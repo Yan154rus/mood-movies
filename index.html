@@ -1073,18 +1073,18 @@ const POSTER_URLS_FIX = {
   "499": "https://ru.wikipedia.org/wiki/Special:FilePath/Постер_фильма_«Великий_Гэтсби»_(2013).jpg?width=400"
 };
 const POSTER_URLS_A = {
-  "10": "posters/10.jpg",
-"191": "posters/191.jpg",
-"194": "posters/194.jpg",
-"218": "posters/218.jpg",
-"343": "posters/343.jpg",
-"261": "posters/261.jpg",
-"266": "posters/266.jpg",
-"301": "posters/301.jpg",
-"390": "posters/390.jpg",
-"456": "posters/456.jpg",
-"457": "posters/457.jpg",
-"30": "posters/30.jpg",
+  "10": "10.jpg",
+"191": "191.jpg",
+"194": "194.jpg",
+"218": "218.jpg",
+"343": "343.jpg",
+"261": "261.jpg",
+"266": "266.jpg",
+"301": "301.jpg",
+"390": "390.jpg",
+"456": "456.jpg",
+"457": "457.jpg",
+"30": "30.jpg",
 
   "27": "https://en.wikipedia.org/wiki/Special:FilePath/The_Gentlemen_(2019_film)_poster.png?width=400",
   "35": "https://ru.wikipedia.org/wiki/Special:FilePath/Головоломка_2015.jpg?width=400",
@@ -2087,7 +2087,7 @@ function renderResults(items, containerId, isFavoriteMode) {
     img.className = 'card-poster';
     img.alt = item.title;
     img.onerror = function() { img.onerror = null; img.src = buildPlaceholder(item); };
-      img.src = POSTER_URLS_A[item.id] || POSTER_URLS_LAST[item.id] || POSTER_URLS_FIX[item.id] || POSTER_URLS_FINAL[item.id] || POSTER_URLS_EXTRA[item.id] || POSTER_URLS[item.id] || ('posters/' + item.id + '.jpg');
+      img.src = POSTER_URLS_A[item.id] || POSTER_URLS_LAST[item.id] || POSTER_URLS_FIX[item.id] || POSTER_URLS_FINAL[item.id] || POSTER_URLS_EXTRA[item.id] || POSTER_URLS[item.id] || ('' + item.id + '.jpg');
 
 
 
