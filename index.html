@@ -41,7 +41,7 @@ body.light {
   color: #1a1722;
 }
 .top-bar {
-  position: sticky; top: 0; z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   padding: 12px 20px; background: rgba(15,10,20,0.75); backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(242,193,78,0.3);
@@ -414,77 +414,49 @@ body.light #no-stats, body.light #no-favorites, body.light #no-watched { backgro
   #chat-panel { width: calc(100vw - 40px); }
 }
 
-/* === ИИ-кинокритик: стили === */
-.ai-chat-wrap {
-  max-width: 640px; margin: 0 auto; background: rgba(26,23,34,0.88);
-  border: 1px solid rgba(242,193,78,0.3); border-radius: 18px; box-shadow: var(--shadow);
-  display: flex; flex-direction: column; height: calc(100vh - 190px); min-height: 380px; overflow: hidden;
-}
-body.light .ai-chat-wrap { background: #fff; border-color: rgba(178,140,50,0.45); }
-.ai-chat-box { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.ai-msg {
-  max-width: 85%; padding: 12px 14px; border-radius: 14px; font-size: 14.5px;
-  line-height: 1.55; white-space: pre-wrap; overflow-wrap: break-word;
-}
-.ai-msg.user {
-  align-self: flex-end; background: linear-gradient(135deg, #d6382f, #7a1f8f);
-  color: #fff; border-bottom-right-radius: 4px;
-}
-.ai-msg.bot {
-  align-self: flex-start; background: rgba(38,30,46,0.9); border: 1px solid rgba(242,193,78,0.35);
-  color: #f5f0e6; border-bottom-left-radius: 4px;
-}
-body.light .ai-msg.bot { background: #f4f1ea; color: #1a1722; }
-.ai-msg.typing { color: var(--gold); font-style: italic; }
-.ai-input-row { display: flex; gap: 8px; padding: 12px; border-top: 1px solid rgba(242,193,78,0.25); }
-body.light .ai-input-row { border-top-color: rgba(178,140,50,0.35); }
-#ai-input {
-  flex: 1; font-family: inherit; font-size: 16px; color: #fff; padding: 12px 14px;
-  background: rgba(38,30,46,0.95); border: 1px solid rgba(242,193,78,0.45); border-radius: 12px; outline: none;
-}
-body.light #ai-input { background: #fff; color: #1a1722; }
-#ai-input:focus { border-color: var(--gold); box-shadow: 0 0 12px rgba(242,193,78,0.3); }
-#ai-send {
-  font-size: 18px; padding: 10px 18px; background: var(--gold); color: #1a1722;
-  border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
-}
-#ai-send:disabled { opacity: 0.5; cursor: wait; }
-.ai-hint { text-align: center; font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 10px; }
-body.light .ai-hint { color: rgba(26,23,34,0.55); }
-
-/* === Шапка и контент: прилипающая шапка, контент начинается под ней === */
-.screen { padding-top: 24px; }
-.card { scroll-margin-top: 110px; }
-
-/* === Планшеты и книжки в раскладке === */
+/* === АДАПТАЦИЯ: планшет, телефон, книжка === */
+:root { --header-h: 90px; }
+.top-bar { position: sticky; top: 0; }
+.screen { padding-top: calc(var(--header-h) + 10px); }
 @media (min-width: 561px) and (max-width: 1024px) {
   h1 { font-size: clamp(28px, 4.5vw, 34px); }
-  .mood-buttons { grid-template-columns: repeat(2, 1fr); }
+  .mood-buttons { grid-template-columns: 1fr 1fr; }
   .couple-row { flex-direction: column; align-items: stretch; }
   .couple-row select { max-width: none; }
-  .card-poster { width: 130px; height: 190px; margin: 14px 0 14px 14px; }
-  .card-body { padding: 14px 16px 14px 0; }
+  .filters-row { gap: 8px; }
 }
-
-/* === Телефоны: шапка двумя строками, постер целиком === */
 @media (max-width: 560px) {
-  h1 { font-size: clamp(22px, 6.5vw, 30px); }
-  .top-bar { flex-direction: column; align-items: stretch; gap: 8px; }
-  .top-bar-left { justify-content: space-between; }
-  .top-bar-right { flex-wrap: nowrap; justify-content: center; }
-  .top-bar-left, .top-bar-right { display: flex; align-items: center; gap: 8px; }
-  .fav-counter, .watched-counter, .stats-counter { flex: 1; justify-content: center; font-size: 12px; padding: 7px 6px; }
-  .card-poster {
-    width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain;
-    margin: 0; border-radius: 0; background: #0d0b12;
-  }
-  .ai-chat-wrap { height: calc(100vh - 230px); }
-  .ai-msg { max-width: 92%; }
+  .top-bar { flex-direction: column; align-items: stretch; gap: 6px; }
+  .top-bar-left, .top-bar-right { flex-wrap: nowrap; justify-content: space-between; }
+  .top-bar-right { display: flex; gap: 6px; }
+  .top-bar-right > button { flex: 1 1 0; min-width: 0; justify-content: center; }
+  .top-bar-title { font-size: 15px; white-space: nowrap; }
+  .card-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain; background: #0d0b14; margin: 0; border-radius: 0; }
+  .card-body { padding: 16px; }
+  .ai-chat-box { padding: 14px; }
+  .ai-msg { max-width: 95%; }
 }
 @media (max-width: 380px) {
-  .top-bar-title { font-size: 13px; }
-  .fav-counter, .watched-counter, .stats-counter, .theme-btn { font-size: 11px; padding: 6px 7px; }
+  .top-bar-right > button { font-size: 11px; padding: 6px 6px; gap: 4px; }
+  .mood-buttons { grid-template-columns: 1fr; }
 }
+/* === ИИ-кинокритик === */
+.ai-chat-box { background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.3); border-radius: 18px; box-shadow: var(--shadow); padding: 20px; display: flex; flex-direction: column; }
+body.light .ai-chat-box { background: #fff; }
+.ai-chat-log { min-height: 320px; max-height: 55vh; overflow-y: auto; display: flex; flex-direction: column; margin-bottom: 14px; padding: 4px 2px; }
+.ai-msg { max-width: 85%; padding: 12px 15px; border-radius: 16px; margin-bottom: 10px; font-size: 14px; line-height: 1.55; white-space: pre-wrap; word-wrap: break-word; }
+.ai-msg.user { align-self: flex-end; background: linear-gradient(135deg, #d6382f, #7a1f8f); color: #fff; border-bottom-right-radius: 4px; }
+.ai-msg.bot { align-self: flex-start; background: rgba(38,30,46,0.92); border: 1px solid rgba(242,193,78,0.35); color: #f5f0e6; border-bottom-left-radius: 4px; }
+body.light .ai-msg.bot { background: #f4f1ea; color: #1a1722; }
+.ai-msg.typing { color: rgba(255,255,255,0.55); font-style: italic; }
+.ai-chat-input-row { display: flex; gap: 8px; align-items: stretch; }
+#ai-input { flex: 1; font-family: inherit; font-size: 16px; color: #fff; padding: 12px 14px; background: rgba(38,30,46,0.95); border: 1px solid rgba(242,193,78,0.45); border-radius: 12px; outline: none; }
+body.light #ai-input { background: #fff; color: #1a1722; }
+#ai-input:focus { border-color: var(--gold); box-shadow: 0 0 14px rgba(242,193,78,0.3); }
+.ai-send-btn { font-size: 18px; padding: 10px 20px; background: var(--gold); color: #1a1722; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+.ai-send-btn:hover { filter: brightness(1.1); }
+.ai-note { font-size: 12px; text-align: center; margin-top: 10px; color: rgba(255,255,255,0.55); }
+body.light .ai-note { color: rgba(26,23,34,0.55); }
 </style>
 </head>
 <body>
@@ -521,25 +493,24 @@ body.light .ai-hint { color: rgba(26,23,34,0.55); }
   <button class="random-btn" id="btn-random">🎲 Случайный фильм</button>
   <button class="random-btn" id="btn-couple">👥 Фильм для двоих</button>
   <button class="random-btn" id="btn-recommend" style="margin-top: 0;">💡 Рекомендации по моим оценкам</button>
-  <button class="random-btn" id="btn-ai" style="margin-top: 0;">🤖 Спросить ИИ</button>
+  <button class="random-btn" id="btn-ai">🤖 Спросить ИИ</button>
+
   <div class="fod-label">🎬 Фильм дня</div>
   <div id="film-of-day"></div>
 </div>
 
 <div class="screen" id="screen-ai">
-  <button class="back-btn" onclick="showScreen('screen-home')">← Назад</button>
+  <button class="back-btn" id="back-home-from-ai">← Назад</button>
   <h1>ИИ-кинокритик</h1>
   <p class="subtitle">Совет от ИИ или любой вопрос о кино</p>
-  <div class="ai-chat-wrap">
-    <div class="ai-chat-box" id="ai-chat-box">
-      <div class="ai-msg bot">Привет! Я ИИ-кинокритик 🎬 Могу подобрать фильм под настроение или ответить на любой вопрос о кино. С чего начнём?</div>
-    </div>
-    <div class="ai-input-row">
+  <div class="ai-chat-box">
+    <div class="ai-chat-log" id="ai-chat-log"></div>
+    <div class="ai-chat-input-row">
       <input type="text" id="ai-input" placeholder="Например: что посмотреть вечером, когда грустно?" autocomplete="off">
-      <button id="ai-send" title="Отправить">➤</button>
+      <button class="ai-send-btn" id="ai-send">➤</button>
     </div>
+    <div class="ai-note">Советую только из каталога Mood Movies — никаких выдуманных фильмов</div>
   </div>
-  <p class="ai-hint">ИИ отвечает через бесплатный сервис Pollinations — иногда нужно подождать до полуминуты</p>
 </div>
 
 <div class="screen" id="screen-couple">
@@ -2655,148 +2626,105 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-/* ================= ИИ-КИНОКРИТИК ================= */
-const AI_SYSTEM = 'Ты — дружелюбный ИИ-кинокритик приложения Mood Movies. Отвечай по-русски, живым языком, коротко: 3-6 предложений максимум, без markdown-звёздочек. Если просят посоветовать фильм — советуй ТОЛЬКО фильмы из каталога ниже, названия точь-в-точь как в каталоге, 1-2 варианта, объясни, почему подошло. На общие вопросы о кино отвечай честно и кратко.';
-
-let aiHistory = [];
-
-function aiCatalog() {
-  return movies.map(function(m) {
-    return m.title + ' (' + m.year + ') — настроения: ' + (m.emotions || []).join(', ') +
-      '; жанры: ' + (m.genres || []).join(', ') + '; рейтинг: ' + m.rating;
-  }).join('\n');
-}
-
-function aiBuildMessages() {
-  const msgs = [{ role: 'system', content: AI_SYSTEM + '\n\nКАТАЛОГ ФИЛЬМОВ:\n' + aiCatalog() }];
-  aiHistory.slice(-8).forEach(function(m) { msgs.push(m); });
-  return msgs;
-}
-
-function aiAddMsg(cls, text) {
-  const box = document.getElementById('ai-chat-box');
-  const d = document.createElement('div');
-  d.className = 'ai-msg ' + cls;
-  d.textContent = text;
-  box.appendChild(d);
-  box.scrollTop = box.scrollHeight;
-  return d;
-}
-
-function aiFallback() {
-  const m = movies[Math.floor(Math.random() * movies.length)];
-  return 'ИИ сейчас не на связи 😔 Бесплатный сервис перегружен — попробуй ещё раз через минуту. А пока случайный вариант из каталога: «' + m.title + '» (' + m.year + '), ' + (m.genres || []).join(', ') + ', рейтинг ' + m.rating + '.';
-}
-
-function aiSleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
-
-async function aiFetchText() {
-  const controller = new AbortController();
-  const timer = setTimeout(function() { controller.abort(); }, 30000);
-
-  // Попытка 1: POST, OpenAI-совместимый формат
-  try {
-    const r = await fetch('https://text.pollinations.ai/openai', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'openai', messages: aiBuildMessages() }),
-      signal: controller.signal
-    });
-    if (r.ok) {
-      const j = await r.json();
-      const c = j && j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
-      if (c && c.trim()) { clearTimeout(timer); return c.trim(); }
-    } else if (r.status === 429) {
-      await aiSleep(15500);
-      const r2 = await fetch('https://text.pollinations.ai/openai', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'openai', messages: aiBuildMessages() }),
-        signal: controller.signal
-      });
-      if (r2.ok) {
-        const j2 = await r2.json();
-        const c2 = j2 && j2.choices && j2.choices[0] && j2.choices[0].message && j2.choices[0].message.content;
-        if (c2 && c2.trim()) { clearTimeout(timer); return c2.trim(); }
-      }
-    }
-  } catch (e) { /* пробуем следующий способ */ }
-
-  // Попытка 2: POST обычным форматом (ответ — простой текст или JSON)
-  try {
-    const r = await fetch('https://text.pollinations.ai/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'openai', messages: aiBuildMessages() }),
-      signal: controller.signal
-    });
-    if (r.ok) {
-      const t = await r.text();
-      let val = t;
-      try {
-        const j = JSON.parse(t);
-        const c = j && j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
-        if (c) val = c;
-      } catch (e) {}
-      if (val && val.trim().length > 10) { clearTimeout(timer); return val.trim(); }
-    }
-  } catch (e) { /* пробуем следующий способ */ }
-
-  // Попытка 3: GET с компактным каталогом
-  try {
-    const compact = 'Советуй только из списка: ' + movies.map(function(m) {
-      return m.title + ' (' + m.year + ', ' + (m.emotions || []).join('/') + ')';
-    }).join('; ');
-    let ctx = '';
-    const last = aiHistory.slice(-2);
-    last.forEach(function(m) { ctx += (m.role === 'user' ? 'Пользователь: ' : 'ИИ: ') + m.content + '\n'; });
-    const url = 'https://text.pollinations.ai/' + encodeURIComponent(ctx + 'Вопрос: ' + (aiHistory.length ? aiHistory[aiHistory.length - 1].content : '')) + '?model=openai&system=' + encodeURIComponent(AI_SYSTEM + ' ' + compact);
-    const r = await fetch(url, { signal: controller.signal });
-    if (r.ok) {
-      const t = await r.text();
-      if (t && t.trim().length > 10) { clearTimeout(timer); return t.trim(); }
-    }
-  } catch (e) {}
-
-  clearTimeout(timer);
-  return null;
-}
-
-async function aiSend() {
-  const input = document.getElementById('ai-input');
-  const q = (input.value || '').trim();
-  if (!q) return;
-  input.value = '';
-  aiHistory.push({ role: 'user', content: q });
-  aiAddMsg('user', q);
-  const typing = aiAddMsg('bot typing', 'Думаю... Может занять до полуминуты');
-  const sendBtn = document.getElementById('ai-send');
-  sendBtn.disabled = true;
-
-  const text = await aiFetchText();
-
-  if (text) {
-    typing.className = 'ai-msg bot';
-    typing.textContent = text;
-    aiHistory.push({ role: 'assistant', content: text });
-    if (aiHistory.length > 16) aiHistory = aiHistory.slice(-16);
-  } else {
-    typing.className = 'ai-msg bot';
-    typing.textContent = aiFallback();
+/* === Динамическая высота шапки === */
+(function(){
+  function updateHeaderOffset() {
+    var h = document.querySelector('.top-bar');
+    if (h) document.documentElement.style.setProperty('--header-h', h.offsetHeight + 'px');
   }
-  sendBtn.disabled = false;
-  input.focus();
-}
+  updateHeaderOffset();
+  window.addEventListener('resize', updateHeaderOffset);
+  window.addEventListener('orientationchange', function() { setTimeout(updateHeaderOffset, 300); });
+  if (window.ResizeObserver) new ResizeObserver(updateHeaderOffset).observe(document.querySelector('.top-bar'));
+})();
 
-(function aiInit() {
-  const sendBtn = document.getElementById('ai-send');
-  const input = document.getElementById('ai-input');
-  const aiBtn = document.getElementById('btn-ai');
-  if (aiBtn) aiBtn.addEventListener('click', function() { showScreen('screen-ai'); });
-  if (sendBtn) sendBtn.addEventListener('click', aiSend);
-  if (input) input.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); aiSend(); }
-  });
+/* === ИИ-кинокритик === */
+(function(){
+  var log = document.getElementById('ai-chat-log');
+  var input = document.getElementById('ai-input');
+  var sendBtn = document.getElementById('ai-send');
+  if (!log || !input || !sendBtn) return;
+
+  var history = [];
+  var greeted = false;
+
+  function buildCatalog() {
+    return movies.map(function(m) {
+      return m.title + ' (' + m.year + '), жанры: ' + (m.genre || m.genres || '').toString() +
+        ', настроение: ' + (m.mood || '') + ', рейтинг: ' + (m.rating || '');
+    }).join('; ');
+  }
+
+  function addMsg(text, who) {
+    var d = document.createElement('div');
+    d.className = 'ai-msg ' + who;
+    d.textContent = text;
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    return d;
+  }
+
+  function greet() {
+    if (greeted) return;
+    greeted = true;
+    addMsg('Привет! Я ИИ-кинокритик 🎬 Могу подобрать фильм под настроение или ответить на любой вопрос о кино. С чего начнём?', 'bot');
+  }
+
+  function fetchAI(prompt) {
+    var q = encodeURIComponent(prompt);
+    var urls = [
+      'https://text.pollinations.ai/' + q + '?model=openai',
+      'https://text.pollinations.ai/' + q
+    ];
+    var tryIdx = 0;
+    function attempt() {
+      if (tryIdx >= urls.length) return Promise.reject(new Error('all failed'));
+      var ctrl = new AbortController();
+      var timer = setTimeout(function(){ ctrl.abort(); }, 25000);
+      return fetch(urls[tryIdx++], { signal: ctrl.signal })
+        .then(function(r) {
+          clearTimeout(timer);
+          if (!r.ok) throw new Error('status ' + r.status);
+          return r.text();
+        })
+        .catch(function(e) { clearTimeout(timer); throw e; });
+    }
+    return attempt().catch(function(){ return attempt(); });
+  }
+
+  function ask(question) {
+    addMsg(question, 'user');
+    var typing = addMsg('Думаю…', 'bot typing');
+    var sys = 'Ты — дружелюбный ИИ-кинокритик в приложении Mood Movies. Отвечай по-русски, коротко и живо (2-4 предложения). Когда советуешь фильм — выбирай ТОЛЬКО из каталога ниже, не выдумывай. Каталог: ' + buildCatalog();
+    history.push({ role: 'user', content: question });
+    var lastMsgs = history.slice(-6).map(function(m){ return m.role + ': ' + m.content; }).join('\n');
+    var prompt = sys + '\n\nИстория диалога:\n' + lastMsgs + '\nОтветь на последний вопрос пользователя.';
+    fetchAI(prompt).then(function(text) {
+      typing.remove();
+      var clean = (text || '').trim();
+      if (!clean) throw new Error('empty');
+      history.push({ role: 'assistant', content: clean });
+      addMsg(clean, 'bot');
+    }).catch(function() {
+      typing.remove();
+      var rnd = movies[Math.floor(Math.random() * movies.length)];
+      addMsg('ИИ сейчас не на связи 🤖 Но вот проверенный вариант из каталога: ' + rnd.title + ' (' + rnd.year + '). Попробуй спросить ещё раз через минуту.', 'bot');
+    });
+  }
+
+  function send() {
+    var q = (input.value || '').trim();
+    if (!q) return;
+    input.value = '';
+    ask(q);
+  }
+
+  var btnAi = document.getElementById('btn-ai');
+  if (btnAi) btnAi.addEventListener('click', function() { showScreen('screen-ai'); greet(); });
+  var back = document.getElementById('back-home-from-ai');
+  if (back) back.addEventListener('click', function() { showScreen('screen-home'); });
+  sendBtn.addEventListener('click', send);
+  input.addEventListener('keydown', function(e) { if (e.key === 'Enter') send(); });
 })();
 </script>
 </body>
