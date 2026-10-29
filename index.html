@@ -459,75 +459,75 @@ body.light .ai-input-row input { background: #fff; color: #1a1722; }
   .filters-row { gap: 8px; }
 }
 
-/* === Главный экран: боковые действия + карусель (Алиса) === */
-.mood-toggle { display: none; }
-.mood-wrap { display: block; }
-@media (min-width: 561px) {
-  .mood-toggle {
-    display: inline-flex; align-items: center; gap: 8px; margin: 0 auto 16px;
-    font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 30px;
-    background: rgba(26,23,34,0.78); color: #f5f0e6;
-    border: 1px solid rgba(242,193,78,0.45); border-radius: 999px;
-    cursor: pointer; transition: all 0.2s ease; box-shadow: var(--shadow);
-  }
-  .mood-toggle:hover { border-color: var(--gold); box-shadow: 0 0 18px rgba(242,193,78,0.45); }
-  body.light .mood-toggle { background: rgba(255,255,255,0.9); color: #1a1722; }
-  .mood-wrap { display: none; }
-  .mood-wrap.open { display: block; position: relative; animation: fadeIn 0.2s ease; }
-  .mood-wrap.open .mood-buttons {
-    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-    z-index: 70; width: min(560px, 100%); margin: 0;
-    background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.5);
-    border-radius: 16px; padding: 14px; box-shadow: 0 16px 44px rgba(0,0,0,0.55);
-  }
-  body.light .mood-wrap.open .mood-buttons { background: #fff; }
+/* === Главный экран: колонка действий, меню настроения, герой дня === */
+.home-layout { display: flex; gap: 24px; align-items: flex-start; }
+.side-actions { display: none; flex-direction: column; gap: 10px; width: 240px; flex-shrink: 0; }
+.action-btn {
+  display: block; width: 100%; text-align: left;
+  font-family: inherit; font-size: 14px; font-weight: 600; padding: 12px 16px;
+  background: rgba(38,30,46,0.9); color: #f5f0e6;
+  border: 1px solid rgba(242,193,78,0.45); border-radius: 14px;
+  cursor: pointer; transition: all 0.2s ease;
 }
-.home-side { display: block; }
-@media (min-width: 900px) {
-  #screen-home {
-    max-width: 1120px; display: grid;
-    grid-template-columns: 250px 1fr; column-gap: 30px;
-    align-items: start; align-content: start;
-  }
-  #screen-home > h1, #screen-home > .subtitle, #screen-home > .search-row,
-  #screen-home > .mood-toggle, #screen-home > .mood-wrap,
-  #screen-home > .fod-label, #screen-home > #film-of-day { grid-column: 2; }
-  .home-side {
-    grid-column: 1; grid-row: 1 / -1; align-self: start;
-    position: sticky; top: calc(var(--header-h, 92px) + 24px);
-    display: flex; flex-direction: column; gap: 12px;
-  }
-  .home-side .random-btn { margin: 0 !important; width: 100%; }
+body.light .action-btn { background: #fff; color: #1a1722; }
+.action-btn:hover { border-color: var(--gold); box-shadow: 0 0 16px rgba(242,193,78,0.35); }
+.action-btn.ai-btn { background: linear-gradient(135deg, #7a1f8f, #d6382f); color: #fff; border-color: transparent; }
+.home-main { flex: 1; min-width: 0; }
+.mood-dd { position: relative; }
+.mood-dd-list {
+  display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 60;
+  margin-top: 8px; padding: 10px; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: rgba(38,30,46,0.97); border: 1px solid rgba(242,193,78,0.45);
+  border-radius: 14px; box-shadow: var(--shadow);
 }
-.fod-carousel { display: flex; align-items: center; gap: 12px; }
+body.light .mood-dd-list { background: #fff; }
+.mood-dd-list.open { display: grid; animation: popIn 0.2s ease; }
+.mood-dd-list .mood-btn { background: transparent; border: 1px solid rgba(242,193,78,0.25); box-shadow: none; padding: 10px; font-size: 13px; }
+.mood-dd-list .mood-btn:hover { transform: none; }
+.fod-hero {
+  display: flex; gap: 20px; align-items: stretch;
+  background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.3);
+  border-radius: 22px; box-shadow: var(--shadow); padding: 24px;
+}
+body.light .fod-hero { background: #fff; }
+.fod-main { display: flex; gap: 22px; flex: 1; min-width: 0; }
+.fod-poster { width: 280px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 14px; cursor: pointer; flex-shrink: 0; }
+.fod-body { flex: 1; min-width: 0; }
+.fod-title { font-size: 28px; font-weight: 800; cursor: pointer; line-height: 1.2; }
+.fod-title:hover { color: var(--gold); }
+.fod-meta { color: var(--gold); font-size: 14px; margin: 4px 0 10px; }
+.fod-emotion { display: inline-block; background: var(--gold-soft); color: var(--gold); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; margin: 6px 0 10px; }
+.fod-desc { font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.78); }
+body.light .fod-desc { color: rgba(26,23,34,0.75); }
+.fod-rating { color: var(--gold); font-size: 16px; margin-top: 10px; }
+.fod-nav { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
 .fod-arrow {
-  width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(38,30,46,0.92); color: var(--gold);
-  border: 1px solid rgba(242,193,78,0.5); cursor: pointer;
-  font-family: inherit; font-size: 22px; line-height: 1;
-  transition: all 0.2s ease;
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  border: 1px solid rgba(242,193,78,0.6); background: transparent; color: var(--gold);
+  font-size: 22px; cursor: pointer; transition: all 0.2s ease;
 }
-.fod-arrow:hover { background: var(--gold); color: #1a1722; box-shadow: 0 0 16px rgba(242,193,78,0.5); transform: scale(1.08); }
-.fod-side { width: 130px; flex-shrink: 0; cursor: pointer; text-align: center; opacity: 0.92; transition: all 0.2s ease; }
-.fod-side:hover { opacity: 1; transform: translateY(-3px); }
-.fod-side img {
-  width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px;
-  border: 1px solid rgba(242,193,78,0.35); background: rgba(0,0,0,0.35);
-}
-.fod-side-title { font-size: 12px; font-weight: 600; margin-top: 6px; line-height: 1.3; color: #f5f0e6; }
-body.light .fod-side-title { color: #1a1722; }
-.fod-side-tag { font-size: 10px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-.fod-center { flex: 1; min-width: 0; }
-.ai-card-btn {
-  font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px;
-  border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
-  background: rgba(122,31,143,0.2); color: #d9a5f5; border: 1px solid rgba(217,165,245,0.5);
-}
-.ai-card-btn:hover { background: #7a1f8f; color: #fff; box-shadow: 0 0 14px rgba(122,31,143,0.5); }
-body.light .ai-card-btn { background: rgba(122,31,143,0.08); color: #7a1f8f; }
-@media (max-width: 560px) {
+.fod-arrow:hover { background: var(--gold); color: #1a1722; }
+.fod-count { font-size: 13px; color: var(--text-soft); }
+.fod-side { display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: center; cursor: pointer; opacity: 0.75; width: 90px; flex-shrink: 0; transition: opacity 0.2s ease; }
+.fod-side:hover { opacity: 1; }
+.fod-side img { width: 80px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 10px; }
+.fod-side span { font-size: 12px; text-align: center; color: rgba(255,255,255,0.7); line-height: 1.3; }
+body.light .fod-side span { color: rgba(26,23,34,0.7); }
+.modal-poster { width: 130px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px; float: left; margin: 0 16px 10px 0; }
+.modal-content::after, #modal-content::after { content: ''; display: block; clear: both; }
+.modal-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 4px; align-items: center; }
+@media (min-width: 1024px) { #screen-home.screen { max-width: 1120px; } }
+@media (min-width: 900px) { .mood-buttons { display: none; } }
+@media (max-width: 899px) {
+  .home-layout { display: block; }
+  .side-actions { display: contents; }
+  .side-actions .action-btn { margin: 10px 0; }
+  .mood-dd { display: none; }
+  .home-main { display: block; }
+  .fod-hero { flex-direction: column; padding: 16px; }
+  .fod-main { flex-direction: column; }
+  .fod-poster { width: min(70%, 260px); margin: 0 auto; }
   .fod-side { display: none; }
-  .fod-arrow { width: 40px; height: 40px; font-size: 18px; }
 }
 </style>
 </head>
@@ -552,8 +552,6 @@ body.light .ai-card-btn { background: rgba(122,31,143,0.08); color: #7a1f8f; }
     <input type="text" id="search-input" placeholder="Найти фильм или режиссёра..." autocomplete="off">
     <button class="search-btn" id="btn-search">🔍</button>
   </div>
-  <button class="mood-toggle" id="mood-toggle" onclick="toggleMoodMenu(event)">🎭 Настроение</button>
-  <div class="mood-wrap" id="mood-wrap">
   <div class="mood-buttons">
     <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
     <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
@@ -564,15 +562,31 @@ body.light .ai-card-btn { background: rgba(122,31,143,0.08); color: #7a1f8f; }
     <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
     <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
   </div>
+  <div class="home-layout">
+    <aside class="side-actions">
+      <button class="action-btn" id="btn-random">🎲 Случайный фильм</button>
+      <button class="action-btn" id="btn-couple">👥 Фильм для двоих</button>
+      <button class="action-btn" id="btn-recommend" style="margin-top: 0;">💡 Рекомендации по моим оценкам</button>
+      <button class="action-btn ai-btn" id="btn-ai" onclick="showScreen('screen-ai')">🤖 Спросить ИИ</button>
+      <div class="mood-dd">
+        <button class="action-btn" id="mood-dd-toggle">🎭 Настроение <span style="float: right;">▾</span></button>
+        <div class="mood-dd-list" id="mood-dd-list">
+          <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
+    <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
+    <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
+    <button class="mood-btn" data-mood="расслабленное"><span class="stone stone-green"></span>Расслабиться</button>
+    <button class="mood-btn" data-mood="философское"><span class="stone stone-blue"></span>Поразмышлять</button>
+    <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
+    <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
+    <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
+        </div>
+      </div>
+    </aside>
+    <div class="home-main">
+      <div class="fod-label">🎬 Фильм дня</div>
+      <div id="film-of-day"></div>
+    </div>
   </div>
-  <div class="home-side">
-  <button class="random-btn" id="btn-random">🎲 Случайный фильм</button>
-  <button class="random-btn" id="btn-couple">👥 Фильм для двоих</button>
-  <button class="random-btn" id="btn-recommend" style="margin-top: 0;">💡 Рекомендации по моим оценкам</button>
-  <button class="random-btn ai-btn" id="btn-ai" onclick="showScreen('screen-ai')">🤖 Спросить ИИ</button>
-  </div>
-  <div class="fod-label">🎬 Фильм дня</div>
-  <div id="film-of-day"></div>
 </div>
 
 <div class="screen" id="screen-couple">
@@ -2049,6 +2063,23 @@ function openModal(id) {
   const content = document.getElementById('modal-content');
   if (!content) return;
 
+  const isInFavorites = favorites.indexOf(m.id) !== -1;
+  const isWatched = watched.indexOf(m.id) !== -1;
+  const favBtn = isInFavorites
+    ? '<button class="remove-fav" onclick="modalFav(\'' + m.id + '\')">Удалить из избранного</button>'
+    : '<button class="add-to-favs" onclick="modalFav(\'' + m.id + '\')">Хочу посмотреть</button>';
+  const watchBtn = isWatched
+    ? '<button class="watch-btn" onclick="modalWatched(\'' + m.id + '\')">✓ Смотрел — убрать метку</button>'
+    : '<button class="watch-btn" onclick="modalWatched(\'' + m.id + '\')">👁 Уже смотрел</button>';
+  const aiAskBtn = '<button class="ai-btn" style="margin: 0; display: inline-block;" onclick="closeModal(); askAiAboutMovie(\'' + m.id + '\');">🤖 Спросить ИИ</button>';
+
+  const userRating = ratings[m.id] || 0;
+  let starsHtml = '<div class="rating-row"><span class="rating-label">Твоя оценка:</span><span class="stars">';
+  for (let i = 1; i <= 5; i++) {
+    starsHtml += '<button class="star-btn' + (i <= userRating ? ' on' : '') + '" onclick="modalRate(\'' + m.id + '\',' + i + ')">★</button>';
+  }
+  starsHtml += '</span>' + (userRating > 0 ? '<span class="rating-label">' + userRating + '/5</span>' : '') + '</div>';
+
   const revs = getReviewsOf(m.id);
   const revHtml = revs.length > 0
     ? '<div class="services-label">Твои отзывы (' + revs.length + '):</div>' +
@@ -2058,6 +2089,7 @@ function openModal(id) {
     : '<div class="review-empty">Отзывов пока нет — поставь оценку и напиши первый.</div>';
 
   content.innerHTML =
+    '<img class="modal-poster" src="' + fodPoster(m) + '" alt="">' +
     '<div class="modal-title">' + m.title + '</div>' +
     '<div class="modal-year">' + m.year + ' · ' + m.age + ' · ' + m.duration + ' мин</div>' +
     '<div class="modal-facts">' +
@@ -2068,12 +2100,75 @@ function openModal(id) {
       '<b>Рейтинг:</b> ' + getStars(m.rating) + ' ' + m.rating + '/10' +
     '</div>' +
     '<div class="modal-desc">' + m.description + '</div>' +
-     '<div style="margin-bottom: 14px;">' + buildServiceLinks(m) + '</div>' +
-    '<div style="margin: 0 0 14px;"><button class="ai-card-btn" onclick="askAiAboutMovie(\'' + m.id + '\')">🤖 Спросить ИИ об этом фильме</button></div>' +
-    revHtml;
+    '<div class="modal-actions">' + favBtn + watchBtn + aiAskBtn + '</div>' +
+    starsHtml +
+    '<div class="modal-actions"><button class="share-btn" id="mshare-btn-' + m.id + '" onclick="modalShare(\'' + m.id + '\')">📤 Поделиться</button></div>' +
+    '<div class="share-messengers" id="mshare-row-' + m.id + '">' +
+      '<a class="share-messenger share-tg" onclick="shareTelegram(\'' + m.id + '\')">Telegram</a>' +
+      '<a class="share-messenger share-vk" onclick="shareVK(\'' + m.id + '\')">VK</a>' +
+      '<a class="share-messenger share-wa" onclick="shareWhatsApp(\'' + m.id + '\')">WhatsApp</a>' +
+      '<a class="share-messenger share-max" onclick="shareMax(\'' + m.id + '\')">Макс</a>' +
+    '</div>' +
+    '<div style="margin-bottom: 14px;">' + buildServiceLinks(m) + '</div>' +
+    '<div class="review-panel open" id="mreviews-' + m.id + '">' +
+      revHtml +
+      '<div class="review-form">' +
+        '<textarea id="mreview-text-' + m.id + '" placeholder="Твой отзыв о фильме..." maxlength="500"></textarea>' +
+        '<button class="review-add" onclick="modalAddReview(\'' + m.id + '\')">Сохранить</button>' +
+      '</div>' +
+    '</div>';
 
   document.getElementById('modal-overlay').classList.add('open');
 }
+
+window.modalFav = function(id) {
+  if (favorites.indexOf(id) !== -1) removeFromFavorites(id);
+  else addToFavorites(id);
+  openModal(id);
+};
+window.modalWatched = function(id) {
+  toggleWatched(id);
+  openModal(id);
+};
+window.modalRate = function(id, n) {
+  rateMovie(id, n);
+  openModal(id);
+};
+window.modalShare = function(id) {
+  const pack = buildShareText(id);
+  if (!pack) return;
+  const btn = document.getElementById('mshare-btn-' + id);
+  function markCopied() {
+    if (!btn) return;
+    const old = btn.textContent;
+    btn.textContent = '✅ Скопировано';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = old; btn.classList.remove('copied'); }, 2000);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(pack.text).then(markCopied).catch(function() { fallbackCopy(pack.text, markCopied); });
+  } else {
+    fallbackCopy(pack.text, markCopied);
+  }
+  const row = document.getElementById('mshare-row-' + id);
+  if (row) row.classList.add('open');
+};
+window.modalAddReview = function(id) {
+  const ta = document.getElementById('mreview-text-' + id);
+  if (!ta) return;
+  const text = ta.value.trim();
+  if (!text) { showToast('Напиши что-нибудь сначала 🙂', false); return; }
+  if (!reviews[id]) reviews[id] = [];
+  reviews[id].push({
+    text: text.slice(0, 500),
+    date: new Date().toLocaleDateString('ru-RU'),
+    stars: ratings[id] || 0
+  });
+  saveReviews();
+  ta.value = '';
+  showToast('💬 Отзыв сохранён', true);
+  openModal(id);
+};
 function closeModal() {
   const overlay = document.getElementById('modal-overlay');
   if (overlay) overlay.classList.remove('open');
@@ -2132,6 +2227,8 @@ function renderResults(items, containerId, isFavoriteMode) {
     img.alt = item.title;
     img.onerror = function() { img.onerror = null; img.src = buildPlaceholder(item); };
       img.src = POSTER_URLS_A[item.id] || POSTER_URLS_LAST[item.id] || POSTER_URLS_FIX[item.id] || POSTER_URLS_FINAL[item.id] || POSTER_URLS_EXTRA[item.id] || POSTER_URLS[item.id] || ('' + item.id + '.jpg');
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', function() { openModal(item.id); });
 
 
 
@@ -2158,8 +2255,8 @@ function renderResults(items, containerId, isFavoriteMode) {
       buildRatingWidget(item) +
       '<div class="card-actions">' + buttonHtml + watchButtonHtml +
         '<button class="share-btn" id="share-btn-' + item.id + '" onclick="shareMovie(\'' + item.id + '\')">📤 Поделиться</button>' +
-         '<button class="review-toggle" onclick="toggleReviews(\'' + item.id + '\')">💬 Отзывы (' + revCount + ')</button>' +
-        '<button class="ai-card-btn" onclick="askAiAboutMovie(\'' + item.id + '\')">🤖 Спросить ИИ</button>' +
+        '<button class="review-toggle" onclick="toggleReviews(\'' + item.id + '\')">💬 Отзывы (' + revCount + ')</button>' +
+        '<button class="review-toggle" onclick="askAiAboutMovie(\'' + item.id + '\')">🤖 Спросить ИИ</button>' +
       '</div>' +
       '<div class="review-panel" id="reviews-' + item.id + '">' +
         reviewsHtml +
@@ -2183,6 +2280,83 @@ function renderResults(items, containerId, isFavoriteMode) {
 }
 
 let lastFullItems = [];
+
+function fodEsc(t) {
+  return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function fodPoster(x) {
+  try {
+    return POSTER_URLS_A[x.id] || POSTER_URLS_LAST[x.id] || POSTER_URLS_FIX[x.id] || POSTER_URLS_FINAL[x.id] || POSTER_URLS_EXTRA[x.id] || POSTER_URLS[x.id] || (x.id + '.jpg');
+  } catch (e) {
+    return x.id + '.jpg';
+  }
+}
+
+function renderFod() {
+  const box = document.getElementById('film-of-day');
+  if (!box) return;
+  if (typeof movies === 'undefined' || !movies.length) return;
+  if (window.__fodIdx == null) {
+    const fd = getFilmOfDay();
+    let idx = 0;
+    for (let i = 0; i < movies.length; i++) { if (movies[i] === fd) { idx = i; break; } }
+    window.__fodIdx = idx;
+  }
+  const n = movies.length;
+  const m = movies[window.__fodIdx];
+  const prev = movies[(window.__fodIdx - 1 + n) % n];
+  const next = movies[(window.__fodIdx + 1) % n];
+  const chips = (Array.isArray(m.genres) ? m.genres : []).map(function(g) {
+    return '<span class="genre-chip">' + fodEsc(g) + '</span>';
+  }).join('');
+
+  box.innerHTML =
+    '<div class="fod-hero">' +
+      '<div class="fod-side fod-side-left" data-shift="-1">' +
+        '<img src="' + fodPoster(prev) + '" alt=""><span>' + fodEsc(prev.title) + '</span>' +
+      '</div>' +
+      '<div class="fod-main">' +
+        '<img class="fod-poster" src="' + fodPoster(m) + '" alt="' + fodEsc(m.title) + '" data-open="1">' +
+        '<div class="fod-body">' +
+          '<div class="fod-title" data-open="1">' + fodEsc(m.title) + '</div>' +
+          '<div class="fod-meta">' + fodEsc(m.year) + ' · ' + fodEsc(m.age) + ' · ' + fodEsc(m.duration) + ' мин</div>' +
+          '<div>' + chips + '</div>' +
+          '<div class="fod-emotion">' + fodEsc((Array.isArray(m.emotions) ? m.emotions : []).join(', ')) + '</div>' +
+          '<div class="fod-desc">' + fodEsc(m.description) + '</div>' +
+          '<div class="fod-rating">' + getStars(m.rating) + ' ' + m.rating + '</div>' +
+          '<div class="fod-nav">' +
+            '<button class="fod-arrow" data-shift="-1">‹</button>' +
+            '<span class="fod-count">' + (window.__fodIdx + 1) + ' / ' + n + '</span>' +
+            '<button class="fod-arrow" data-shift="1">›</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="fod-side fod-side-right" data-shift="1">' +
+        '<img src="' + fodPoster(next) + '" alt=""><span>' + fodEsc(next.title) + '</span>' +
+      '</div>' +
+    '</div>';
+
+  const imgs = box.querySelectorAll('img');
+  const items = [prev, m, next];
+  imgs.forEach(function(img, k) {
+    const it = items[k];
+    if (!it) return;
+    img.onerror = function() { img.onerror = null; img.src = buildPlaceholder(it); };
+  });
+  box.querySelectorAll('[data-shift]').forEach(function(el) {
+    el.addEventListener('click', function() { fodShift(parseInt(el.getAttribute('data-shift'), 10)); });
+  });
+  box.querySelectorAll('[data-open]').forEach(function(el) {
+    el.addEventListener('click', function() { openModal(m.id); });
+  });
+}
+
+window.fodShift = function(d) {
+  const n = movies.length;
+  window.__fodIdx = ((window.__fodIdx + d) % n + n) % n;
+  renderFod();
+};
 
 function renderResultsScreen() {
   const view = applyView(lastFullItems);
@@ -2694,7 +2868,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="screen" id="screen-ai">
   <button class="back-btn" onclick="showScreen('screen-home')">← Назад</button>
   <h1>ИИ-кинокритик</h1>
-  <p class="subtitle">Совет от ИИ или любой вопрос о кино — с фактами из Википедии</p>
+  <p class="subtitle">Совет от ИИ или любой вопрос о кино</p>
   <div class="ai-chat">
     <div class="ai-messages" id="ai-messages">
       <div class="ai-msg bot">Привет! Я ИИ-кинокритик 🎬 Могу подобрать фильм под настроение или ответить на любой вопрос о кино. С чего начнём?</div>
@@ -2706,10 +2880,40 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </section>
 <script>
+// ===== Меню настроения и кнопка «Спросить ИИ» на карточках =====
+(function() {
+  const tgl = document.getElementById('mood-dd-toggle');
+  const list = document.getElementById('mood-dd-list');
+  if (tgl && list) {
+    tgl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      list.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!list.contains(e.target) && !tgl.contains(e.target)) list.classList.remove('open');
+    });
+    list.querySelectorAll('.mood-btn').forEach(function(b) {
+      b.addEventListener('click', function() { list.classList.remove('open'); });
+    });
+  }
+})();
+
+window.askAiAboutMovie = function(id) {
+  const m = movies.find(function(x) { return x.id === id; });
+  if (!m) return;
+  showScreen('screen-ai');
+  const q = 'Расскажи о фильме «' + m.title + '» (' + m.year + '): о чём он, где снимали и почему стоит посмотреть?';
+  setTimeout(function() {
+    const inp = document.getElementById('ai-input');
+    if (inp) inp.value = q;
+    if (window.aiSend) window.aiSend();
+  }, 120);
+};
+
+
 (function(){
   'use strict';
   var lastReq = 0;
-  var fodOffset = 0;
 
   function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -2724,7 +2928,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function buildSystem(){
-    return 'Ты — дружелюбный ИИ-кинокритик приложения Mood Movies. Отвечай по-русски, живо и коротко (до 100 слов). Если просят посоветовать фильм — советуй ТОЛЬКО фильмы из каталога ниже, объясняй, почему подходит. Если вопрос общий о кино — отвечай коротко и интересно. Если дана справка из Википедии — опирайся на неё.\n\nКАТАЛОГ:\n' + buildCatalog();
+    return 'Ты — дружелюбный ИИ-кинокритик приложения Mood Movies. Отвечай по-русски, живо, коротко (до 100 слов). Если просят посоветовать фильм — советуй ТОЛЬКО фильмы из каталога ниже, объясняй, почему подходит. Если вопрос общий (о кино, жанрах, режиссёрах) — отвечай коротко и интересно.\n\nКАТАЛОГ:\n' + buildCatalog();
   }
 
   function fetchTO(url, opts, ms){
@@ -2742,79 +2946,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  function sleep(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
-
-  function parsePost(txt){
-    try {
-      var j = JSON.parse(txt);
-      var c = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
-      if(c && String(c).trim()) return String(c).trim();
-    } catch(e){}
-    if(txt && txt.length < 4000 && txt.trim().charAt(0) !== '{') return txt.trim();
-    throw new Error('формат');
-  }
-
   function viaPost(sys, user){
-    var n = 0;
-    function run(){
-      n++;
-      return fetchTO('https://text.pollinations.ai/openai', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'openai', messages: [ {role:'system', content: sys}, {role:'user', content: user} ], referrer: 'mood-movies' })
-      }, 25000).then(parsePost).catch(function(err){
-        var msg = err && err.message ? String(err.message) : '';
-        var busy = msg.indexOf('429') >= 0 || msg.indexOf('402') >= 0 || msg.indexOf('HTTP 5') >= 0 || msg.indexOf('сеть') >= 0 || msg.indexOf('таймаут') >= 0;
-        if(busy && n < 3) return sleep(7000).then(run);
-        throw err;
-      });
-    }
-    return run();
+    return fetchTO('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'openai', referrer: (location.hostname || 'moodmovies'), messages: [ {role:'system', content: sys}, {role:'user', content: user} ] })
+    }, 25000).then(function(txt){
+      try {
+        var j = JSON.parse(txt);
+        var c = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+        if(c && String(c).trim()) return String(c).trim();
+      } catch(e){}
+      if(txt && txt.length < 4000 && txt.trim().charAt(0) !== '{') return txt.trim();
+      throw new Error('формат');
+    });
   }
 
   function viaGet(sys, user){
     var catalog = buildCatalog();
     if(catalog.length > 1200) catalog = catalog.split('\n').slice(0, 25).join('\n');
     var prompt = 'Ответь коротко по-русски (до 80 слов). Каталог фильмов: ' + catalog + '. Вопрос: ' + user;
-    return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt) + '?referrer=mood-movies', {}, 25000).then(function(t){
+    return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt) + '?referrer=' + encodeURIComponent(location.hostname || 'moodmovies'), {}, 25000).then(function(t){
       if(!t || !String(t).trim() || String(t).trim().charAt(0) === '{') throw new Error('пусто');
       return String(t).trim();
     });
-  }
-
-  function normTitle(t){ return String(t || '').toLowerCase().replace(/ё/g, 'е').replace(/[^a-zа-яё0-9 ]/gi, ' ').replace(/\s+/g, ' ').trim(); }
-
-  function findMovieInQuestion(text){
-    var q = normTitle(text);
-    for(var i = 0; i < movies.length; i++){
-      var t = normTitle(movies[i].title);
-      if(t.length > 3 && q.indexOf(t) >= 0) return movies[i];
-    }
-    return null;
-  }
-
-  function wikiFetch(query){
-    var searchUrl = 'https://ru.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srlimit=1&srsearch=' + encodeURIComponent(query);
-    return fetchTO(searchUrl, {}, 8000).then(function(t){
-      var j = JSON.parse(t);
-      var hit = j && j.query && j.query.search && j.query.search[0];
-      if(!hit) return '';
-      var artUrl = 'https://ru.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=1&explaintext=1&redirects=1&titles=' + encodeURIComponent(hit.title);
-      return fetchTO(artUrl, {}, 8000).then(function(t2){
-        var j2 = JSON.parse(t2);
-        var pages = j2 && j2.query && j2.query.pages;
-        if(!pages) return '';
-        var p = pages[Object.keys(pages)[0]];
-        var ex = p && p.extract ? String(p.extract) : '';
-        return ex ? ex.slice(0, 1200) : '';
-      });
-    }).catch(function(){ return ''; });
-  }
-
-  function wikiQueryFor(txt, movie){
-    if(movie) return movie.title + ' фильм ' + movie.year;
-    var m = txt.match(/«([^»]{3,60})»/);
-    return m ? (m[1] + ' фильм') : txt.slice(0, 80);
   }
 
   function localScore(t){
@@ -2837,7 +2992,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var r = movies[Math.floor(Math.random() * movies.length)];
       list = '🎬 «' + r.title + '» (' + r.year + ') — ' + r.genres.join(', ') + ', рейтинг ' + r.rating;
     }
-    return 'ИИ-сервис сейчас недоступен, но я подобрал по твоему запросу из каталога:\n\n' + list + '\n\nПопробуй спросить ещё раз через минуту — ИИ может ожить.';
+    return 'ИИ-сервис сейчас недоступен, но я подобрала по твоему запросу из каталога:\n\n' + list + '\n\nПопробуй спросить ещё раз через минуту — ИИ может ожить.';
   }
 
   function fallbackText(err){
@@ -2862,99 +3017,96 @@ document.addEventListener('DOMContentLoaded', function() {
     return d;
   }
 
-  function posterOf(m){
-    return POSTER_URLS_A[m.id] || POSTER_URLS_LAST[m.id] || POSTER_URLS_FIX[m.id] || POSTER_URLS_FINAL[m.id] || POSTER_URLS_EXTRA[m.id] || POSTER_URLS[m.id] || '';
+    function isRateLimitMsg(msg) {
+    return /HTTP (429|402|5\d\d)|таймаут|сеть|перегруз/i.test(msg || '');
   }
 
-  // ===== Карусель "Фильм дня": центр + соседи + стрелки =====
-  window.renderFod = function(){
-    var box = document.getElementById('film-of-day');
-    if(!box) return;
-    var n = movies.length;
-    if(!n) return;
-    var base = movies.indexOf(getFilmOfDay());
-    var idx = (((base + fodOffset) % n) + n) % n;
-    var prev = movies[(((idx - 1) % n) + n) % n];
-    var next = movies[((idx + 1) % n) % n];
-    var cur = movies[idx];
-    var pp = posterOf(prev), np = posterOf(next);
-    box.innerHTML =
-      '<div class="fod-carousel">' +
-        '<button class="fod-arrow" onclick="fodStep(-1)" aria-label="Предыдущий фильм">‹</button>' +
-        '<div class="fod-side" onclick="fodStep(-1)" title="' + esc(prev.title) + '">' +
-          (pp ? '<img src="' + pp + '" alt="' + esc(prev.title) + '" onerror="this.style.display=\'none\'">' : '') +
-          '<div class="fod-side-title">' + esc(prev.title) + '</div>' +
-          '<div class="fod-side-tag">смотреть</div>' +
-        '</div>' +
-        '<div class="fod-center" id="fod-center"></div>' +
-        '<div class="fod-side" onclick="fodStep(1)" title="' + esc(next.title) + '">' +
-          (np ? '<img src="' + np + '" alt="' + esc(next.title) + '" onerror="this.style.display=\'none\'">' : '') +
-          '<div class="fod-side-title">' + esc(next.title) + '</div>' +
-          '<div class="fod-side-tag">смотреть</div>' +
-        '</div>' +
-        '<button class="fod-arrow" onclick="fodStep(1)" aria-label="Следующий фильм">›</button>' +
-      '</div>';
-    renderResults([cur], 'fod-center', false);
-  };
-
-  window.fodStep = function(d){
-    fodOffset += d;
-    if(window.renderFod) window.renderFod();
-  };
-
-  // ===== Кнопка "Спросить ИИ" о конкретном фильме =====
-  window.askAiAboutMovie = function(id){
-    var m = null;
-    for(var i = 0; i < movies.length; i++){ if(movies[i].id === id){ m = movies[i]; break; } }
-    if(!m) return;
-    if(typeof closeModal === 'function') closeModal();
-    showScreen('screen-ai');
-    var q = 'Расскажи о фильме «' + m.title + '» (' + m.year + '): о чём он, где снимали и почему стоит посмотреть?';
-    setTimeout(function(){ window.aiSend(q); }, 350);
-  };
-
-  window.toggleMoodMenu = function(e){
-    if(e) e.stopPropagation();
-    var w = document.getElementById('mood-wrap');
-    if(w) w.classList.toggle('open');
-  };
-
-  document.addEventListener('click', function(e){
-    var w = document.getElementById('mood-wrap');
-    if(w && w.classList.contains('open')){
-      var t = e.target;
-      if(!w.contains(t) && (!t || t.id !== 'mood-toggle')) w.classList.remove('open');
-      if(t && t.classList && t.classList.contains('mood-btn')) setTimeout(function(){ w.classList.remove('open'); }, 150);
-    }
-  });
-
-  window.aiSend = function(forced){
-    var inp = document.getElementById('ai-input');
-    var txt = (typeof forced === 'string' && forced.trim()) ? forced.trim() : ((inp && inp.value) || '').trim();
-    if(!txt) return;
-    if(inp) inp.value = '';
-    aiAdd('user', txt);
-    var typing = aiAdd('ai-typing', 'ИИ думает…');
-    var movie = findMovieInQuestion(txt);
-    var wq = wikiQueryFor(txt, movie);
-    wikiFetch(wq).then(function(wiki){
-      return throttle().then(function(){
-        var sys = buildSystem();
-        var user = txt;
-        if(wiki) user += '\n\n(Справка из Википедии для точности: ' + wiki + ')';
-        return viaPost(sys, user).catch(function(){ return viaGet(sys, user); });
+  function smartChain(sys, user, attempt) {
+    attempt = attempt || 1;
+    return viaPost(sys, user).catch(function(e1) {
+      return viaGet(sys, user).catch(function(e2) {
+        const msg = ((e1 && e1.message) || '') + ' ' + ((e2 && e2.message) || '');
+        if (isRateLimitMsg(msg) && attempt < 3) {
+          return new Promise(function(res) { setTimeout(res, 7000); }).then(function() {
+            return smartChain(sys, user, attempt + 1);
+          });
+        }
+        throw new Error([e1 && e1.message, e2 && e2.message].filter(Boolean).join(' / '));
       });
-    }).then(function(reply){
-      if(typing) typing.remove();
+    });
+  }
+
+  function normalizeName(s) {
+    return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[^a-zа-я0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
+  function findMovieInText(text) {
+    const nt = normalizeName(text);
+    if (!nt) return null;
+    let best = null;
+    movies.forEach(function(m) {
+      const nm = normalizeName(m.title);
+      if (nm && nm.length > 3 && nt.indexOf(nm) !== -1) best = m;
+    });
+    return best;
+  }
+
+  function wikiSummary(pageTitle) {
+    return fetchTO('https://ru.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(pageTitle), { headers: { 'Accept': 'application/json' } }, 8000).then(function(t) {
+      try {
+        const j = JSON.parse(t);
+        if (j && j.extract) return 'СПРАВКА ИЗ ВИКИПЕДИИ («' + j.title + '»): ' + j.extract;
+      } catch (e) {}
+      return '';
+    }).catch(function() { return ''; });
+  }
+
+  function wikiSearch(query) {
+    const u = 'https://ru.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(query) + '&format=json&srlimit=1&origin=*';
+    return fetchTO(u, { headers: { 'Accept': 'application/json' } }, 8000).then(function(t) {
+      try {
+        const j = JSON.parse(t);
+        const hit = j && j.query && j.query.search && j.query.search[0];
+        if (hit) return wikiSummary(hit.title);
+      } catch (e) {}
+      return '';
+    }).catch(function() { return ''; });
+  }
+
+  function wikiLookup(user) {
+    const m = findMovieInText(user);
+    if (m) {
+      return wikiSummary(m.title).then(function(w) { return w || wikiSearch(user); });
+    }
+    if (/фильм|кино|сня|режисс|сериал/i.test(user)) return wikiSearch(user);
+    return Promise.resolve('');
+  }
+
+  window.aiSend = function() {
+    const inp = document.getElementById('ai-input');
+    if (!inp) return;
+    const txt = (inp.value || '').trim();
+    if (!txt) return;
+    inp.value = '';
+    aiAdd('user', txt);
+    const typing = aiAdd('ai-typing', 'ИИ думает…');
+    wikiLookup(txt).then(function(wiki) {
+      const sys = buildSystem() + (wiki ? '\n\n' + wiki : '');
+      const q = wiki ? txt + '\n(Используй справку из Википедии, если она помогает ответить.)' : txt;
+      return throttle().then(function() {
+        return smartChain(sys, q, 1);
+      });
+    }).then(function(reply) {
+      if (typing) typing.remove();
       lastReq = Date.now();
       aiAdd('bot', reply || 'Пустой ответ, попробуй ещё раз.');
-    }).catch(function(e){
-      if(typing) typing.remove();
-      var la = localAdvice(txt);
-      aiAdd('bot', la || fallbackText(e));
+    }).catch(function(e) {
+      if (typing) typing.remove();
+      const s2 = localAdvice(txt);
+      if (s2) { aiAdd('bot', s2); return; }
+      aiAdd('bot', fallbackText(e));
     });
-  };
-})();
+  };})();
 </script>
 
 </body>
