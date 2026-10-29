@@ -417,6 +417,9 @@ body.light #no-stats, body.light #no-favorites, body.light #no-watched { backgro
 /* === Адаптация и ИИ-чат (блок Алисы) === */
 :root { --header-h: 92px; }
 .ai-btn { background: linear-gradient(135deg, #7a1f8f, #d6382f); display: block; margin: 12px auto 0; }
+.ai-ask-btn { font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 16px; background: linear-gradient(135deg, #7a1f8f, #d6382f); color: #fff; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
+.ai-ask-btn:hover { filter: brightness(1.15); box-shadow: 0 0 16px rgba(122,31,143,0.5); }
+@media (max-width: 560px) { .ai-ask-btn { padding: 8px 12px; font-size: 13px; } }
 .ai-btn:hover { filter: brightness(1.15); box-shadow: 0 0 20px rgba(122,31,143,0.5); }
 .ai-chat { background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow); padding: 14px; }
 body.light .ai-chat { background: #fff; }
@@ -1992,6 +1995,7 @@ function openModal(id) {
       '<b>Рейтинг:</b> ' + getStars(m.rating) + ' ' + m.rating + '/10' +
     '</div>' +
     '<div class="modal-desc">' + m.description + '</div>' +
+    '<div style="margin-bottom: 14px;"><button class="ai-ask-btn" onclick="askAiAboutMovie(\'' + m.id + '\')">🤖 Спросить ИИ об этом фильме</button></div>' +
     '<div style="margin-bottom: 14px;">' + buildServiceLinks(m) + '</div>' +
     revHtml;
 
@@ -2082,6 +2086,7 @@ function renderResults(items, containerId, isFavoriteMode) {
       '<div class="card-actions">' + buttonHtml + watchButtonHtml +
         '<button class="share-btn" id="share-btn-' + item.id + '" onclick="shareMovie(\'' + item.id + '\')">📤 Поделиться</button>' +
         '<button class="review-toggle" onclick="toggleReviews(\'' + item.id + '\')">💬 Отзывы (' + revCount + ')</button>' +
+        '<button class="ai-ask-btn" onclick="askAiAboutMovie(\'' + item.id + '\')">🤖 Спросить ИИ</button>' +
       '</div>' +
       '<div class="review-panel" id="reviews-' + item.id + '">' +
         reviewsHtml +
@@ -2632,6 +2637,95 @@ document.addEventListener('DOMContentLoaded', function() {
   'use strict';
   var lastReq = 0;
 
+  // === Википедия: справка о фильме ===
+  function normTitle(s){
+    return String(s || '').toLowerCase().replace(/\u0451/g, '\u0435').replace(/[^a-z\u0430-\u044f0-9 ]/gi, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function findMovieInText(text){
+    var t = normTitle(text);
+    var best = null;
+    try {
+      movies.forEach(function(m){
+        var nt = normTitle(m.title);
+        if(nt && nt.length >= 3 && t.indexOf(nt) >= 0){
+          if(!best || nt.length > normTitle(best.title).length) best = m;
+        }
+      });
+    } catch(e){}
+    return best;
+  }
+  function fetchTO2(url, ms){
+    return new Promise(function(resolve, reject){
+      var done = false;
+      var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+      var timer = setTimeout(function(){ if(!done){ done = true; reject(new Error('таймаут')); } }, ms || 8000);
+      var o = {};
+      if(ctrl) o.signal = ctrl.signal;
+      fetch(url, o).then(function(r){
+        if(done) return;
+        if(!r.ok){ done = true; clearTimeout(timer); reject(new Error('HTTP ' + r.status)); return; }
+        r.text().then(function(t){ if(!done){ done = true; clearTimeout(timer); resolve(t); } }, function(e){ if(!done){ done = true; clearTimeout(timer); reject(e); } });
+      }, function(){ if(!done){ done = true; clearTimeout(timer); reject(new Error('сеть')); } });
+    });
+  }
+  function wikiSummary(title){
+    var url = 'https://ru.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(String(title).replace(/ /g, '_'));
+    return fetchTO2(url, 8000).then(function(t){
+      var j = JSON.parse(t);
+      var ex = j && j.extract ? String(j.extract) : '';
+      if(ex.length > 700) ex = ex.slice(0, 700) + '\u2026';
+      if(!ex) throw new Error('пусто');
+      return ex;
+    });
+  }
+  function wikiSearch(q){
+    var url = 'https://ru.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(q) + '&srlimit=1&format=json&origin=*';
+    return fetchTO2(url, 8000).then(function(t){
+      var j = JSON.parse(t);
+      var s = j && j.query && j.query.search && j.query.search[0];
+      if(!s) return '';
+      return wikiSummary(s.title).catch(function(){ return ''; });
+    });
+  }
+  function buildWikiContext(userText){
+    var m = findMovieInText(userText);
+    if(m) return wikiSummary(m.title).catch(function(){ return wikiSearch(userText).catch(function(){ return ''; }); });
+    if(/\u0444\u0438\u043b\u044c\u043c|\u0441\u043d\u044f\u0442|\u0441\u043d\u0438\u043c\u0430\u043b|\u0440\u0435\u0436\u0438\u0441\u0441|\u0440\u0430\u0441\u0441\u043a\u0430\u0436\u0438|\u043a\u0442\u043e \u0442\u0430\u043a|\u0447\u0442\u043e \u0437\u0430/i.test(userText)){
+      return wikiSearch(userText).catch(function(){ return ''; });
+    }
+    return Promise.resolve('');
+  }
+
+  // === Умная цепочка: повтор при лимите и перегрузке ===
+  function aiChain(sys, user){
+    return viaPost(sys, user).catch(function(e1){
+      var m1 = e1 && e1.message ? String(e1.message) : '';
+      var retriable = /HTTP 4\d\d/.test(m1) || m1 === '\u0442\u0430\u0439\u043c\u0430\u0443\u0442' || m1 === '\u0441\u0435\u0442\u044c';
+      if(!retriable) return viaGet(sys, user);
+      return new Promise(function(res){ setTimeout(res, 7000); }).then(function(){
+        return viaGet(sys, user).catch(function(e2){
+          var m2 = e2 && e2.message ? String(e2.message) : '';
+          if(/HTTP 4\d\d/.test(m2) || m2 === '\u0442\u0430\u0439\u043c\u0430\u0443\u0442' || m2 === '\u0441\u0435\u0442\u044c'){
+            return new Promise(function(res){ setTimeout(res, 7000); }).then(function(){
+              return viaGet(sys, user);
+            });
+          }
+          throw e2;
+        });
+      });
+    });
+  }
+
+  // === Кнопка «Спросить ИИ об этом фильме» ===
+  window.askAiAboutMovie = function(id){
+    var m = null;
+    try { m = movies.find(function(x){ return String(x.id) === String(id); }); } catch(e){}
+    if(!m) return;
+    showScreen('screen-ai');
+    var q = '\u0420\u0430\u0441\u0441\u043a\u0430\u0436\u0438 \u043e \u0444\u0438\u043b\u044c\u043c\u0435 \u00ab' + m.title + '\u00bb (' + m.year + '): \u043e \u0447\u0451\u043c \u043e\u043d, \u0433\u0434\u0435 \u0441\u043d\u0438\u043c\u0430\u043b\u0438 \u0438 \u043f\u043e\u0447\u0435\u043c\u0443 \u0441\u0442\u043e\u0438\u0442 \u043f\u043e\u0441\u043c\u043e\u0442\u0440\u0435\u0442\u044c?';
+    setTimeout(function(){ try { window.aiSend(q); } catch(e){} }, 350);
+  };
+
   function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function buildCatalog(){
@@ -2667,7 +2761,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return fetchTO('https://text.pollinations.ai/openai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'openai', referrer: 'yan154rus.github.io', messages: [ {role:'system', content: sys}, {role:'user', content: user} ] })
+      body: JSON.stringify({ model: 'openai', messages: [ {role:'system', content: sys}, {role:'user', content: user} ] })
     }, 25000).then(function(txt){
       try {
         var j = JSON.parse(txt);
@@ -2683,7 +2777,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var catalog = buildCatalog();
     if(catalog.length > 1200) catalog = catalog.split('\n').slice(0, 25).join('\n');
     var prompt = 'Ответь коротко по-русски (до 80 слов). Каталог фильмов: ' + catalog + '. Вопрос: ' + user;
-    return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt) + '?referrer=yan154rus.github.io', {}, 25000).then(function(t){
+    return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt), {}, 25000).then(function(t){
       if(!t || !String(t).trim() || String(t).trim().charAt(0) === '{') throw new Error('пусто');
       return String(t).trim();
     });
@@ -2718,8 +2812,6 @@ document.addEventListener('DOMContentLoaded', function() {
     return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + '. Попробуй задать вопрос ещё раз через минуту.';
   }
 
-  function wait(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
-
   function throttle(){
     var wait = Math.max(0, lastReq + 15000 - Date.now());
     return new Promise(function(res){ setTimeout(res, wait); });
@@ -2736,32 +2828,19 @@ document.addEventListener('DOMContentLoaded', function() {
     return d;
   }
 
-  window.aiSend = function(){
+  window.aiSend = function(forcedText){
     var inp = document.getElementById('ai-input');
     if(!inp) return;
-    var txt = (inp.value || '').trim();
+    var txt = forcedText || (inp.value || '').trim();
     if(!txt) return;
     inp.value = '';
     aiAdd('user', txt);
     var typing = aiAdd('ai-typing', 'ИИ думает…');
     var t0 = Date.now();
-    throttle().then(function(){
-      return viaPost(buildSystem(), txt).catch(function(e1){
-        var c1 = e1 && e1.message ? String(e1.message) : '';
-        return viaGet(buildSystem(), txt).then(null, function(e2){
-          var c2 = e2 && e2.message ? String(e2.message) : '';
-          var codes = (c1 + ' ' + c2);
-          // Лимит или перегрузка сервиса: ждём и пробуем ещё раз одним каналом
-          if(/HTTP 429|HTTP 402|HTTP 502|HTTP 503/.test(codes)){
-            return wait(7000).then(function(){
-              return viaGet(buildSystem(), txt).then(null, function(e3){
-                throw new Error([c1, c2, e3 && e3.message].filter(Boolean).join(' / '));
-              });
-            });
-          }
-          throw new Error([c1, c2].filter(Boolean).join(' / '));
-        });
-      });
+    buildWikiContext(txt).then(function(wiki){
+      var sys = buildSystem();
+      if(wiki) sys += '\n\nСправка из Википедии (используй эти факты, если они относятся к вопросу):\n' + wiki;
+      return throttle().then(function(){ return aiChain(sys, txt); });
     }).then(function(reply){
       if(typing) typing.remove();
       lastReq = Date.now();
