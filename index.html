@@ -2616,7 +2616,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="screen" id="screen-ai">
   <button class="back-btn" onclick="showScreen('screen-home')">← Назад</button>
   <h1>ИИ-кинокритик</h1>
-  <p class="subtitle">Совет от ИИ, справки о фильмах — и любой вопрос о кино</p>
+  <p class="subtitle">Совет от ИИ или любой вопрос о кино</p>
   <div class="ai-chat">
     <div class="ai-messages" id="ai-messages">
       <div class="ai-msg bot">Привет! Я ИИ-кинокритик 🎬 Могу подобрать фильм под настроение или ответить на любой вопрос о кино. С чего начнём?</div>
@@ -2627,7 +2627,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </section>
-<script src="https://js.puter.com/v2/" async></script>
 <script>
 (function(){
   'use strict';
@@ -2645,11 +2644,8 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch(err){ return ''; }
   }
 
-  function buildSystem(wiki){
-    var base = 'Ты — дружелюбный ИИ-кинокритик приложения Mood Movies. Отвечай по-русски, живо, коротко (до 100 слов). Если просят посоветовать фильм — советуй ТОЛЬКО фильмы из каталога ниже, объясняй, почему подходит. На общие вопросы о кино (сюжеты, жанры, режиссёры, съёмки, факты) отвечай коротко и интересно, опираясь на свои знания и на справку из Википедии, если она есть.\n\n';
-    if(wiki) base += 'СПРАВКА ИЗ ВИКИПЕДИИ (используй её при ответе на вопрос пользователя):\n' + wiki + '\n\n';
-    base += 'КАТАЛОГ:\n' + buildCatalog();
-    return base;
+  function buildSystem(){
+    return 'Ты — дружелюбный ИИ-кинокритик приложения Mood Movies. Отвечай по-русски, живо, коротко (до 100 слов). Если просят посоветовать фильм — советуй ТОЛЬКО фильмы из каталога ниже, объясняй, почему подходит. Если вопрос общий (о кино, жанрах, режиссёрах) — отвечай коротко и интересно.\n\nКАТАЛОГ:\n' + buildCatalog();
   }
 
   function fetchTO(url, opts, ms){
@@ -2671,7 +2667,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return fetchTO('https://text.pollinations.ai/openai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'openai', messages: [ {role:'system', content: sys}, {role:'user', content: user} ] })
+      body: JSON.stringify({ model: 'openai', referrer: 'yan154rus.github.io', messages: [ {role:'system', content: sys}, {role:'user', content: user} ] })
     }, 25000).then(function(txt){
       try {
         var j = JSON.parse(txt);
@@ -2684,28 +2680,12 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function viaGet(sys, user){
-    var wikiPart = '';
-    var wi = sys.indexOf('\u0421\u041f\u0420\u0410\u0412\u041a\u0410 \u0418\u0417 \u0412\u0418\u041a\u0418\u041f\u0415\u0414\u0418\u0418');
-    if(wi >= 0){
-      var we = sys.indexOf('КАТАЛОГ:');
-      if(we > wi) wikiPart = sys.slice(wi, we);
-    }
     var catalog = buildCatalog();
     if(catalog.length > 1200) catalog = catalog.split('\n').slice(0, 25).join('\n');
-    var prompt = 'Ответь коротко по-русски (до 80 слов). ' + wikiPart + 'Каталог фильмов: ' + catalog + '. Вопрос: ' + user;
-    return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt), {}, 25000).then(function(t){
+    var prompt = 'Ответь коротко по-русски (до 80 слов). Каталог фильмов: ' + catalog + '. Вопрос: ' + user;
+    return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt) + '?referrer=yan154rus.github.io', {}, 25000).then(function(t){
       if(!t || !String(t).trim() || String(t).trim().charAt(0) === '{') throw new Error('пусто');
       return String(t).trim();
-    });
-  }
-
-  function viaPuter(sys, user){
-    if(typeof puter === 'undefined' || !puter.ai || !puter.ai.chat) return Promise.reject(new Error('нет канала'));
-    return puter.ai.chat([ {role:'system', content: sys}, {role:'user', content: user} ], { model: 'gpt-4o-mini' }).then(function(resp){
-      var t = resp && resp.message && resp.message.content;
-      if(typeof t !== 'string'){ t = resp ? String(resp) : ''; }
-      if(!t || !t.trim()) throw new Error('пусто');
-      return t.trim();
     });
   }
 
@@ -2738,47 +2718,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + '. Попробуй задать вопрос ещё раз через минуту.';
   }
 
-  function normTitle(s){ return String(s||'').toLowerCase().replace(/\u0451/g,'\u0435'); }
-
-  function wikiFetch(title){
-    var url = 'https://ru.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=1&explaintext=1&redirects=1&titles=' + encodeURIComponent(title);
-    return fetchTO(url, {}, 8000).then(function(txt){
-      var j = JSON.parse(txt);
-      var pages = j && j.query && j.query.pages;
-      if(!pages) throw new Error('нет данных');
-      var keys = Object.keys(pages);
-      if(!keys.length) throw new Error('нет данных');
-      var ex = (pages[keys[0]].extract || '').trim();
-      if(!ex) throw new Error('нет данных');
-      if(ex.length > 700) ex = ex.slice(0, 700) + '\u2026';
-      return ex;
-    });
-  }
-
-  function wikiSearch(query){
-    var url = 'https://ru.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srlimit=3&srsearch=' + encodeURIComponent(query);
-    return fetchTO(url, {}, 8000).then(function(txt){
-      var j = JSON.parse(txt);
-      var hits = j && j.query && j.query.search;
-      if(!hits || !hits.length) throw new Error('не найдено');
-      return hits.map(function(h){ return h.title; });
-    });
-  }
-
-  function wikiContext(userText){
-    var q = normTitle(userText);
-    var found = null;
-    for(var i = 0; i < movies.length; i++){
-      var t = normTitle(movies[i].title);
-      if(t.length > 3 && q.indexOf(t) >= 0){ found = movies[i].title; break; }
-    }
-    if(found){
-      return wikiFetch(found + ' (фильм)').catch(function(){ return wikiFetch(found); }).catch(function(){ return ''; });
-    }
-    return wikiSearch(userText + ' фильм').then(function(list){ return wikiFetch(list[0]); })
-      .catch(function(){ return wikiSearch(userText).then(function(list){ return wikiFetch(list[0]); }); })
-      .catch(function(){ return ''; });
-  }
+  function wait(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
 
   function throttle(){
     var wait = Math.max(0, lastReq + 15000 - Date.now());
@@ -2804,15 +2744,22 @@ document.addEventListener('DOMContentLoaded', function() {
     inp.value = '';
     aiAdd('user', txt);
     var typing = aiAdd('ai-typing', 'ИИ думает…');
-    wikiContext(txt).then(function(wiki){
-      var sys = buildSystem(wiki);
-      return throttle().then(function(){
-        return viaPost(sys, txt).catch(function(e1){
-          return viaGet(sys, txt).catch(function(e2){
-            return viaPuter(sys, txt).catch(function(e3){
-              throw new Error([e1 && e1.message, e2 && e2.message, e3 && e3.message].filter(Boolean).join(' / '));
+    var t0 = Date.now();
+    throttle().then(function(){
+      return viaPost(buildSystem(), txt).catch(function(e1){
+        var c1 = e1 && e1.message ? String(e1.message) : '';
+        return viaGet(buildSystem(), txt).then(null, function(e2){
+          var c2 = e2 && e2.message ? String(e2.message) : '';
+          var codes = (c1 + ' ' + c2);
+          // Лимит или перегрузка сервиса: ждём и пробуем ещё раз одним каналом
+          if(/HTTP 429|HTTP 402|HTTP 502|HTTP 503/.test(codes)){
+            return wait(7000).then(function(){
+              return viaGet(buildSystem(), txt).then(null, function(e3){
+                throw new Error([c1, c2, e3 && e3.message].filter(Boolean).join(' / '));
+              });
             });
-          });
+          }
+          throw new Error([c1, c2].filter(Boolean).join(' / '));
         });
       });
     }).then(function(reply){
