@@ -399,27 +399,55 @@ body.light .stats-hint { color: rgba(26,23,34,0.6); }
   border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow);
 }
 body.light #no-stats, body.light #no-favorites, body.light #no-watched { background: #fff; }
-@media (max-width: 900px) {
-  h1 { font-size: 30px; }
-  .screen { padding: 100px 16px 50px; }
-  .mood-buttons { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+/* ===== Мобильная версия (телефон и узкий планшет) ===== */
+@media (max-width: 640px) {
+  /* Шапка в две ровные строки: сверху название + тема, ниже три счётчика в ряд */
+  .top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 7px;
+    padding: 9px 12px;
+  }
+  .top-bar-left, .top-bar-right {
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .top-bar-left { justify-content: space-between; }
+  .top-bar-right { justify-content: space-between; }
+  .top-bar-right > button {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    padding: 9px 4px;
+    font-size: 12px;
+    gap: 6px;
+  }
+  .top-bar-right .fav-count, .top-bar-right .watched-count, .top-bar-right .stats-count {
+    min-width: 20px; height: 20px; font-size: 11px;
+  }
+  .top-bar-title { font-size: 16px; }
+  .theme-btn { padding: 8px 14px; font-size: 13px; }
+  .screen { padding-top: 108px; }
 }
+
 @media (max-width: 560px) {
   h1 { font-size: 26px; }
-  .mood-buttons { grid-template-columns: 1fr 1fr; }
+  .mood-buttons { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mood-btn { padding: 14px 10px; font-size: 13px; }
   .card { flex-direction: column; }
   .card-poster { width: 100%; height: 300px; margin: 0; border-radius: 0; }
   .card-body { padding: 16px; }
-  .top-bar { padding: 8px 10px; flex-wrap: wrap; row-gap: 6px; }
-  .top-bar-left { width: 100%; justify-content: space-between; }
-  .top-bar-right { width: 100%; justify-content: space-between; }
-  .top-bar-title { font-size: 14px; white-space: nowrap; }
-  .fav-counter, .watched-counter, .stats-counter, .theme-btn { font-size: 12px; padding: 6px 10px; gap: 5px; white-space: nowrap; }
-  .screen { padding-top: 112px; }
   .couple-row { flex-direction: column; align-items: stretch; }
   .couple-row select { max-width: none; }
   #toast-container { right: 10px; bottom: 10px; left: 10px; }
   #chat-panel { width: calc(100vw - 40px); }
+}
+
+/* ===== Совсем маленькие экраны ===== */
+@media (max-width: 380px) {
+  .top-bar-right > button { font-size: 11px; padding: 8px 2px; }
+  .top-bar-title { font-size: 14px; }
 }
 </style>
 </head>
