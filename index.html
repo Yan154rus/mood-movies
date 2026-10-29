@@ -41,7 +41,7 @@ body.light {
   color: #1a1722;
 }
 .top-bar {
-  position: sticky; top: 0; z-index: 100;
+  position: sticky; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   padding: 12px 20px; background: rgba(15,10,20,0.75); backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(242,193,78,0.3);
@@ -78,7 +78,7 @@ body.light .fav-counter, body.light .watched-counter, body.light .stats-counter,
 .fav-count { background: var(--gold); color: #1a1722; }
 .watched-count { background: var(--green); color: #1a1722; }
 .stats-count { background: var(--blue); color: #1a1722; }
-.screen { display: none; max-width: 760px; margin: 0 auto; padding: 20px 20px 60px; animation: fadeIn 0.35s ease; }
+.screen { display: none; max-width: 760px; margin: 0 auto; padding: 16px 20px 60px; animation: fadeIn 0.35s ease; }
 .screen.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
@@ -172,6 +172,7 @@ body.light .filters-row select { background: #fff; color: #1a1722; }
 .results-note { font-size: 13px; text-align: center; margin-bottom: 14px; color: rgba(255,255,255,0.65); }
 body.light .results-note { color: rgba(26,23,34,0.65); }
 .card {
+  scroll-margin-top: 80px;
   display: flex; background: rgba(26,23,34,0.88);
   border: 1px solid rgba(242,193,78,0.25); border-radius: 18px;
   margin-bottom: 16px; box-shadow: var(--shadow);
@@ -400,16 +401,12 @@ body.light .stats-hint { color: rgba(26,23,34,0.6); }
 }
 body.light #no-stats, body.light #no-favorites, body.light #no-watched { background: #fff; }
 @media (max-width: 560px) {
-  h1 { font-size: clamp(24px, 7vw, 30px); }
+  h1 { font-size: 26px; }
   .mood-buttons { grid-template-columns: 1fr 1fr; }
   .card { flex-direction: column; }
-  .card-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain; background: #221b2e; margin: 0; border-radius: 0; }
-  body.light .card-poster { background: #efe9dc; }
+  .card-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; margin: 0; border-radius: 0; }
   .card-body { padding: 16px; }
-  .top-bar { padding: 8px 10px; flex-wrap: wrap; gap: 8px; }
-  .top-bar-left, .top-bar-right { width: 100%; justify-content: space-between; }
-  .top-bar-right { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .stats-counter, .watched-counter, .fav-counter { justify-content: center; width: 100%; padding: 8px 6px; font-size: 12px; }
+  .top-bar { padding: 8px 10px; }
   .top-bar-title { font-size: 14px; }
   .fav-counter, .watched-counter, .stats-counter, .theme-btn { font-size: 12px; padding: 6px 10px; gap: 5px; }
   .couple-row { flex-direction: column; align-items: stretch; }
@@ -417,25 +414,34 @@ body.light #no-stats, body.light #no-favorites, body.light #no-watched { backgro
   #toast-container { right: 10px; bottom: 10px; left: 10px; }
   #chat-panel { width: calc(100vw - 40px); }
 }
-/* Прокрутка к карточке с учётом прилипающей шапки */
-.card { scroll-margin-top: 100px; }
 
-/* Планшеты и телефоны-книжки в раскладке */
-@media (min-width: 561px) and (max-width: 1024px) {
-  h1 { font-size: clamp(28px, 4.5vw, 34px); }
-  .mood-buttons { grid-template-columns: 1fr 1fr; }
-  .couple-row { flex-direction: column; align-items: stretch; }
-  .couple-row select { max-width: none; }
-  .filters-row { gap: 8px; }
-}
+  /* === АДАПТАЦИЯ: мобильные === */
+  @media (max-width: 560px) {
+    .top-bar { flex-direction: column; align-items: stretch; row-gap: 8px; }
+    .top-bar-left, .top-bar-right { width: 100%; justify-content: space-between; flex-wrap: nowrap; }
+    .fav-counter, .watched-counter, .stats-counter { flex: 1; justify-content: center; padding: 8px 6px; font-size: 13px; }
+    .theme-btn { flex-shrink: 0; }
+    h1 { font-size: clamp(26px, 8vw, 34px); }
+    .card { scroll-margin-top: 128px; }
+    .mood-btn { padding: 16px 12px; font-size: 15px; }
+    .random-btn { width: 100%; max-width: 340px; }
+    .more-btn { width: 100%; max-width: 340px; }
+  }
 
-/* Совсем узкие экраны */
-@media (max-width: 380px) {
-  .top-bar-title { font-size: 13px; }
-  .stats-counter, .watched-counter, .fav-counter { font-size: 11px; padding: 6px 4px; gap: 4px; }
-  .top-bar-left, .top-bar-right { gap: 4px; }
-}
+  @media (max-width: 380px) {
+    .fav-counter, .watched-counter, .stats-counter { font-size: 11px; padding: 6px 4px; }
+    .fav-count, .watched-count, .stats-count { min-width: 18px; height: 18px; font-size: 10px; }
+    .top-bar-title { font-size: 13px; }
+  }
 
+  @media (min-width: 561px) and (max-width: 1024px) {
+    h1 { font-size: clamp(28px, 4.5vw, 34px); }
+    .mood-buttons { grid-template-columns: 1fr 1fr; }
+    .couple-row { flex-direction: column; align-items: stretch; }
+    .couple-row select { max-width: none; }
+    .filters-row { gap: 8px; }
+    .card { scroll-margin-top: 100px; }
+  }
 </style>
 </head>
 <body>
