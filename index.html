@@ -506,6 +506,31 @@ body.light .fod-hero { background: #fff; }
 /* Модалка: прокрутка без видимой полосы */
 .modal-box { scrollbar-width: none; -ms-overflow-style: none; }
 .modal-box::-webkit-scrollbar { display: none; width: 0; }
+
+/* Главный экран: колонка действий слева + фильм дня в центре */
+.home-layout { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 8px; }
+.home-side { flex: 0 0 230px; display: flex; flex-direction: column; gap: 10px; }
+.home-side .quick-btn { width: 100%; display: block; margin: 0; padding: 12px 14px; font-size: 14px; }
+.mood-dropdown { position: relative; }
+.mood-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 60;
+  background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.45); border-radius: 14px;
+  padding: 8px; box-shadow: 0 14px 40px rgba(0,0,0,0.5); }
+body.light .mood-menu { background: #fff; }
+.mood-menu.open { display: block; animation: popIn 0.2s ease; }
+.mood-menu .mood-btn { padding: 11px 12px; margin: 0 0 8px; box-shadow: none; }
+.mood-menu .mood-btn:last-child { margin-bottom: 0; }
+.home-main { flex: 1; min-width: 0; }
+.mood-buttons.mobile-only { margin-bottom: 8px; }
+@media (max-width: 899px) {
+  .home-layout { display: block; }
+  .home-side { flex-direction: row; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .home-side .quick-btn { width: calc(50% - 5px); display: inline-block; }
+  .mood-dropdown { display: none; }
+  .mood-buttons.mobile-only { display: grid; }
+}
+@media (min-width: 900px) {
+  .mood-buttons.mobile-only { display: none; }
+}
 </style>
 </head>
 <body>
@@ -529,13 +554,32 @@ body.light .fod-hero { background: #fff; }
     <input type="text" id="search-input" placeholder="Найти фильм или режиссёра..." autocomplete="off">
     <button class="search-btn" id="btn-search">🔍</button>
   </div>
-  <div class="quick-actions">
-    <button class="quick-btn" id="btn-random">🎲 Случайный фильм</button>
-    <button class="quick-btn" id="btn-couple">👥 Фильм для двоих</button>
-    <button class="quick-btn" id="btn-recommend">💡 Рекомендации</button>
-    <button class="quick-btn ai-quick" id="btn-ai" onclick="showScreen('screen-ai')">🤖 Спросить ИИ</button>
+  <div class="home-layout">
+    <aside class="home-side">
+      <button class="quick-btn" id="btn-random">🎲 Случайный фильм</button>
+      <button class="quick-btn" id="btn-couple">👥 Фильм для двоих</button>
+      <button class="quick-btn" id="btn-recommend">💡 Рекомендации</button>
+      <button class="quick-btn ai-quick" id="btn-ai" onclick="showScreen('screen-ai')">✨ Спросить ИИ</button>
+      <div class="mood-dropdown">
+        <button class="quick-btn" id="btn-mood-toggle">🎭 Настроение</button>
+        <div class="mood-menu" id="mood-menu">
+    <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
+    <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
+    <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
+    <button class="mood-btn" data-mood="расслабленное"><span class="stone stone-green"></span>Расслабиться</button>
+    <button class="mood-btn" data-mood="философское"><span class="stone stone-blue"></span>Поразмышлять</button>
+    <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
+    <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
+    <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
+        </div>
+      </div>
+    </aside>
+    <div class="home-main">
+      <div class="fod-label">🎬 Фильм дня</div>
+      <div id="film-of-day"></div>
+    </div>
   </div>
-  <div class="mood-buttons">
+  <div class="mood-buttons mobile-only">
     <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
     <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
     <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
@@ -545,7 +589,8 @@ body.light .fod-hero { background: #fff; }
     <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
     <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
   </div>
-  <div class="fod-label">🎬 Фильм дня</div>
+  
+<div class="fod-label">🎬 Фильм дня</div>
   <div id="film-of-day"></div>
 </div>
 
@@ -2050,12 +2095,12 @@ function openModal(id) {
     '</div>' +
     '<div class="modal-desc">' + m.description + '</div>' +
     '<div class="card-actions">' + modalFavBtn + modalWatchBtn +
-      '<button class="ai-soft" onclick="aiAboutMovie(\'' + m.id + '\')">🤖 Спросить ИИ</button>' +
+      '<button class="ai-soft" onclick="aiAboutMovie(\'' + m.id + '\')">✨ Спросить ИИ</button>' +
     '</div>' +
     buildRatingWidget(m) +
     '<div class="card-actions">' +
       '<button class="share-btn" id="share-btn-' + m.id + '" onclick="shareMovie(\'' + m.id + '\')">📤 Поделиться</button>' +
-      '<button class="review-toggle" onclick="toggleReviews(\'' + m.id + '\')">💬 Отзывы (' + revCount + ')</button>' +
+      '<button class="review-toggle" onclick="toggleReviews(\'' + m.id + '\')">💬 Отзывы (' + revs.length + ')</button>' +
     '</div>' +
     '<div class="review-panel" id="reviews-' + m.id + '">' +
       revHtml +
@@ -2205,7 +2250,7 @@ function renderResults(items, containerId, isFavoriteMode) {
       '<div class="card-actions">' + buttonHtml + watchButtonHtml +
         '<button class="share-btn" id="share-btn-' + item.id + '" onclick="shareMovie(\'' + item.id + '\')">📤 Поделиться</button>' +
         '<button class="review-toggle" onclick="toggleReviews(\'' + item.id + '\')">💬 Отзывы (' + revCount + ')</button>' +
-        '<button class="ai-soft" onclick="aiAboutMovie(\'' + item.id + '\')">🤖 Спросить ИИ</button>' +
+        '<button class="ai-soft" onclick="aiAboutMovie(\'' + item.id + '\')">✨ Спросить ИИ</button>' +
       '</div>' +
       '<div class="review-panel" id="reviews-' + item.id + '">' +
         reviewsHtml +
@@ -2953,6 +2998,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (_togW) _togW(id);
     if (window.__modalId && document.getElementById('modal-overlay').classList.contains('open')) openModal(window.__modalId);
   };
+})();
+</script>
+
+<script>
+(function() {
+  var t = document.getElementById('btn-mood-toggle');
+  var m = document.getElementById('mood-menu');
+  if (!t || !m) return;
+  t.addEventListener('click', function(e) { e.stopPropagation(); m.classList.toggle('open'); });
+  m.addEventListener('click', function(e) {
+    if (e.target && e.target.closest && e.target.closest('.mood-btn')) m.classList.remove('open');
+  });
+  document.addEventListener('click', function(e) {
+    if (!m.contains(e.target) && e.target !== t) m.classList.remove('open');
+  });
 })();
 </script>
 
