@@ -459,41 +459,75 @@ body.light .ai-input-row input { background: #fff; color: #1a1722; }
   .filters-row { gap: 8px; }
 }
 
-/* === Редизайн главного экрана (Алиса) === */
-.mood-select-wrap { display: none; }
-.ai-ask-btn {
-  font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 16px;
-  background: rgba(122,31,143,0.18); color: #d9a0f5; border: 1px solid rgba(122,31,143,0.6);
-  border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
-}
-.ai-ask-btn:hover { background: linear-gradient(135deg, #7a1f8f, #d6382f); color: #fff; box-shadow: 0 0 16px rgba(122,31,143,0.5); }
-body.light .ai-ask-btn { background: rgba(122,31,143,0.08); color: #7a1f8f; }
+/* === Главный экран: боковые действия + карусель (Алиса) === */
+.mood-toggle { display: none; }
+.mood-wrap { display: block; }
 @media (min-width: 561px) {
-  .quick-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: stretch; margin: 20px 0 16px; }
-  .quick-actions .random-btn { margin: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: 1 1 190px; max-width: 280px; padding: 13px 14px; font-size: 14px; }
-  .mood-buttons { display: none; }
-  .mood-select-wrap { display: block; position: relative; max-width: 460px; margin: 0 auto 22px; }
-  .mood-select-btn {
-    font-family: inherit; width: 100%; font-size: 16px; font-weight: 700; color: #f5f0e6;
-    background: rgba(26,23,34,0.85); border: 1px solid rgba(242,193,78,0.5); border-radius: 14px;
-    padding: 14px 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
-    gap: 10px; box-shadow: var(--shadow); transition: all 0.2s ease;
+  .mood-toggle {
+    display: inline-flex; align-items: center; gap: 8px; margin: 0 auto 16px;
+    font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 30px;
+    background: rgba(26,23,34,0.78); color: #f5f0e6;
+    border: 1px solid rgba(242,193,78,0.45); border-radius: 999px;
+    cursor: pointer; transition: all 0.2s ease; box-shadow: var(--shadow);
   }
-  body.light .mood-select-btn { background: #fff; color: #1a1722; }
-  .mood-select-btn:hover, .mood-select-btn.open { border-color: var(--gold); box-shadow: 0 0 18px rgba(242,193,78,0.45); }
-  .mood-select-arrow { transition: transform 0.25s ease; }
-  .mood-select-btn.open .mood-select-arrow { transform: rotate(180deg); }
-  .mood-dropdown {
-    display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 90;
-    background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.4); border-radius: 16px;
-    box-shadow: 0 14px 40px rgba(0,0,0,0.5); padding: 12px;
-    grid-template-columns: 1fr 1fr; gap: 8px; animation: fadeIn 0.2s ease;
+  .mood-toggle:hover { border-color: var(--gold); box-shadow: 0 0 18px rgba(242,193,78,0.45); }
+  body.light .mood-toggle { background: rgba(255,255,255,0.9); color: #1a1722; }
+  .mood-wrap { display: none; }
+  .mood-wrap.open { display: block; position: relative; animation: fadeIn 0.2s ease; }
+  .mood-wrap.open .mood-buttons {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    z-index: 70; width: min(560px, 100%); margin: 0;
+    background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.5);
+    border-radius: 16px; padding: 14px; box-shadow: 0 16px 44px rgba(0,0,0,0.55);
   }
-  body.light .mood-dropdown { background: #fff; }
-  .mood-dropdown.open { display: grid; }
-  .mood-dropdown .mood-btn { background: transparent; box-shadow: none; padding: 12px; }
-  .mood-dropdown .mood-btn:hover { background: rgba(38,30,46,0.92); transform: none; }
-  body.light .mood-dropdown .mood-btn:hover { background: #f4f1ea; }
+  body.light .mood-wrap.open .mood-buttons { background: #fff; }
+}
+.home-side { display: block; }
+@media (min-width: 900px) {
+  #screen-home {
+    max-width: 1120px; display: grid;
+    grid-template-columns: 250px 1fr; column-gap: 30px;
+    align-items: start; align-content: start;
+  }
+  #screen-home > h1, #screen-home > .subtitle, #screen-home > .search-row,
+  #screen-home > .mood-toggle, #screen-home > .mood-wrap,
+  #screen-home > .fod-label, #screen-home > #film-of-day { grid-column: 2; }
+  .home-side {
+    grid-column: 1; grid-row: 1 / -1; align-self: start;
+    position: sticky; top: calc(var(--header-h, 92px) + 24px);
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .home-side .random-btn { margin: 0 !important; width: 100%; }
+}
+.fod-carousel { display: flex; align-items: center; gap: 12px; }
+.fod-arrow {
+  width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(38,30,46,0.92); color: var(--gold);
+  border: 1px solid rgba(242,193,78,0.5); cursor: pointer;
+  font-family: inherit; font-size: 22px; line-height: 1;
+  transition: all 0.2s ease;
+}
+.fod-arrow:hover { background: var(--gold); color: #1a1722; box-shadow: 0 0 16px rgba(242,193,78,0.5); transform: scale(1.08); }
+.fod-side { width: 130px; flex-shrink: 0; cursor: pointer; text-align: center; opacity: 0.92; transition: all 0.2s ease; }
+.fod-side:hover { opacity: 1; transform: translateY(-3px); }
+.fod-side img {
+  width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 12px;
+  border: 1px solid rgba(242,193,78,0.35); background: rgba(0,0,0,0.35);
+}
+.fod-side-title { font-size: 12px; font-weight: 600; margin-top: 6px; line-height: 1.3; color: #f5f0e6; }
+body.light .fod-side-title { color: #1a1722; }
+.fod-side-tag { font-size: 10px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+.fod-center { flex: 1; min-width: 0; }
+.ai-card-btn {
+  font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px;
+  border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+  background: rgba(122,31,143,0.2); color: #d9a5f5; border: 1px solid rgba(217,165,245,0.5);
+}
+.ai-card-btn:hover { background: #7a1f8f; color: #fff; box-shadow: 0 0 14px rgba(122,31,143,0.5); }
+body.light .ai-card-btn { background: rgba(122,31,143,0.08); color: #7a1f8f; }
+@media (max-width: 560px) {
+  .fod-side { display: none; }
+  .fod-arrow { width: 40px; height: 40px; font-size: 18px; }
 }
 </style>
 </head>
@@ -518,26 +552,9 @@ body.light .ai-ask-btn { background: rgba(122,31,143,0.08); color: #7a1f8f; }
     <input type="text" id="search-input" placeholder="Найти фильм или режиссёра..." autocomplete="off">
     <button class="search-btn" id="btn-search">🔍</button>
   </div>
-  <div class="quick-actions">
-    <button class="random-btn" id="btn-random">🎲 Случайный фильм</button>
-    <button class="random-btn" id="btn-couple">👥 Фильм для двоих</button>
-    <button class="random-btn" id="btn-recommend" style="margin-top: 0;">💡 Рекомендации по моим оценкам</button>
-    <button class="random-btn ai-btn" id="btn-ai" onclick="showScreen('screen-ai')">🤖 Спросить ИИ</button>
-  </div>
-  <div class="mood-select-wrap">
-    <button class="mood-select-btn" id="mood-select-btn"><span>🎭 Настроение</span><span class="mood-select-arrow">▾</span></button>
-    <div class="mood-dropdown" id="mood-dropdown">
-      <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
-      <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
-      <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
-      <button class="mood-btn" data-mood="расслабленное"><span class="stone stone-green"></span>Расслабиться</button>
-      <button class="mood-btn" data-mood="философское"><span class="stone stone-blue"></span>Поразмышлять</button>
-      <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
-      <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
-      <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
-    </div>
-  </div>
-<div class="mood-buttons">
+  <button class="mood-toggle" id="mood-toggle" onclick="toggleMoodMenu(event)">🎭 Настроение</button>
+  <div class="mood-wrap" id="mood-wrap">
+  <div class="mood-buttons">
     <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
     <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
     <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
@@ -546,6 +563,13 @@ body.light .ai-ask-btn { background: rgba(122,31,143,0.08); color: #7a1f8f; }
     <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
     <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
     <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
+  </div>
+  </div>
+  <div class="home-side">
+  <button class="random-btn" id="btn-random">🎲 Случайный фильм</button>
+  <button class="random-btn" id="btn-couple">👥 Фильм для двоих</button>
+  <button class="random-btn" id="btn-recommend" style="margin-top: 0;">💡 Рекомендации по моим оценкам</button>
+  <button class="random-btn ai-btn" id="btn-ai" onclick="showScreen('screen-ai')">🤖 Спросить ИИ</button>
   </div>
   <div class="fod-label">🎬 Фильм дня</div>
   <div id="film-of-day"></div>
@@ -2044,8 +2068,8 @@ function openModal(id) {
       '<b>Рейтинг:</b> ' + getStars(m.rating) + ' ' + m.rating + '/10' +
     '</div>' +
     '<div class="modal-desc">' + m.description + '</div>' +
-    '<div style="margin-bottom: 14px;">' + buildServiceLinks(m) + '</div>' +
-    '<div style="margin-bottom: 14px;"><button class="ai-ask-btn" onclick="askAiAboutMovie(\'' + m.id + '\')">🤖 Спросить ИИ об этом фильме</button></div>' +
+     '<div style="margin-bottom: 14px;">' + buildServiceLinks(m) + '</div>' +
+    '<div style="margin: 0 0 14px;"><button class="ai-card-btn" onclick="askAiAboutMovie(\'' + m.id + '\')">🤖 Спросить ИИ об этом фильме</button></div>' +
     revHtml;
 
   document.getElementById('modal-overlay').classList.add('open');
@@ -2134,8 +2158,8 @@ function renderResults(items, containerId, isFavoriteMode) {
       buildRatingWidget(item) +
       '<div class="card-actions">' + buttonHtml + watchButtonHtml +
         '<button class="share-btn" id="share-btn-' + item.id + '" onclick="shareMovie(\'' + item.id + '\')">📤 Поделиться</button>' +
-        '<button class="review-toggle" onclick="toggleReviews(\'' + item.id + '\')">💬 Отзывы (' + revCount + ')</button>' +
-        '<button class="ai-ask-btn" onclick="askAiAboutMovie(\'' + item.id + '\')">🤖 Спросить ИИ</button>' +
+         '<button class="review-toggle" onclick="toggleReviews(\'' + item.id + '\')">💬 Отзывы (' + revCount + ')</button>' +
+        '<button class="ai-card-btn" onclick="askAiAboutMovie(\'' + item.id + '\')">🤖 Спросить ИИ</button>' +
       '</div>' +
       '<div class="review-panel" id="reviews-' + item.id + '">' +
         reviewsHtml +
@@ -2180,7 +2204,7 @@ function refreshCurrentScreen() {
   } else {
     renderResultsScreen();
   }
-  renderResults([getFilmOfDay()], 'film-of-day', false);
+  renderFod();
 }
 
 window.addToFavorites = function(id) {
@@ -2519,7 +2543,7 @@ document.addEventListener('DOMContentLoaded', function() {
   updateStatsCounter();
   fillGenreFilter();
   fillYearFilter();
-  renderResults([getFilmOfDay()], 'film-of-day', false);
+  renderFod();
 
   const themeBtn = document.getElementById('theme-btn');
   if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
@@ -2670,7 +2694,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="screen" id="screen-ai">
   <button class="back-btn" onclick="showScreen('screen-home')">← Назад</button>
   <h1>ИИ-кинокритик</h1>
-  <p class="subtitle">Совет от ИИ или любой вопрос о кино</p>
+  <p class="subtitle">Совет от ИИ или любой вопрос о кино — с фактами из Википедии</p>
   <div class="ai-chat">
     <div class="ai-messages" id="ai-messages">
       <div class="ai-msg bot">Привет! Я ИИ-кинокритик 🎬 Могу подобрать фильм под настроение или ответить на любой вопрос о кино. С чего начнём?</div>
@@ -2685,6 +2709,7 @@ document.addEventListener('DOMContentLoaded', function() {
 (function(){
   'use strict';
   var lastReq = 0;
+  var fodOffset = 0;
 
   function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -2699,7 +2724,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function buildSystem(){
-    return 'Ты — дружелюбный ИИ-кинокритик приложения Mood Movies. Отвечай по-русски, живо, коротко (до 100 слов). Если просят посоветовать фильм — советуй ТОЛЬКО фильмы из каталога ниже, объясняй, почему подходит. Если вопрос общий (о кино, жанрах, режиссёрах) — отвечай коротко и интересно.\n\nКАТАЛОГ:\n' + buildCatalog();
+    return 'Ты — дружелюбный ИИ-кинокритик приложения Mood Movies. Отвечай по-русски, живо и коротко (до 100 слов). Если просят посоветовать фильм — советуй ТОЛЬКО фильмы из каталога ниже, объясняй, почему подходит. Если вопрос общий о кино — отвечай коротко и интересно. Если дана справка из Википедии — опирайся на неё.\n\nКАТАЛОГ:\n' + buildCatalog();
   }
 
   function fetchTO(url, opts, ms){
@@ -2717,75 +2742,81 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  function sleep(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
+
+  function parsePost(txt){
+    try {
+      var j = JSON.parse(txt);
+      var c = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+      if(c && String(c).trim()) return String(c).trim();
+    } catch(e){}
+    if(txt && txt.length < 4000 && txt.trim().charAt(0) !== '{') return txt.trim();
+    throw new Error('формат');
+  }
+
   function viaPost(sys, user){
-    return fetchTO('https://text.pollinations.ai/openai', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'openai', messages: [ {role:'system', content: sys}, {role:'user', content: user} ] })
-    }, 25000).then(function(txt){
-      try {
-        var j = JSON.parse(txt);
-        var c = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
-        if(c && String(c).trim()) return String(c).trim();
-      } catch(e){}
-      if(txt && txt.length < 4000 && txt.trim().charAt(0) !== '{') return txt.trim();
-      throw new Error('формат');
-    });
+    var n = 0;
+    function run(){
+      n++;
+      return fetchTO('https://text.pollinations.ai/openai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'openai', messages: [ {role:'system', content: sys}, {role:'user', content: user} ], referrer: 'mood-movies' })
+      }, 25000).then(parsePost).catch(function(err){
+        var msg = err && err.message ? String(err.message) : '';
+        var busy = msg.indexOf('429') >= 0 || msg.indexOf('402') >= 0 || msg.indexOf('HTTP 5') >= 0 || msg.indexOf('сеть') >= 0 || msg.indexOf('таймаут') >= 0;
+        if(busy && n < 3) return sleep(7000).then(run);
+        throw err;
+      });
+    }
+    return run();
   }
 
   function viaGet(sys, user){
     var catalog = buildCatalog();
     if(catalog.length > 1200) catalog = catalog.split('\n').slice(0, 25).join('\n');
     var prompt = 'Ответь коротко по-русски (до 80 слов). Каталог фильмов: ' + catalog + '. Вопрос: ' + user;
-    return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt), {}, 25000).then(function(t){
+    return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt) + '?referrer=mood-movies', {}, 25000).then(function(t){
       if(!t || !String(t).trim() || String(t).trim().charAt(0) === '{') throw new Error('пусто');
       return String(t).trim();
     });
   }
 
-  function waitRetry(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
-  function isLimit(e){ return e && /HTTP\s+(429|402|502|503)/i.test(String(e && e.message)); }
-  function viaPostRetry(sys, user){
-    return viaPost(sys, user).catch(function(e){
-      if(isLimit(e)) return waitRetry(7000).then(function(){ return viaPost(sys, user); });
-      throw e;
-    });
-  }
-  function viaGetRetry(sys, user){
-    return viaGet(sys, user).catch(function(e){
-      if(isLimit(e)) return waitRetry(7000).then(function(){ return viaGet(sys, user); });
-      throw e;
-    });
-  }
-  function wikiNorm(s){ return String(s || '').toLowerCase().replace(/ё/g, 'е'); }
-  function findMovieInQuestion(q){
-    var nq = wikiNorm(q); var best = null;
-    movies.forEach(function(m){
-      var nt = wikiNorm(m.title);
-      if(nt.length > 2 && nq.indexOf(nt) >= 0){ if(!best || nt.length > wikiNorm(best.title).length) best = m; }
-    });
-    return best;
-  }
-  function wikiSummary(title){
-    return fetchTO('https://ru.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title) + '?redirect=true', {}, 8000).then(function(r){
-      try { var j = JSON.parse(r); if(j && j.extract) return String(j.extract).slice(0, 600); } catch(e){}
-      return '';
-    }).catch(function(){ return ''; });
-  }
-  function wikiSearchTitle(q){
-    var url = 'https://ru.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(q) + '&format=json&origin=*&srlimit=1';
-    return fetchTO(url, {}, 8000).then(function(r){
-      try { var j = JSON.parse(r); var x = j && j.query && j.query.search && j.query.search[0]; return x ? x.title : ''; } catch(e){ return ''; }
-    }).catch(function(){ return ''; });
-  }
-  function wikiContext(txt){
-    var mv = findMovieInQuestion(txt);
-    if(mv) return wikiSummary(mv.title);
-    if(txt.indexOf('?') >= 0 && txt.length > 15) {
-      return wikiSearchTitle(txt).then(function(x){ return x ? wikiSummary(x) : ''; });
+  function normTitle(t){ return String(t || '').toLowerCase().replace(/ё/g, 'е').replace(/[^a-zа-яё0-9 ]/gi, ' ').replace(/\s+/g, ' ').trim(); }
+
+  function findMovieInQuestion(text){
+    var q = normTitle(text);
+    for(var i = 0; i < movies.length; i++){
+      var t = normTitle(movies[i].title);
+      if(t.length > 3 && q.indexOf(t) >= 0) return movies[i];
     }
-    return Promise.resolve('');
+    return null;
   }
+
+  function wikiFetch(query){
+    var searchUrl = 'https://ru.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srlimit=1&srsearch=' + encodeURIComponent(query);
+    return fetchTO(searchUrl, {}, 8000).then(function(t){
+      var j = JSON.parse(t);
+      var hit = j && j.query && j.query.search && j.query.search[0];
+      if(!hit) return '';
+      var artUrl = 'https://ru.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=1&explaintext=1&redirects=1&titles=' + encodeURIComponent(hit.title);
+      return fetchTO(artUrl, {}, 8000).then(function(t2){
+        var j2 = JSON.parse(t2);
+        var pages = j2 && j2.query && j2.query.pages;
+        if(!pages) return '';
+        var p = pages[Object.keys(pages)[0]];
+        var ex = p && p.extract ? String(p.extract) : '';
+        return ex ? ex.slice(0, 1200) : '';
+      });
+    }).catch(function(){ return ''; });
+  }
+
+  function wikiQueryFor(txt, movie){
+    if(movie) return movie.title + ' фильм ' + movie.year;
+    var m = txt.match(/«([^»]{3,60})»/);
+    return m ? (m[1] + ' фильм') : txt.slice(0, 80);
+  }
+
   function localScore(t){
     var s = (t || '').toLowerCase();
     return movies.map(function(m){
@@ -2806,7 +2837,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var r = movies[Math.floor(Math.random() * movies.length)];
       list = '🎬 «' + r.title + '» (' + r.year + ') — ' + r.genres.join(', ') + ', рейтинг ' + r.rating;
     }
-    return 'ИИ-сервис сейчас недоступен, но я подобрала по твоему запросу из каталога:\n\n' + list + '\n\nПопробуй спросить ещё раз через минуту — ИИ может ожить.';
+    return 'ИИ-сервис сейчас недоступен, но я подобрал по твоему запросу из каталога:\n\n' + list + '\n\nПопробуй спросить ещё раз через минуту — ИИ может ожить.';
   }
 
   function fallbackText(err){
@@ -2831,22 +2862,87 @@ document.addEventListener('DOMContentLoaded', function() {
     return d;
   }
 
+  function posterOf(m){
+    return POSTER_URLS_A[m.id] || POSTER_URLS_LAST[m.id] || POSTER_URLS_FIX[m.id] || POSTER_URLS_FINAL[m.id] || POSTER_URLS_EXTRA[m.id] || POSTER_URLS[m.id] || '';
+  }
+
+  // ===== Карусель "Фильм дня": центр + соседи + стрелки =====
+  window.renderFod = function(){
+    var box = document.getElementById('film-of-day');
+    if(!box) return;
+    var n = movies.length;
+    if(!n) return;
+    var base = movies.indexOf(getFilmOfDay());
+    var idx = (((base + fodOffset) % n) + n) % n;
+    var prev = movies[(((idx - 1) % n) + n) % n];
+    var next = movies[((idx + 1) % n) % n];
+    var cur = movies[idx];
+    var pp = posterOf(prev), np = posterOf(next);
+    box.innerHTML =
+      '<div class="fod-carousel">' +
+        '<button class="fod-arrow" onclick="fodStep(-1)" aria-label="Предыдущий фильм">‹</button>' +
+        '<div class="fod-side" onclick="fodStep(-1)" title="' + esc(prev.title) + '">' +
+          (pp ? '<img src="' + pp + '" alt="' + esc(prev.title) + '" onerror="this.style.display=\'none\'">' : '') +
+          '<div class="fod-side-title">' + esc(prev.title) + '</div>' +
+          '<div class="fod-side-tag">смотреть</div>' +
+        '</div>' +
+        '<div class="fod-center" id="fod-center"></div>' +
+        '<div class="fod-side" onclick="fodStep(1)" title="' + esc(next.title) + '">' +
+          (np ? '<img src="' + np + '" alt="' + esc(next.title) + '" onerror="this.style.display=\'none\'">' : '') +
+          '<div class="fod-side-title">' + esc(next.title) + '</div>' +
+          '<div class="fod-side-tag">смотреть</div>' +
+        '</div>' +
+        '<button class="fod-arrow" onclick="fodStep(1)" aria-label="Следующий фильм">›</button>' +
+      '</div>';
+    renderResults([cur], 'fod-center', false);
+  };
+
+  window.fodStep = function(d){
+    fodOffset += d;
+    if(window.renderFod) window.renderFod();
+  };
+
+  // ===== Кнопка "Спросить ИИ" о конкретном фильме =====
+  window.askAiAboutMovie = function(id){
+    var m = null;
+    for(var i = 0; i < movies.length; i++){ if(movies[i].id === id){ m = movies[i]; break; } }
+    if(!m) return;
+    if(typeof closeModal === 'function') closeModal();
+    showScreen('screen-ai');
+    var q = 'Расскажи о фильме «' + m.title + '» (' + m.year + '): о чём он, где снимали и почему стоит посмотреть?';
+    setTimeout(function(){ window.aiSend(q); }, 350);
+  };
+
+  window.toggleMoodMenu = function(e){
+    if(e) e.stopPropagation();
+    var w = document.getElementById('mood-wrap');
+    if(w) w.classList.toggle('open');
+  };
+
+  document.addEventListener('click', function(e){
+    var w = document.getElementById('mood-wrap');
+    if(w && w.classList.contains('open')){
+      var t = e.target;
+      if(!w.contains(t) && (!t || t.id !== 'mood-toggle')) w.classList.remove('open');
+      if(t && t.classList && t.classList.contains('mood-btn')) setTimeout(function(){ w.classList.remove('open'); }, 150);
+    }
+  });
+
   window.aiSend = function(forced){
     var inp = document.getElementById('ai-input');
-    if(!inp) return;
-    var txt = (typeof forced === 'string' && forced.trim()) ? forced.trim() : (inp.value || '').trim();
+    var txt = (typeof forced === 'string' && forced.trim()) ? forced.trim() : ((inp && inp.value) || '').trim();
     if(!txt) return;
-    if(typeof forced !== 'string') inp.value = '';
+    if(inp) inp.value = '';
     aiAdd('user', txt);
     var typing = aiAdd('ai-typing', 'ИИ думает…');
-    wikiContext(txt).then(function(info){
-      var q = info ? txt + '\n\n(Справка из Википедии: ' + info + ')' : txt;
+    var movie = findMovieInQuestion(txt);
+    var wq = wikiQueryFor(txt, movie);
+    wikiFetch(wq).then(function(wiki){
       return throttle().then(function(){
-        return viaPostRetry(buildSystem(), q).catch(function(e1){
-          return viaGetRetry(buildSystem(), q).catch(function(e2){
-            throw new Error([e1 && e1.message, e2 && e2.message].filter(Boolean).join(' / '));
-          });
-        });
+        var sys = buildSystem();
+        var user = txt;
+        if(wiki) user += '\n\n(Справка из Википедии для точности: ' + wiki + ')';
+        return viaPost(sys, user).catch(function(){ return viaGet(sys, user); });
       });
     }).then(function(reply){
       if(typing) typing.remove();
@@ -2854,39 +2950,12 @@ document.addEventListener('DOMContentLoaded', function() {
       aiAdd('bot', reply || 'Пустой ответ, попробуй ещё раз.');
     }).catch(function(e){
       if(typing) typing.remove();
-      var s = localAdvice(txt);
-      if(s) { aiAdd('bot', s); return; }
-      aiAdd('bot', fallbackText(e));
+      var la = localAdvice(txt);
+      aiAdd('bot', la || fallbackText(e));
     });
-  };
-  window.askAiAboutMovie = function(id){
-    var m = movies.find(function(x){ return x.id === id; });
-    if(!m) return;
-    showScreen('screen-ai');
-    setTimeout(function(){
-      window.aiSend('Расскажи о фильме «' + m.title + '» (' + m.year + '): о чём он, где снимали, кто режиссёр и почему стоит посмотреть?');
-    }, 150);
   };
 })();
 </script>
 
-<script>
-(function(){
-  var msBtn = document.getElementById('mood-select-btn');
-  var msDd = document.getElementById('mood-dropdown');
-  if(msBtn && msDd){
-    msBtn.addEventListener('click', function(e){
-      e.stopPropagation();
-      msDd.classList.toggle('open');
-      msBtn.classList.toggle('open');
-    });
-    var closeDd = function(){ msDd.classList.remove('open'); msBtn.classList.remove('open'); };
-    document.addEventListener('click', function(e){
-      if(msDd.classList.contains('open') && !msDd.contains(e.target)) closeDd();
-    });
-    msDd.addEventListener('click', function(){ closeDd(); });
-  }
-})();
-</script>
 </body>
 </html>
