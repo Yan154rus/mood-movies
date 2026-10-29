@@ -413,6 +413,69 @@ body.light #no-stats, body.light #no-favorites, body.light #no-watched { backgro
   #toast-container { right: 10px; bottom: 10px; left: 10px; }
   #chat-panel { width: calc(100vw - 40px); }
 }
+/* ============ АДАПТАЦИЯ: ПЛАНШЕТ ============ */
+@media (max-width: 1024px) {
+  h1 { font-size: 30px; }
+  .screen { padding: 84px 16px 56px; }
+  body { background-attachment: scroll; } /* фикс фона для планшетов и телефонов */
+}
+
+/* ============ АДАПТАЦИЯ: ТЕЛЕФОН (дополнение к старому блоку) ============ */
+@media (max-width: 560px) {
+  h1 { font-size: 24px; }
+  .subtitle { font-size: 15px; margin-bottom: 24px; }
+  .screen { padding: 78px 12px 50px; }
+
+  /* кнопки настроений — крупные, удобно попадать пальцем */
+  .mood-btn { padding: 18px 16px; font-size: 15px; min-height: 52px; }
+  .mood-buttons { gap: 10px; }
+
+  /* поиск */
+  .search-row { flex-wrap: nowrap; }
+  #search-input { font-size: 16px; } /* iOS не зумит поле при фокусе */
+  .search-btn { padding: 10px 14px; min-height: 46px; }
+
+  /* фильтры — в столбик, на всю ширину */
+  .filters-row { flex-direction: column; align-items: stretch; }
+  .filters-row label { width: 100%; }
+  .filters-row select { width: 100%; max-width: none; }
+
+  /* карточка фильма */
+  .card-poster { height: 240px; }
+  .card-actions { flex-wrap: wrap; }
+  .card-actions button { flex: 1 1 auto; min-height: 46px; }
+
+  /* модальное окно и отзывы */
+  .modal-overlay { padding: 10px; }
+  .modal-box { padding: 20px 14px; max-height: 90vh; }
+  .review-form { flex-direction: column; }
+  .review-form textarea, .review-form button, .review-form input { width: 100%; }
+
+  /* большие кнопки */
+  .more-btn, .random-btn { width: 100%; max-width: 340px; padding: 14px 20px; }
+  .back-btn { min-height: 44px; }
+
+  /* помощник */
+  .chat-q { width: 100%; text-align: left; }
+  #chat-panel { max-height: 60vh; }
+  #chat-btn { width: 56px; height: 56px; }
+}
+
+/* ============ АДАПТАЦИЯ: ОЧЕНЬ МАЛЕНЬКИЙ ЭКРАН ============ */
+@media (max-width: 380px) {
+  h1 { font-size: 21px; }
+  .top-bar { padding: 8px 8px; }
+  .top-bar-title { font-size: 12px; }
+  .fav-counter, .watched-counter, .stats-counter, .theme-btn { font-size: 11px; padding: 6px 8px; gap: 4px; }
+  .fav-count, .watched-count, .stats-count { min-width: 19px; height: 19px; font-size: 11px; }
+  .mood-buttons { grid-template-columns: 1fr; }
+}
+
+/* на сенсорных экранах убираем «зависание» кнопок после нажатия */
+@media (hover: none) {
+  .mood-btn:hover { transform: none; }
+}
+
 </style>
 </head>
 <body>
