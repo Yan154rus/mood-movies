@@ -47,15 +47,16 @@ body.light {
   border-bottom: 1px solid rgba(242,193,78,0.3);
 }
 body.light .top-bar { background: rgba(255,252,246,0.85); border-bottom-color: rgba(178,140,50,0.4); }
-.top-bar-slogan { font-size: 13px; color: var(--text-soft); white-space: nowrap; }
-.top-bar-search { display: flex; gap: 8px; flex: 1; max-width: 620px; margin: 0 auto; }
-@media (max-width: 1100px) { .top-bar-slogan { display: none; } }
 .top-bar-left, .top-bar-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .top-bar-title {
   font-weight: 800; font-size: 17px; letter-spacing: 0.5px;
   background: linear-gradient(90deg, #f2c14e, #f2894e);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
+.top-bar { flex-wrap: wrap; }
+.top-slogan { font-size: 12px; color: rgba(255,255,255,0.65); }
+body.light .top-slogan { color: rgba(26,23,34,0.6); }
+.top-search-row { flex-basis: 100%; display: flex; gap: 8px; }
 .fav-counter, .watched-counter, .stats-counter, .theme-btn {
   font-family: inherit; font-size: 14px; font-weight: 600;
   display: flex; align-items: center; gap: 8px; padding: 8px 16px;
@@ -115,7 +116,7 @@ body.light #search-input::placeholder { color: rgba(26,23,34,0.4); }
 body.light .search-empty { background: #fff; color: #1a1722; }
 .fod-label {
   font-size: 13px; font-weight: 700; color: var(--gold); text-transform: uppercase;
-  letter-spacing: 1px; text-align: center; margin: 28px 0 12px;
+  letter-spacing: 1px; text-align: center; margin: 0 0 12px;
 }
 .couple-box {
   background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25);
@@ -418,7 +419,7 @@ body.light #no-stats, body.light #no-favorites, body.light #no-watched { backgro
 }
 
 /* === Адаптация и ИИ-чат (блок Алисы) === */
-:root { --header-h: 92px; }
+:root { --header-h: 136px; }
 .ai-btn { background: rgba(122,31,143,0.14); color: #d9a5f2; border: 1px solid rgba(178,112,235,0.55); display: block; margin: 12px auto 0; }
 .ai-btn:hover { filter: brightness(1.15); box-shadow: 0 0 20px rgba(122,31,143,0.5); }
 .ai-chat { background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow); padding: 14px; }
@@ -439,6 +440,8 @@ body.light .ai-input-row input { background: #fff; color: #1a1722; }
 .ai-send-btn:hover { filter: brightness(1.1); }
 
 @media (max-width: 560px) {
+  html { --header-h: 176px; }
+  .top-slogan { display: none; }
   .top-bar { flex-wrap: wrap; row-gap: 9px; padding: 10px 14px; }
   .top-bar-left { width: 100%; justify-content: space-between; }
   .top-bar-right { width: 100%; flex-wrap: nowrap; gap: 6px; }
@@ -462,37 +465,42 @@ body.light .ai-input-row input { background: #fff; color: #1a1722; }
   .filters-row { gap: 8px; }
 }
 
-/* Быстрые действия: компактная колонка слева, единый мягкий стиль */
-.home-layout { display: flex; align-items: flex-start; gap: 22px; }
-.side-col { flex: 0 0 188px; display: flex; flex-direction: column; gap: 9px; margin-left: -20px; }
-.quick-btn {
-  font-family: inherit; font-size: 14px; font-weight: 600; padding: 11px 12px;
+/* Быстрые действия: колонка слева + «Фильм дня» справа, одна строка */
+.home-columns { display: flex; align-items: flex-start; gap: 28px; }
+.quick-col { flex: 0 0 210px; display: flex; flex-direction: column; gap: 10px; }
+.quick-col .quick-btn {
+  width: 100%; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: inherit; font-size: 14px; font-weight: 600; padding: 12px 14px;
   background: rgba(122,31,143,0.14); color: #d9a5f2;
-  border: 1px solid rgba(178,112,235,0.55); border-radius: 12px; cursor: pointer;
-  transition: all 0.2s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  text-align: center; width: 100%;
+  border: 1px solid rgba(178,112,235,0.55); border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
 }
-.quick-btn:hover { background: #7a1f8f; color: #fff; box-shadow: 0 0 14px rgba(122,31,143,0.5); transform: translateY(-2px); }
-.mood-dd { position: relative; }
+.quick-col .quick-btn:hover { background: #7a1f8f; color: #fff; box-shadow: 0 0 14px rgba(122,31,143,0.5); transform: translateY(-2px); }
+.fod-col { flex: 1; min-width: 0; }
+.mood-wrap { position: relative; }
 .mood-menu {
-  display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 60;
-  min-width: 200px; background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.4);
-  border-radius: 14px; box-shadow: var(--shadow); padding: 8px;
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 60;
+  display: none; flex-direction: column; gap: 2px;
+  background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.4);
+  border-radius: 12px; padding: 8px; box-shadow: var(--shadow);
+  max-height: 340px; overflow-y: auto;
 }
 body.light .mood-menu { background: #fff; }
-.mood-dd.open .mood-menu { display: block; animation: fadeIn 0.2s ease; }
-.mood-menu .mood-btn { width: 100%; border-color: transparent; background: transparent; box-shadow: none; padding: 10px 12px; }
-.mood-menu .mood-btn:hover { border-color: var(--gold); background: rgba(38,30,46,0.9); transform: none; }
-body.light .mood-menu .mood-btn:hover { background: #f4f1ea; }
-.fod-col { flex: 1; min-width: 0; }
-.fod-col .fod-label { margin-top: 0; }
+.mood-menu.open { display: flex; animation: popIn 0.2s ease; }
+.mood-menu .mood-btn { background: transparent; border: none; box-shadow: none; padding: 10px 12px; margin: 0; border-radius: 8px; }
+.mood-menu .mood-btn:hover { background: rgba(122,31,143,0.22); transform: none; box-shadow: none; }
+.mood-menu .cat-btn {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  font-size: 14px; font-weight: 600; font-family: inherit; color: #f5f0e6;
+  background: transparent; border: none; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.2s ease;
+}
+body.light .mood-menu .cat-btn { color: #1a1722; }
+.mood-menu .cat-btn:hover { background: rgba(122,31,143,0.22); }
 @media (max-width: 900px) {
-  .home-layout { flex-direction: column; }
-  .side-col { flex: none; width: 100%; margin-left: 0; display: grid; grid-template-columns: 1fr 1fr; }
-  .quick-btn { font-size: 13px; padding: 10px 8px; }
-  .mood-dd { display: contents; }
-  .mood-menu { position: static; grid-column: 1 / -1; }
-  .mood-dd.open .mood-menu { display: grid; }
+  .home-columns { flex-direction: column; gap: 18px; }
+  .quick-col { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mood-wrap { grid-column: span 2; }
+  .mood-menu { position: absolute; left: 0; right: 0; }
+  .fod-col { width: 100%; }
 }
 /* Мягкая ИИ-кнопка (единый стиль с соседями) */
 .ai-soft {
@@ -508,8 +516,8 @@ body.light .mood-menu .mood-btn:hover { background: #f4f1ea; }
 .fod-side img { width: 110px; aspect-ratio: 2/3; object-fit: cover; border-radius: 10px; border: 1px solid rgba(242,193,78,0.35); }
 .fod-side-title { font-size: 12px; margin-top: 6px; color: rgba(255,255,255,0.75); }
 body.light .fod-side-title { color: rgba(26,23,34,0.7); }
-.fod-hero { flex: 1; display: flex; gap: 22px; background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow); padding: 20px; }
-body.light .fod-hero { background: #fff; }
+.fod-hero { flex: 1; display: flex; gap: 22px; background: rgba(26,23,34,0.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow); padding: 20px; }
+body.light .fod-hero { background: rgba(255,255,255,0.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .fod-poster { width: 220px; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; flex-shrink: 0; cursor: pointer; }
 .fod-info { flex: 1; min-width: 0; }
 .fod-info .card-title { font-size: 26px; }
@@ -538,29 +546,29 @@ body.light .fod-hero { background: #fff; }
 <header class="top-bar">
   <div class="top-bar-left">
     <div class="top-bar-title">🎬 Mood Movies</div>
-    <div class="top-bar-slogan">Выбери настроение — подберу фильм</div>
+    <div class="top-slogan">Выбери настроение — подберу фильм</div>
     <button class="theme-btn" id="theme-btn">🌙 Тема</button>
-  </div>
-  <div class="top-bar-search">
-    <input type="text" id="search-input" placeholder="Найти фильм или режиссёра..." autocomplete="off">
-    <button class="search-btn" id="btn-search">🔍</button>
   </div>
   <div class="top-bar-right">
     <button class="stats-counter" id="stats-counter">📊 Статистика <span class="stats-count" id="stats-count">0</span></button>
     <button class="watched-counter" id="watched-counter">👁 Смотрел <span class="watched-count" id="watched-count">0</span></button>
     <button class="fav-counter" id="fav-counter">❤️ Избранное <span class="fav-count" id="fav-count">0</span></button>
   </div>
+  <div class="top-search-row">
+    <input type="text" id="search-input" placeholder="Найти фильм или режиссёра..." autocomplete="off">
+    <button class="search-btn" id="btn-search">🔍</button>
+  </div>
 </header>
 
 <div class="screen active" id="screen-home">
-  <div class="home-layout">
-    <div class="side-col">
+  <div class="home-columns">
+    <div class="quick-col">
       <button class="quick-btn" id="btn-random">🎲 Случайный фильм</button>
       <button class="quick-btn" id="btn-couple">👥 Фильм для двоих</button>
       <button class="quick-btn" id="btn-recommend">💡 Рекомендации</button>
       <button class="quick-btn ai-quick" id="btn-ai" onclick="showScreen('screen-ai')">✨ Спросить ИИ</button>
-      <div class="mood-dd">
-        <button class="quick-btn" id="mood-toggle">🎭 Настроение</button>
+      <div class="mood-wrap">
+        <button class="quick-btn mood-toggle" id="btn-mood">🎭 Настроение</button>
         <div class="mood-menu" id="mood-menu">
           <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
           <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
@@ -572,10 +580,16 @@ body.light .fod-hero { background: #fff; }
           <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
         </div>
       </div>
+      <div class="mood-wrap">
+        <button class="quick-btn mood-toggle" id="btn-cats">🗂️ Категории</button>
+        <div class="mood-menu" id="cats-menu"></div>
+      </div>
     </div>
     <div class="fod-col">
       <div class="fod-label">🎬 Фильм дня</div>
       <div id="film-of-day"></div>
+    </div>
+  </div>
 </div>
 
 <div class="screen" id="screen-couple">
@@ -2984,25 +2998,67 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.__modalId && document.getElementById('modal-overlay').classList.contains('open')) openModal(window.__modalId);
   };
 })();
+
+// ===== Выпадающие меню: настроение и категории =====
+(function() {
+  function setupToggle(btnId, menuId) {
+    const btn = document.getElementById(btnId);
+    const menu = document.getElementById(menuId);
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = menu.classList.contains('open');
+      document.querySelectorAll('.mood-menu.open').forEach(function(m) { m.classList.remove('open'); });
+      if (!isOpen) menu.classList.add('open');
+    });
+  }
+  setupToggle('btn-mood', 'mood-menu');
+  setupToggle('btn-cats', 'cats-menu');
+  document.addEventListener('click', function(e) {
+    document.querySelectorAll('.mood-menu.open').forEach(function(m) {
+      if (!m.contains(e.target)) m.classList.remove('open');
+    });
+  });
+  document.querySelectorAll('#mood-menu .mood-btn').forEach(function(b) {
+    b.addEventListener('click', function() {
+      document.querySelectorAll('.mood-menu.open').forEach(function(m) { m.classList.remove('open'); });
+    });
+  });
+  // Категории: собираем жанры из базы и открываем подборку по клику
+  const catsMenu = document.getElementById('cats-menu');
+  if (catsMenu && typeof movies !== 'undefined') {
+    const seen = {};
+    movies.forEach(function(m) { (m.genres || []).forEach(function(g) { seen[normalize(g)] = g; }); });
+    Object.keys(seen).sort().forEach(function(g) {
+      const orig = seen[g];
+      const b = document.createElement('button');
+      b.className = 'cat-btn';
+      b.textContent = '▸ ' + orig.charAt(0).toUpperCase() + orig.slice(1);
+      b.addEventListener('click', function() {
+        const titleEl = document.getElementById('results-title');
+        if (titleEl) titleEl.textContent = 'Категория: ' + orig.charAt(0).toUpperCase() + orig.slice(1);
+        const selRating = document.getElementById('sel-rating');
+        const selGenre = document.getElementById('sel-genre');
+        const selYear = document.getElementById('sel-year');
+        const selSort = document.getElementById('sel-sort');
+        if (selRating) selRating.value = '0';
+        if (selGenre) selGenre.value = 'all';
+        if (selYear) selYear.value = 'all';
+        if (selSort) selSort.value = 'rating';
+        shownExtraPages = 0;
+        const target = normalize(orig);
+        lastFullItems = movies.filter(function(m) {
+          return (m.genres || []).some(function(x) { return normalize(x) === target; });
+        });
+        renderResultsScreen();
+        showScreen('screen-results');
+        catsMenu.classList.remove('open');
+      });
+      catsMenu.appendChild(b);
+    });
+  }
+})();
 </script>
 
 </body>
 </html>
-
-<script>
-(function(){
-  var dd = document.querySelector('.mood-dd');
-  var tog = document.getElementById('mood-toggle');
-  if (tog && dd) {
-    tog.addEventListener('click', function(e){ e.stopPropagation(); dd.classList.toggle('open'); });
-    document.addEventListener('click', function(e){
-      if (dd.classList.contains('open') && !dd.contains(e.target)) dd.classList.remove('open');
-    });
-  }
-  function fitHeader(){
-    var bar = document.querySelector('.top-bar');
-    if (bar) document.documentElement.style.setProperty('--header-h', bar.offsetHeight + 'px');
-  }
-  fitHeader(); window.addEventListener('resize', fitHeader); window.addEventListener('load', fitHeader);
-})();
-</script>
