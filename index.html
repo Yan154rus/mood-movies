@@ -415,7 +415,7 @@ body.light #no-stats, body.light #no-favorites, body.light #no-watched { backgro
 }
 
 /* === Адаптация и ИИ-чат (блок Алисы) === */
-:root { --header-h: 136px; }
+:root { --header-h: 92px; }
 .ai-btn { background: rgba(122,31,143,0.14); color: #d9a5f2; border: 1px solid rgba(178,112,235,0.55); display: block; margin: 12px auto 0; }
 .ai-btn:hover { filter: brightness(1.15); box-shadow: 0 0 20px rgba(122,31,143,0.5); }
 .ai-chat { background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow); padding: 14px; }
@@ -460,7 +460,27 @@ body.light .ai-input-row input { background: #fff; color: #1a1722; }
 }
 
 /* Быстрые действия на главном */
-.quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 2px 0 20px; }
+/* Колонка действий у левого края + «Фильм дня» на одном уровне */
+#screen-home { padding-top: 16px; position: relative; }
+.quick-col { display: flex; flex-direction: column; gap: 10px; }
+.quick-btn { width: 100%; }
+.mood-drop { position: relative; }
+.mood-menu {
+  display: none; position: absolute; top: calc(100% + 6px); left: 0; width: 100%;
+  background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.45);
+  border-radius: 12px; padding: 8px; z-index: 60; box-shadow: var(--shadow);
+  flex-direction: column; gap: 6px;
+}
+.mood-menu.open { display: flex; animation: fadeIn 0.2s ease; }
+body.light .mood-menu { background: #fff; }
+.mood-menu .mood-btn { padding: 10px 12px; font-size: 13px; box-shadow: none; }
+.fod-col { min-width: 0; }
+@media (min-width: 1100px) {
+  .quick-col { position: absolute; left: calc(50% - 50vw + 20px); top: 16px; width: 250px; }
+}
+@media (max-width: 1099px) {
+  .quick-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+}
 .quick-btn {
   font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 14px;
   background: linear-gradient(135deg, #d6382f, #7a1f8f); color: #fff;
@@ -507,98 +527,66 @@ body.light .fod-hero { background: #fff; }
 .modal-box { scrollbar-width: none; -ms-overflow-style: none; }
 .modal-box::-webkit-scrollbar { display: none; width: 0; }
 
-/* Шапка: слоган и поиск в верхней полосе */
-.top-bar { flex-wrap: wrap; }
-.top-bar-tagline { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
-body.light .top-bar-tagline { color: rgba(26,23,34,0.6); }
-.header-search { flex-basis: 100%; display: flex; gap: 8px; justify-content: center; padding: 2px 0 4px; }
-.header-search #search-input { max-width: 760px; }
-
-/* Колонка быстрых действий слева от «Фильма дня» */
-.home-layout { display: flex; gap: 18px; align-items: flex-start; }
-.quick-side { flex: 0 0 250px; display: flex; flex-direction: column; gap: 10px; }
-.quick-side .quick-btn { width: 100%; padding: 12px 14px; font-size: 14px; }
-.mood-dd-wrap { position: relative; }
-.mood-dropdown {
-  display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 90;
-  flex-direction: column; gap: 4px; padding: 8px;
-  background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.45);
-  border-radius: 14px; box-shadow: var(--shadow);
+/* Шапка: логотип + слоган в одну строку, поиск под ними */
+.top-bar { flex-direction: column; align-items: stretch; gap: 8px; }
+.top-bar-main { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.top-bar-slogan { font-size: 13px; color: var(--text-soft); white-space: nowrap; }
+body.light .top-bar-slogan { color: rgba(26,23,34,0.7); }
+.top-bar-search { display: flex; gap: 8px; max-width: 1040px; width: 100%; margin: 0 auto; }
+.top-bar-search #search-input {
+  flex: 1; font-family: inherit; font-size: 15px; color: #fff; padding: 10px 14px;
+  background: rgba(26,23,34,0.85); border: 1px solid rgba(242,193,78,0.45);
+  border-radius: 12px; outline: none; transition: border-color 0.2s ease;
 }
-body.light .mood-dropdown { background: #fff; }
-.mood-dropdown.open { display: flex; }
-.mood-dropdown .mood-btn { padding: 10px 12px; font-size: 13px; background: transparent; border: 1px solid transparent; box-shadow: none; margin: 0; }
-.mood-dropdown .mood-btn:hover { border-color: rgba(242,193,78,0.5); background: rgba(38,30,46,0.6); transform: none; }
-body.light .mood-dropdown .mood-btn:hover { background: #f4f1ea; }
-
-/* На ПК сетка настроений на главном скрыта — живёт в выпадашке */
-@media (min-width: 901px) { .home-moods { display: none; } }
-@media (max-width: 900px) {
-  .home-layout { flex-direction: column; }
-  .home-main { width: 100%; }
-  .quick-side { flex: none; display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
-  .mood-dd-wrap { display: none; }
-  .home-moods { margin-bottom: 4px; }
-  .top-bar-tagline { display: none; }
-}
-@media (min-width: 561px) and (max-width: 1024px) { :root { --header-h: 152px; } }
-@media (max-width: 560px) { :root { --header-h: 210px; } }
+body.light .top-bar-search #search-input { background: #fff; color: #1a1722; }
+.top-bar-search #search-input:focus { border-color: var(--gold); box-shadow: 0 0 12px rgba(242,193,78,0.3); }
+@media (max-width: 900px) { .top-bar-slogan { display: none; } }
 </style>
 </head>
 <body>
 
 <header class="top-bar">
-  <div class="top-bar-left">
-    <div class="top-bar-title">🎬 Mood Movies</div>
-    <button class="theme-btn" id="theme-btn">🌙 Тема</button>
+  <div class="top-bar-main">
+    <div class="top-bar-left">
+      <div class="top-bar-title">🎬 Mood Movies</div>
+      <span class="top-bar-slogan">Выбери настроение — подберу фильм</span>
+      <button class="theme-btn" id="theme-btn">🌙 Тема</button>
+    </div>
+    <div class="top-bar-right">
+      <button class="stats-counter" id="stats-counter">📊 Статистика <span class="stats-count" id="stats-count">0</span></button>
+      <button class="watched-counter" id="watched-counter">👁 Смотрел <span class="watched-count" id="watched-count">0</span></button>
+      <button class="fav-counter" id="fav-counter">❤️ Избранное <span class="fav-count" id="fav-count">0</span></button>
+    </div>
   </div>
-  <div class="top-bar-right">
-    <button class="stats-counter" id="stats-counter">📊 Статистика <span class="stats-count" id="stats-count">0</span></button>
-    <button class="watched-counter" id="watched-counter">👁 Смотрел <span class="watched-count" id="watched-count">0</span></button>
-    <button class="fav-counter" id="fav-counter">❤️ Избранное <span class="fav-count" id="fav-count">0</span></button>
-  </div>
-  <div class="top-bar-tagline">Выбери настроение — подберу фильм</div>
-  <div class="header-search">
+  <div class="top-bar-search">
     <input type="text" id="search-input" placeholder="Найти фильм или режиссёра..." autocomplete="off">
     <button class="search-btn" id="btn-search">🔍</button>
   </div>
 </header>
 
 <div class="screen active" id="screen-home">
-  <div class="home-layout">
-    <aside class="quick-side">
-      <button class="quick-btn" id="btn-random">🎲 Случайный фильм</button>
-      <button class="quick-btn" id="btn-couple">👥 Фильм для двоих</button>
-      <button class="quick-btn" id="btn-recommend">💡 Рекомендации</button>
-      <button class="quick-btn ai-quick" id="btn-ai" onclick="showScreen('screen-ai')">✨ Спросить ИИ</button>
-      <div class="mood-dd-wrap">
-        <button class="quick-btn" id="btn-mood-toggle">🎭 Настроение</button>
-        <div class="mood-dropdown" id="mood-dropdown">
-          <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
-          <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
-          <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
-          <button class="mood-btn" data-mood="расслабленное"><span class="stone stone-green"></span>Расслабиться</button>
-          <button class="mood-btn" data-mood="философское"><span class="stone stone-blue"></span>Поразмышлять</button>
-          <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
-          <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
-          <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
-        </div>
+  <div class="quick-col">
+    <button class="quick-btn" id="btn-random">🎲 Случайный фильм</button>
+    <button class="quick-btn" id="btn-couple">👥 Фильм для двоих</button>
+    <button class="quick-btn" id="btn-recommend">💡 Рекомендации</button>
+    <button class="quick-btn ai-quick" id="btn-ai" onclick="showScreen('screen-ai')">✨ Спросить ИИ</button>
+    <div class="mood-drop">
+      <button class="quick-btn" id="mood-toggle">🎭 Настроение</button>
+      <div class="mood-menu" id="mood-menu">
+        <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
+        <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
+        <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
+        <button class="mood-btn" data-mood="расслабленное"><span class="stone stone-green"></span>Расслабиться</button>
+        <button class="mood-btn" data-mood="философское"><span class="stone stone-blue"></span>Поразмышлять</button>
+        <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
+        <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
+        <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
       </div>
-    </aside>
-    <div class="home-main">
-      <div class="fod-label">🎬 Фильм дня</div>
-      <div id="film-of-day"></div>
     </div>
   </div>
-  <div class="mood-buttons home-moods">
-    <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
-          <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
-          <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
-          <button class="mood-btn" data-mood="расслабленное"><span class="stone stone-green"></span>Расслабиться</button>
-          <button class="mood-btn" data-mood="философское"><span class="stone stone-blue"></span>Поразмышлять</button>
-          <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
-          <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
-          <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
+  <div class="fod-col">
+    <div class="fod-label">🎬 Фильм дня</div>
+    <div id="film-of-day"></div>
   </div>
 </div>
 
@@ -2084,6 +2072,7 @@ function openModal(id) {
   if (!content) return;
 
   const revs = getReviewsOf(m.id);
+  const revCount = revs.length;
   const revHtml = revs.length > 0
     ? '<div class="services-label">Твои отзывы (' + revs.length + '):</div>' +
       revs.map(function(r) {
@@ -2108,7 +2097,7 @@ function openModal(id) {
     buildRatingWidget(m) +
     '<div class="card-actions">' +
       '<button class="share-btn" id="share-btn-' + m.id + '" onclick="shareMovie(\'' + m.id + '\')">📤 Поделиться</button>' +
-      '<button class="review-toggle" onclick="toggleReviews(\'' + m.id + '\')">💬 Отзывы (' + revs.length + ')</button>' +
+      '<button class="review-toggle" onclick="toggleReviews(\'' + m.id + '\')">💬 Отзывы (' + revCount + ')</button>' +
     '</div>' +
     '<div class="review-panel" id="reviews-' + m.id + '">' +
       revHtml +
@@ -3008,19 +2997,17 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 })();
 
-// ===== Выпадающее настроение на ПК =====
-(function(){
-  var t = document.getElementById('btn-mood-toggle');
-  var d = document.getElementById('mood-dropdown');
-  if (!t || !d) return;
-  t.addEventListener('click', function(e){
-    e.stopPropagation();
-    d.classList.toggle('open');
-  });
-  d.addEventListener('click', function(){ d.classList.remove('open'); });
-  document.addEventListener('click', function(e){
-    if (!d.contains(e.target) && e.target !== t) d.classList.remove('open');
-  });
+(function() {
+  var mt = document.getElementById('mood-toggle');
+  var mm = document.getElementById('mood-menu');
+  if (mt && mm) {
+    mt.addEventListener('click', function(e) { e.stopPropagation(); mm.classList.toggle('open'); });
+    mm.addEventListener('click', function(e) { e.stopPropagation(); });
+    document.addEventListener('click', function() { mm.classList.remove('open'); });
+    mm.querySelectorAll('.mood-btn').forEach(function(b) {
+      b.addEventListener('click', function() { mm.classList.remove('open'); });
+    });
+  }
 })();
 </script>
 
