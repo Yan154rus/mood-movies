@@ -8,6 +8,9 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
 </script>
 <title>Mood Movies — фильмы под настроение</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2150,13 +2153,19 @@ function closeModal() {
   if (overlay) overlay.classList.remove('open');
 }
 
+const POSTER_URLS_MINE = {"5":"5.jpg","10":"10.jpg","21":"21.jpg","27":"27.jpg","43":"43.jpg","44":"44.jpg","58":"58.jpg","65":"65.jpg","79":"79.jpg","88":"88.jpg","96":"96.jpg","102":"102.jpg","107":"107.jpg","118":"118.jpg","121":"121.jpg","125":"125.jpg","126":"126.jpg","134":"134.jpg","135":"135.jpg","145":"145.jpg","147":"147.jpg","149":"149.jpg","155":"155.jpg","162":"162.jpg","163":"163.jpg","174":"174.jpg","176":"176.jpg","177":"177.jpg","186":"186.jpg","189":"189.jpg","190":"190.jpg","209":"209.jpg","217":"217.jpg","221":"221.jpg","230":"230.jpg","235":"235.jpg","236":"236.jpg","249":"249.jpg","260":"260.jpg","263":"263.jpg","265":"265.jpg","268":"268.jpg","274":"274.jpg","276":"276.jpg","288":"288.jpg","298":"298.jpg","305":"305.jpg","309":"309.jpg","324":"324.jpg","334":"334.jpg","336":"336.jpg","341":"341.jpg","342":"342.jpg","358":"358.jpg","399":"399.jpg","421":"421.jpg","426":"426.jpg","427":"427.jpg","430":"430.jpg","433":"433.jpg","442":"442.jpg","450":"450.jpg","451":"451.jpg","464":"464.jpg","498":"498.jpg","377":"377.jpg","468":"468.jpg"};
+window.__pfFallback = function(img){
+  img.onerror = null;
+  var m = (img.getAttribute("src") || "").match(/(\d+)\.jpg/);
+  if (!m) return;
+  var id = m[1], mv = null;
+  for (var i = 0; i < movies.length; i++) { if (String(movies[i].id) === id) { mv = movies[i]; break; } }
+  if (mv) img.src = buildPlaceholder(mv);
+};
 // ===== Карточки =====
 window.__fodOffset = 0;
-var LOCAL67 = {5:1,10:1,21:1,27:1,43:1,44:1,58:1,65:1,79:1,88:1,96:1,102:1,107:1,118:1,121:1,125:1,126:1,134:1,135:1,145:1,147:1,149:1,155:1,162:1,163:1,174:1,176:1,177:1,186:1,189:1,190:1,209:1,217:1,221:1,230:1,235:1,236:1,249:1,260:1,263:1,265:1,268:1,274:1,276:1,288:1,298:1,305:1,309:1,324:1,334:1,336:1,341:1,342:1,358:1,399:1,421:1,426:1,427:1,430:1,433:1,442:1,450:1,451:1,464:1,498:1,377:1,468:1};
-var FOD_FALLBACK_POSTER = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNDUwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQ1MCIgZmlsbD0iIzJhMjQzMyIvPjx0ZXh0IHg9IjE1MCIgeT0iMjI1IiBmaWxsPSIjOGE4ZGEzIiBmb250LXNpemU9IjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiPm5vIHBvc3RlcjwvdGV4dD48L3N2Zz4=';
-
 function fodPoster(id) {
-  return (LOCAL67[id] ? ('' + id + '.jpg') : (POSTER_URLS_A[id] || POSTER_URLS_LAST[id] || POSTER_URLS_FIX[id] || POSTER_URLS_FINAL[id] || POSTER_URLS_EXTRA[id] || POSTER_URLS[id] || ('' + id + '.jpg')));
+  return POSTER_URLS_MINE[id] || POSTER_URLS_A[id] || POSTER_URLS_LAST[id] || POSTER_URLS_FIX[id] || POSTER_URLS_FINAL[id] || POSTER_URLS_EXTRA[id] || POSTER_URLS[id] || ('' + id + '.jpg');
 }
 window.fodShift = function(dir) {
   window.__fodOffset = (window.__fodOffset || 0) + dir;
@@ -2172,11 +2181,11 @@ window.renderFod = function(container, filmOfDay) {
   container.innerHTML =
     '<div class="fod-row">' +
       '<div class="fod-side" onclick="fodShift(-1)">' +
-        '<img src="' + fodPoster(l.id) + '" alt="' + l.title + '">' +
+        '<img src="' + fodPoster(l.id) + '" alt="' + l.title + '" onerror="window.__pfFallback(this)">' +
         '<div class="fod-side-title">' + l.title + '</div>' +
       '</div>' +
       '<div class="fod-hero">' +
-        '<img class="fod-poster" src="' + fodPoster(c.id) + '" alt="' + c.title + '" onclick="openModal(\'' + c.id + '\')">' +
+        '<img class="fod-poster" src="' + fodPoster(c.id) + '" alt="' + c.title + '" onclick="openModal(\'' + c.id + '\')" onerror="window.__pfFallback(this)">' +
         '<div class="fod-info">' +
           '<div class="card-title" onclick="openModal(\'' + c.id + '\')">' + c.title + '</div>' +
           '<div class="card-meta"><span class="card-year">' + c.year + ' · ' + c.age + ' · ' + c.duration + ' мин</span></div>' +
@@ -2187,7 +2196,7 @@ window.renderFod = function(container, filmOfDay) {
         '</div>' +
       '</div>' +
       '<div class="fod-side" onclick="fodShift(1)">' +
-        '<img src="' + fodPoster(r.id) + '" alt="' + r.title + '">' +
+        '<img src="' + fodPoster(r.id) + '" alt="' + r.title + '" onerror="window.__pfFallback(this)">' +
         '<div class="fod-side-title">' + r.title + '</div>' +
       '</div>' +
     '</div>' +
@@ -2196,8 +2205,6 @@ window.renderFod = function(container, filmOfDay) {
       '<span class="fod-counter">' + (centerIdx + 1) + ' / ' + n + '</span>' +
       '<button class="fod-arrow" onclick="fodShift(1)">›</button>' +
     '</div>';
-  const imgs = container.querySelectorAll('img');
-  imgs.forEach(function(el) { el.onerror = function() { this.onerror = null; this.src = FOD_FALLBACK_POSTER; }; });
 };
 function renderResults(items, containerId, isFavoriteMode) {
   const container = document.getElementById(containerId);
@@ -2253,7 +2260,7 @@ function renderResults(items, containerId, isFavoriteMode) {
     img.onerror = function() { img.onerror = null; img.src = buildPlaceholder(item); };
       img.onclick = function() { openModal(item.id); };
       img.style.cursor = 'pointer';
-      img.src = (LOCAL67[item.id] ? ('' + item.id + '.jpg') : (POSTER_URLS_A[item.id] || POSTER_URLS_LAST[item.id] || POSTER_URLS_FIX[item.id] || POSTER_URLS_FINAL[item.id] || POSTER_URLS_EXTRA[item.id] || POSTER_URLS[item.id] || ('' + item.id + '.jpg')));
+      img.src = POSTER_URLS_MINE[item.id] || POSTER_URLS_A[item.id] || POSTER_URLS_LAST[item.id] || POSTER_URLS_FIX[item.id] || POSTER_URLS_FINAL[item.id] || POSTER_URLS_EXTRA[item.id] || POSTER_URLS[item.id] || ('' + item.id + '.jpg');
 
 
 
