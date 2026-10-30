@@ -9,7 +9,7 @@
 <link rel="icon" href="icon-192.png">
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(function(){});
+ navigator.serviceWorker.register('sw.js').catch(function(){});
 }
 </script>
 <title>Mood Movies — фильмы под настроение</title>
@@ -19,61 +19,61 @@ if ('serviceWorker' in navigator) {
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  --gold: #f2c14e; --gold-soft: rgba(242,193,78,0.25);
-  --red: #d6382f; --red-dark: #a3201a;
-  --green: #4ecb7d; --blue: #4e8ef2;
-  --text-soft: #8a8da3;
-  --shadow: 0 6px 24px rgba(0,0,0,0.25);
+ --gold: #f2c14e; --gold-soft: rgba(242,193,78,0.25);
+ --red: #d6382f; --red-dark: #a3201a;
+ --green: #4ecb7d; --blue: #4e8ef2;
+ --text-soft: #8a8da3;
+ --shadow: 0 6px 24px rgba(0,0,0,0.25);
 }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  background-color: #1a1722;
-  background-image: linear-gradient(rgba(15,10,20,0.55), rgba(15,10,20,0.65)), url('marvel.jpg');
-  background-position: center center; background-repeat: no-repeat;
-  background-size: cover; background-attachment: fixed;
-  color: #fff; min-height: 100vh;
-  transition: background-color 0.4s ease, color 0.4s ease;
+ font-family: 'Inter', 'Segoe UI', sans-serif;
+ background-color: #1a1722;
+ background-image: linear-gradient(rgba(15,10,20,0.55), rgba(15,10,20,0.65)), url('marvel.jpg');
+ background-position: center center; background-repeat: no-repeat;
+ background-size: cover; background-attachment: fixed;
+ color: #fff; min-height: 100vh;
+ transition: background-color 0.4s ease, color 0.4s ease;
 }
 body.light {
-  background-color: #f4f1ea;
-  background-image: linear-gradient(rgba(255,250,240,0.6), rgba(255,250,240,0.7)), url('background-day.jpg');
-  color: #1a1722;
+ background-color: #f4f1ea;
+ background-image: linear-gradient(rgba(255,250,240,0.6), rgba(255,250,240,0.7)), url('background-day.jpg');
+ color: #1a1722;
 }
 .top-bar {
-  position: sticky; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 12px 20px; background: rgba(15,10,20,0.75); backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(242,193,78,0.3);
+ position: sticky; top: 0; left: 0; right: 0; z-index: 100;
+ display: flex; align-items: center; justify-content: space-between; gap: 8px;
+ padding: 12px 20px; background: rgba(15,10,20,0.75); backdrop-filter: blur(10px);
+ border-bottom: 1px solid rgba(242,193,78,0.3);
 }
 body.light .top-bar { background: rgba(255,252,246,0.85); border-bottom-color: rgba(178,140,50,0.4); }
 .top-bar-left, .top-bar-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .top-bar-title {
-  font-weight: 800; font-size: 17px; letter-spacing: 0.5px;
-  background: linear-gradient(90deg, #f2c14e, #f2894e);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+ font-weight: 800; font-size: 17px; letter-spacing: 0.5px;
+ background: linear-gradient(90deg, #f2c14e, #f2894e);
+ -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .fav-counter, .watched-counter, .stats-counter, .theme-btn {
-  font-family: inherit; font-size: 14px; font-weight: 600;
-  display: flex; align-items: center; gap: 8px; padding: 8px 16px;
-  background: rgba(38,30,46,0.9); color: #f5f0e6;
-  border: 1px solid rgba(242,193,78,0.45); border-radius: 999px;
-  cursor: pointer; transition: all 0.2s ease;
+ font-family: inherit; font-size: 14px; font-weight: 600;
+ display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+ background: rgba(38,30,46,0.9); color: #f5f0e6;
+ border: 1px solid rgba(242,193,78,0.45); border-radius: 999px;
+ cursor: pointer; transition: all 0.2s ease;
 }
 body.light .fav-counter, body.light .watched-counter, body.light .stats-counter, body.light .theme-btn {
-  background: #fff; color: #1a1722;
+ background: #fff; color: #1a1722;
 }
 .watched-counter { border-color: rgba(78,203,125,0.45); }
 .stats-counter { border-color: rgba(78,142,242,0.45); }
-.theme-btn { border-color: rgba(242,193,78,0.45); }
-.fav-counter:hover { border-color: var(--gold); box-shadow: 0 0 16px rgba(242,193,78,0.4); }
-.watched-counter:hover { border-color: var(--green); box-shadow: 0 0 16px rgba(78,203,125,0.4); }
-.stats-counter:hover { border-color: var(--blue); box-shadow: 0 0 16px rgba(78,142,242,0.4); }
+.theme-btn { цвет границы: rgba(242,193,78,0.45); }
+.счетчик предпочтений: наведите курсор { цвет границы: var(--gold); поле-тень: 0 0 16px rgba(242,193,78,0.4); } 
+.просмотренный счетчик: наведите курсор { цвет границы: var(--зеленый); поле-тень: 0 0 16px rgba(78,203,125,0.4); } 
+.счетчик статистики: наведите курсор { цвет границы: var(--синий); поле-тень: 0 0 16px rgba(78,142,242,0.4); }
 .theme-btn:hover { border-color: var(--gold); box-shadow: 0 0 16px rgba(242,193,78,0.4); }
 .fav-count, .watched-count, .stats-count {
-  font-size: 12px; font-weight: 800; min-width: 22px; height: 22px;
-  border-radius: 999px; display: inline-flex; align-items: center;
-  justify-content: center; padding: 0 6px;
+ font-size: 12px; font-weight: 800; min-width: 22px; height: 22px;
+ border-radius: 999px; display: inline-flex; align-items: center;
+ justify-content: center; padding: 0 6px;
 }
 .fav-count { background: var(--gold); color: #1a1722; }
 .watched-count { background: var(--green); color: #1a1722; }
@@ -83,117 +83,117 @@ body.light .fav-counter, body.light .watched-counter, body.light .stats-counter,
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 h1 {
-  font-size: 34px; font-weight: 800; text-align: center; margin-bottom: 8px; letter-spacing: 1px;
-  background: linear-gradient(90deg, #f2c14e, #f2a54e, #d6382f);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  text-transform: uppercase;
+ font-size: 34px; font-weight: 800; text-align: center; margin-bottom: 8px; letter-spacing: 1px;
+ background: linear-gradient(90deg, #f2c14e, #f2a54e, #d6382f);
+ -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+ text-transform: uppercase;
 }
 .subtitle { text-align: center; margin-bottom: 32px; font-size: 16px; text-shadow: 0 1px 8px rgba(0,0,0,0.7); }
 body.light .subtitle { color: rgba(26,23,34,0.75); text-shadow: none; }
 .search-row { display: flex; gap: 8px; margin-bottom: 24px; }
 #search-input {
-  flex: 1; font-family: inherit; font-size: 15px; color: #fff; padding: 12px 16px;
-  background: rgba(26,23,34,0.85); border: 1px solid rgba(242,193,78,0.45);
-  border-radius: 12px; outline: none; transition: all 0.2s ease;
+ flex: 1; font-family: inherit; font-size: 15px; color: #fff; padding: 12px 16px;
+ background: rgba(26,23,34,0.85); border: 1px solid rgba(242,193,78,0.45);
+ border-radius: 12px; outline: none; transition: all 0.2s ease;
 }
 body.light #search-input { background: #fff; color: #1a1722; }
 #search-input::placeholder { color: rgba(255,255,255,0.45); }
 body.light #search-input::placeholder { color: rgba(26,23,34,0.4); }
-#search-input:focus { border-color: var(--gold); box-shadow: 0 0 14px rgba(242,193,78,0.3); }
-.search-btn {
-  font-size: 16px; padding: 10px 18px; background: var(--gold); color: #1a1722;
-  border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
+#поиск-ввод:фокус { цвет границы: var(--gold); поле-тень: 0 0 14 пикселей rgba (242,193,78,0.3); } 
+.поиск-btn { 
+ размер шрифта: 16px; отступ: 10px 18px; фон: var (--золотой); цвет: #1a1722; 
+ граница: отсутствует; радиус границы: 12 пикселей; вес шрифта: 700; курсор: указатель; легкость перехода: всего 0,2 секунды;
 }
 .search-btn:hover { filter: brightness(1.1); box-shadow: 0 0 14px rgba(242,193,78,0.4); }
 .search-empty {
-  text-align: center; padding: 30px 20px; background: rgba(26,23,34,0.88);
-  border: 1px solid rgba(242,193,78,0.25); border-radius: 18px;
+ text-align: center; padding: 30px 20px; background: rgba(26,23,34,0.88);
+ border: 1px solid rgba(242,193,78,0.25); border-radius: 18px;
 }
 body.light .search-empty { background: #fff; color: #1a1722; }
 .fod-label {
-  font-size: 13px; font-weight: 700; color: var(--gold); text-transform: uppercase;
-  letter-spacing: 1px; text-align: center; margin: 28px 0 12px;
+ font-size: 13px; font-weight: 700; color: var(--gold); text-transform: uppercase;
+ letter-spacing: 1px; text-align: center; margin: 28px 0 12px;
 }
 .couple-box {
-  background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25);
-  border-radius: 18px; box-shadow: var(--shadow); padding: 24px 20px; margin-bottom: 20px;
+ background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25);
+ border-radius: 18px; box-shadow: var(--shadow); padding: 24px 20px; margin-bottom: 20px;
 }
-body.light .couple-box { background: #fff; }
-.couple-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-.couple-row label { font-size: 15px; font-weight: 600; color: #f5f0e6; flex-shrink: 0; }
-body.light .couple-row label { color: #1a1722; }
-.couple-row select {
-  flex: 1; max-width: 260px; font-family: inherit; font-size: 14px; color: #fff;
-  padding: 10px 12px; background: rgba(38,30,46,0.95);
-  border: 1px solid rgba(242,193,78,0.45); border-radius: 12px; outline: none; cursor: pointer;
+body.light .couple-поле { фон: #fff; } 
+.couple-row { отображать: сгибать; выравнивать-элементы: по центру; выравнивать-содержимое: пробел между ними; пробел: 12 пикселей; поле-внизу: 14 пикселей; } 
+.метка в пару строк { размер шрифта: 15 пикселей; вес шрифта: 600; цвет: #f5f0e6; сгибание-усадка: 0; } 
+body.light .метка в пару строк {цвет: #1a1722; } 
+.выбор пары строк {
+ flex: 1; max-width: 260px; font-family: inherit; font-size: 14px; color: #fff;
+ padding: 10px 12px; background: rgba(38,30,46,0.95);
+ border: 1px solid rgba(242,193,78,0.45); border-radius: 12px; outline: none; cursor: pointer;
 }
 body.light .couple-row select { background: #fff; color: #1a1722; }
 .couple-row select:focus { border-color: var(--gold); box-shadow: 0 0 12px rgba(242,193,78,0.3); }
 .couple-row select option, .filters-panel select option { background: #261e2e; color: #fff; }
-body.light .couple-row select option, body.light .filters-panel select option { background: #fff; color: #1a1722; }
-.couple-hint { font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.6); margin-bottom: 18px; }
-body.light .couple-hint { color: rgba(26,23,34,0.6); }
-.couple-result-note { text-align: center; font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 16px; }
-body.light .couple-result-note { color: rgba(26,23,34,0.65); }
-.mood-buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 8px; }
-.mood-btn {
-  display: flex; align-items: center; gap: 10px; padding: 16px 14px;
-  font-size: 14px; font-weight: 600; font-family: inherit; color: #f5f0e6;
-  background: rgba(26,23,34,0.78); border: 1px solid rgba(242,193,78,0.45);
-  border-radius: 14px; box-shadow: var(--shadow); cursor: pointer; transition: all 0.2s ease; text-align: left;
+body.light.couple-опция выбора ряда, body.light.filters- опция выбора панели { фон: #fff; цвет: #1a1722; } 
+.пара-подсказка { размер шрифта: 13 пикселей; высота строки: 1.5; цвет: rgba (255,255,255,0.6); нижнее поле: 18 пикселей; } 
+body.light .couple-подсказка { цвет: rgba(26,23,34,0.6); } 
+.couple-результат-примечание { выравнивание текста по центру; размер шрифта: 13 пикселей; цвет: rgba (255,255,255,0.65); нижнее поле: 16 пикселей; } 
+body.light .couple-результат-примечание { цвет: rgba(26,23,34,0.65); } 
+.mood-кнопки { отображение: сетка; сетка-шаблон-столбцы: повторение(автозаполнение, минимальное значение (160px, 1fr)); пробел: 12px; поле-внизу: 8px; } 
+.настроение-btn { 
+ отобразить: сгибать; выровнять-элементы: по центру; интервал: 10 пикселей; отступ: 16x14px;
+ font-size: 14px; font-weight: 600; font-family: inherit; color: #f5f0e6;
+ background: rgba(26,23,34,0.78); border: 1px solid rgba(242,193,78,0.45);
+ border-radius: 14px; box-shadow: var(--shadow); cursor: pointer; transition: all 0.2s ease; text-align: left;
 }
 body.light .mood-btn { background: rgba(255,255,255,0.9); color: #1a1722; }
 .mood-btn:hover { background: rgba(38,30,46,0.92); border-color: var(--gold); box-shadow: 0 0 18px rgba(242,193,78,0.45); transform: translateY(-3px); }
 body.light .mood-btn:hover { background: #fff; }
-.mood-btn:active { transform: translateY(0) scale(0.97); }
-.stone { width: 14px; height: 14px; flex-shrink: 0; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
-.stone-purple { background: #b45be0; color: #b45be0; }
-.stone-yellow { background: #f2e05f; color: #f2e05f; }
-.stone-orange { background: #f29a4e; color: #f29a4e; }
-.stone-green { background: #4ecb7d; color: #4ecb7d; }
-.stone-blue { background: #4e8ef2; color: #4e8ef2; }
-.stone-red { background: #f24e57; color: #f24e57; }
-.stone-groot { background: #a8c46a; color: #a8c46a; }
-.filters-panel {
-  background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25);
-  border-radius: 14px; box-shadow: var(--shadow); padding: 14px 16px; margin-bottom: 8px;
+.mood-btn: активен { преобразование: шкала перевода (0) (0.97); } 
+.stone { ширина: 14 пикселей; высота: 14 пикселей; изгиб-усадка: 0; радиус границы: 50%; поле-тень: 0 0 8px currentColor; } 
+.камень-фиолетовый { фон: #b45be0; цвет: #b45be0; } 
+.камень-желтый { фон: #f2e05f; цвет: #f2e05f; } 
+.камень-оранжевый { фон: #f29a4e; цвет: #f29a4e; } 
+.камень-зеленый { фон: #4ecb7d; цвет: #4ecb7d; } 
+.камень-синий { фон: #4e8ef2; цвет: #4e8ef2; } 
+.камень-красный { фон: #f24e57; цвет: #f24e57; } 
+.камень-грут { фон: #a8c46a; цвет: #a8c46a; } 
+.фильтры-панель { 
+ фон: rgba (26,23,34,0.88); граница: сплошная rgba размером 1 пиксель (242,193,78,0.25);
+ border-radius: 14px; box-shadow: var(--shadow); padding: 14px 16px; margin-bottom: 8px;
 }
-body.light .filters-panel { background: #fff; }
-.filters-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.filters-row label { font-size: 13px; color: var(--text-soft); flex-shrink: 0; }
-body.light .filters-row label { color: #5a5866; }
-.filters-row select {
-  font-family: inherit; font-size: 13px; color: #fff; padding: 8px 10px;
-  background: rgba(38,30,46,0.95); border: 1px solid rgba(242,193,78,0.45);
-  border-radius: 10px; outline: none; cursor: pointer;
+body.light .filters-панель { фон: #fff; } 
+.фильтры-строка { отображать: сгибать; выравнивать-элементы: по центру; зазор: 10 пикселей; сгибать-обертывать: wrap; } 
+.фильтры-метка строки { размер шрифта: 13 пикселей; цвет: var (--text-мягкий); сгибание-сжатие: 0; } 
+body.light .filters-метка строки {цвет: #5a5866; } 
+.фильтры-выбор строки { 
+ семейство шрифтов: inherit; размер шрифта: 13px; цвет: #fff; отступ: 8px 10px;
+ background: rgba(38,30,46,0.95); border: 1px solid rgba(242,193,78,0.45);
+ border-radius: 10px; outline: none; cursor: pointer;
 }
 body.light .filters-row select { background: #fff; color: #1a1722; }
 .filters-row select:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(242,193,78,0.3); }
 .results-note { font-size: 13px; text-align: center; margin-bottom: 14px; color: rgba(255,255,255,0.65); }
 body.light .results-note { color: rgba(26,23,34,0.65); }
 .card {
-  display: flex; background: rgba(26,23,34,0.88);
-  border: 1px solid rgba(242,193,78,0.25); border-radius: 18px;
-  margin-bottom: 16px; box-shadow: var(--shadow);
-  transition: all 0.25s ease; overflow: hidden; animation: popIn 0.3s ease backwards;
+ display: flex; background: rgba(26,23,34,0.88);
+ border: 1px solid rgba(242,193,78,0.25); border-radius: 18px;
+ margin-bottom: 16px; box-shadow: var(--shadow);
+ transition: all 0.25s ease; overflow: hidden; animation: popIn 0.3s ease backwards;
 }
-body.light .card { background: #fff; }
-.card:hover { transform: translateY(-3px) scale(1.01); border-color: rgba(242,193,78,0.6); box-shadow: 0 10px 32px rgba(0,0,0,0.45); }
-.card-poster { width: 170px; height: 250px; object-fit: cover; flex-shrink: 0; margin: 16px; border-radius: 12px; }
-.card-body { padding: 20px 20px 20px 0; flex: 1; }
-.card-title { font-size: 19px; font-weight: 700; color: #fff; cursor: pointer; transition: color 0.2s ease; }
-.card-title:hover { color: var(--gold); }
-body.light .card-title { color: #1a1722; }
-.card-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 2px 0 8px; }
-.card-year { color: var(--text-soft); font-size: 14px; }
-.card-info { font-size: 13px; line-height: 1.6; margin-bottom: 10px; color: rgba(255,255,255,0.65); }
-body.light .card-info { color: rgba(26,23,34,0.65); }
-.card-info b { color: rgba(255,255,255,0.85); font-weight: 600; }
+body.light .card { фон: #fff; } 
+.карточка: наведите курсор { преобразование: масштаб перевода (-3px) (1.01); цвет границы: rgba (242,193,78,0.6); поле-тень: 0 10px 32px rgba (0,0,0,0.45); } 
+.открытка-постер { ширина: 170px; высота: 250px; объект-подгонка: обложка; сгибание-усадка: 0; поле: 16px; радиус границы: 12px; } 
+.card-body { заполнение: 20px 20px 20px 0; flex: 1; } 
+.card-title { размер шрифта: 19 пикселей; вес шрифта: 700; цвет: #fff; курсор: указатель; переход: по цвету с легкостью 0,2 секунды; } 
+.название карты: наведите курсор {цвет: var (--золотой); } 
+body.light .название карты { цвет: #1a1722; }
+.card-meta { отображение: flex; выравнивание элементов: по центру; разрыв: 10 пикселей; flex-wrap: обертывание; поле: 2px 0 8px; } 
+.card-year { цвет: var(--text-мягкий); размер шрифта: 14 пикселей; } 
+.card-info { размер шрифта: 13 пикселей; высота строки: 1.6; нижнее поле: 10 пикселей; цвет: rgba (255,255,255,0.65); } 
+body.light .card-информация { цвет: rgba (26,23,34,0.65); } 
+.информация о карте b { цвет: rgba (255,255,255,0.85); вес шрифта: 600; }
 body.light .card-info b { color: #1a1722; }
 .genre-chip {
-  display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px;
-  margin: 0 6px 4px 0; border-radius: 999px;
-  background: rgba(78,142,242,0.15); color: #9ec1ff; border: 1px solid rgba(78,142,242,0.4);
+ display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px;
+ margin: 0 6px 4px 0; border-radius: 999px;
+ background: rgba(78,142,242,0.15); color: #9ec1ff; border: 1px solid rgba(78,142,242,0.4);
 }
 body.light .genre-chip { color: #2a5fd0; }
 .age-badge { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; line-height: 1.5; }
@@ -202,80 +202,80 @@ body.light .genre-chip { color: #2a5fd0; }
 .age-16 { background: rgba(242,154,78,0.18); color: #f29a4e; border: 1px solid rgba(242,154,78,0.5); }
 .age-18 { background: rgba(242,78,87,0.18); color: #f24e57; border: 1px solid rgba(242,78,87,0.5); }
 .watched-badge {
-  font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; line-height: 1.5;
-  background: rgba(78,203,125,0.15); color: #4ecb7d; border: 1px solid rgba(78,203,125,0.5);
+ font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; line-height: 1.5;
+ background: rgba(78,203,125,0.15); color: #4ecb7d; border: 1px solid rgba(78,203,125,0.5);
 }
 .card-emotion {
-  display: inline-block; background: var(--gold-soft); color: var(--gold);
-  font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
+ display: inline-block; background: var(--gold-soft); color: var(--gold);
+ font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
 }
-.card-desc { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.75); margin-bottom: 12px; }
-body.light .card-desc { color: rgba(26,23,34,0.75); }
-.card-rating { color: var(--gold); font-size: 15px; margin-bottom: 6px; }
-.rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-.rating-label { font-size: 12px; color: var(--text-soft); }
-body.light .rating-label { color: #5a5866; }
-.stars { display: flex; gap: 2px; }
-.star-btn {
-  background: none; border: none; font-size: 20px; line-height: 1; padding: 0 2px;
-  color: rgba(255,255,255,0.25); cursor: pointer; transition: all 0.15s ease;
+.card-desc { размер шрифта: 14 пикселей; высота строки: 1.5; цвет: rgba (255,255,255,0.75); нижнее поле: 12 пикселей; } 
+body.light .card-desc { цвет: rgba(26,23,34,0.75); } 
+.card-рейтинг { цвет: var(--gold); размер шрифта: 15 пикселей; нижнее поле: 6 пикселей; } 
+.rating-строка { отображение: flex; выравнивание-элементы: по центру; пробел: 8 пикселей; поле-внизу: 14 пикселей; } 
+.rating-label { размер шрифта: 12 пикселей; цвет: var (--текст-мягкий); } 
+body.light .rating-label { цвет: #5a5866; } 
+.stars { отображение: гибкое; интервал: 2 пикселя; } 
+.star-btn { 
+ фон: отсутствует; граница: отсутствует; размер шрифта: 20 пикселей; высота строки: 1; отступ: 02 пикселей;
+ color: rgba(255,255,255,0.25); cursor: pointer; transition: all 0.15s ease;
 }
 body.light .star-btn { color: rgba(26,23,34,0.25); }
-.star-btn:hover { color: var(--gold); transform: scale(1.2); }
-.star-btn.on { color: var(--gold); text-shadow: 0 0 8px rgba(242,193,78,0.55); }
-.card-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.add-to-favs, .remove-fav, .watch-btn, .share-btn, .random-btn, .back-btn, .review-toggle {
-  font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px;
-  border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+.star-btn: наведите курсор { цвет: var(--gold); преобразование: масштаб (1.2); } 
+.star-btn.on { цвет: var(--gold); текст-тень: 0 0 8px rgba(242,193,78,0.55); } 
+.card-действия { отображать: сгибать; выравнивать-элементы: по центру; разрыв: 10 пикселей; сгибать-обертывать: wrap; } 
+.добавить в избранное, .удалить избранное, .смотреть-btn, .поделиться-btn, .случайный-btn, .назад-btn, .обзор-переключить { 
+ семейство шрифтов: inherit; размер шрифта: 14px; вес шрифта: 600; отступ: 10px 18px;
+ border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
 }
-.add-to-favs { background: var(--red); color: #fff; }
-.add-to-favs:hover { background: var(--red-dark); }
-.watch-btn { background: rgba(78,203,125,0.12); color: #4ecb7d; border: 1px solid rgba(78,203,125,0.5); }
-.watch-btn:hover { background: #4ecb7d; color: #1a1722; }
-.share-btn { background: rgba(242,193,78,0.15); color: var(--gold); border: 1px solid rgba(242,193,78,0.5); }
-.share-btn:hover { background: var(--gold); color: #1a1722; }
-.share-btn.copied { background: #4ecb7d; color: #1a1722; border-color: #4ecb7d; }
+.добавить в избранное { background: var(--красный); color: #fff; } 
+.добавить в избранное: наведите курсор { background: var (--красный-темный); } 
+.watch-btn { фон: rgba (78,203,125,0.12); цвет: #4ecb7d; граница: сплошная rgba в 1 пиксель (78,203,125,0.5); } 
+.watch-btn: наведите курсор { фон: #4ecb7d; цвет: #1a1722; } 
+.поделиться-btn { фон: rgba (242,193,78,0.15); цвет: var (--gold); граница: сплошная rgba размером 1 пиксель (242,193,78,0.5); } 
+.поделиться-btn: наведите курсор { фон: var(--gold); цвет: #1a1722; } 
+.поделиться-btn.copied { фон: #4ecb7d; цвет: #1a1722; цвет границы: #4ecb7d; }
 .review-toggle { background: rgba(78,142,242,0.12); color: #7fa8f5; border: 1px solid rgba(78,142,242,0.5); }
 .review-toggle:hover { background: var(--blue); color: #1a1722; }
 .share-messengers { display: none; gap: 8px; flex-wrap: wrap; margin-top: 10px; animation: fadeIn 0.25s ease; }
 .share-messengers.open { display: flex; }
 .share-messenger {
-  font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 14px;
-  border: 1px solid rgba(255,255,255,0.25); border-radius: 12px;
-  background: rgba(38,30,46,0.9); color: rgba(255,255,255,0.85);
-  cursor: pointer; text-decoration: none; transition: all 0.2s ease;
+ font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 14px;
+ border: 1px solid rgba(255,255,255,0.25); border-radius: 12px;
+ background: rgba(38,30,46,0.9); color: rgba(255,255,255,0.85);
+ cursor: pointer; text-decoration: none; transition: all 0.2s ease;
 }
-body.light .share-messenger { background: #f0ebe0; color: #1a1722; }
-.share-messenger:hover { filter: brightness(1.2); transform: translateY(-1px); }
-.share-tg { border-color: rgba(41,152,229,0.55); color: #54a9eb; }
-.share-vk { border-color: rgba(0,119,255,0.55); color: #4c9aff; }
-.share-wa { border-color: rgba(37,211,102,0.55); color: #3ddc7a; }
-.share-max { border-color: rgba(140,82,255,0.55); color: #a97bff; }
-.remove-fav { background: rgba(242,193,78,0.15); color: var(--gold); border: 1px solid rgba(242,193,78,0.5); }
-.remove-fav:hover { background: var(--gold); color: #1a1722; }
-.random-btn {
-  background: linear-gradient(135deg, #d6382f, #7a1f8f); color: #fff;
-  display: block; margin: 24px auto 12px; padding: 12px 24px;
+body.light .share-мессенджер { фон: #f0ebe0; цвет: #1a1722; } 
+.поделиться-messenger: наведите курсор { фильтр: яркость (1.2); преобразование: масштабируемость (-1px); } 
+.поделиться-tg { цвет границы: rgba(41,152,229,0.55); цвет: #54a9eb; } 
+.поделиться-vk { цвет рамки: rgba(0,119,255,0.55); цвет: #4c9aff; } 
+.поделиться-wa { цвет границы: rgba(37,211,102,0.55); цвет: #3ddc7a; } 
+.share-max { цвет границы: rgba(140,82,255,0.55); цвет: #a97bff; } 
+.remove-fav { фон: rgba (242,193,78,0.15); цвет: var(--gold); граница: сплошная rgba размером 1 пиксель (242,193,78,0.5); } 
+.удалить-избранное: наведите курсор { фон: var(--gold); цвет: #1a1722; } 
+.случайный-btn { 
+ фон: линейно-градиентный (135 градусов, #d6382f, #7a1f8f); цвет: #fff; 
+ дисплей: блок; поле: 24px, авто 12px; отступ: 12px 24px; 
 }
 .random-btn:hover { filter: brightness(1.15); box-shadow: 0 0 20px rgba(214,56,47,0.5); }
 #btn-next { display: block; margin: 8px auto 0; }
 .more-btn {
-  font-family: inherit; font-size: 15px; font-weight: 700; display: block;
-  margin: 16px auto 4px; padding: 12px 28px; background: transparent; color: var(--gold);
-  border: 1px solid rgba(242,193,78,0.55); border-radius: 999px; cursor: pointer; transition: all 0.2s ease;
+ font-family: inherit; font-size: 15px; font-weight: 700; display: block;
+ margin: 16px auto 4px; padding: 12px 28px; background: transparent; color: var(--gold);
+ border: 1px solid rgba(242,193,78,0.55); border-radius: 999px; cursor: pointer; transition: all 0.2s ease;
 }
 .more-btn:hover { background: var(--gold); color: #1a1722; box-shadow: 0 0 18px rgba(242,193,78,0.45); }
 .back-btn { background: transparent; color: rgba(255,255,255,0.85); margin-bottom: 20px; padding: 8px 0; }
 body.light .back-btn { color: rgba(26,23,34,0.85); }
-.back-btn:hover { color: var(--gold); }
-.services-label { font-size: 12px; font-weight: 600; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin: 4px 0 8px; }
-body.light .services-label { color: #5a5866; }
-.services { display: flex; flex-wrap: wrap; gap: 8px; }
-.service-chip {
-  font-family: inherit; font-size: 13px; font-weight: 600; padding: 6px 12px;
-  background: rgba(38,30,46,0.9); color: rgba(255,255,255,0.85);
-  border: 1px solid rgba(255,255,255,0.25); border-radius: 999px;
-  text-decoration: none; transition: all 0.2s ease;
+.back-btn: наведите курсор { цвет: var(--золотой); } 
+.services-label { размер шрифта: 12 пикселей; вес шрифта: 600; цвет: var (--text-soft); преобразование текста: верхний регистр; интервал между буквами: 0,5 пикселя; поле: 4px 0 8px; } 
+body.light .services-этикетка { цвет: #5a5866; } 
+.services { дисплей: гибкий; flex-wrap: обертка; зазор: 8 пикселей; } 
+.service-микросхема { 
+ семейство шрифтов: inherit; размер шрифта: 13 пикселей; вес шрифта: 600; отступ: 6 пикселей на 12 пикселей;
+ background: rgba(38,30,46,0.9); color: rgba(255,255,255,0.85);
+ border: 1px solid rgba(255,255,255,0.25); border-radius: 999px;
+ text-decoration: none; transition: all 0.2s ease;
 }
 body.light .service-chip { background: #f0ebe0; color: #1a1722; }
 .service-chip:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 12px rgba(242,193,78,0.3); }
@@ -284,223 +284,223 @@ body.light .service-chip { background: #f0ebe0; color: #1a1722; }
 .review-panel { display: none; margin-top: 12px; animation: fadeIn 0.25s ease; }
 .review-panel.open { display: block; }
 .review-item {
-  padding: 10px 12px; margin-bottom: 8px; border-radius: 12px;
-  background: rgba(38,30,46,0.6); border: 1px solid rgba(255,255,255,0.12);
-  font-size: 13px; line-height: 1.5;
+ padding: 10px 12px; margin-bottom: 8px; border-radius: 12px;
+ background: rgba(38,30,46,0.6); border: 1px solid rgba(255,255,255,0.12);
+ font-size: 13px; line-height: 1.5;
 }
 body.light .review-item { background: #f4f1ea; border-color: rgba(26,23,34,0.12); }
 .review-item b { color: var(--gold); }
-.review-meta { font-size: 11px; color: var(--text-soft); margin-top: 4px; }
-.review-form { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-.review-form textarea {
-  flex: 1; min-width: 200px; font-family: inherit; font-size: 13px; color: #fff;
-  padding: 8px 10px; background: rgba(38,30,46,0.95);
-  border: 1px solid rgba(242,193,78,0.45); border-radius: 10px; outline: none; resize: vertical; min-height: 40px;
+.обзор-meta { размер шрифта: 11 пикселей; цвет: var (--text-мягкий); верхнее поле: 4 пикселя; } 
+.форма обзора { отображение: гибкое; пробел: 8 пикселей; верхнее поле: 8 пикселей; flex-wrap: перенос; } 
+.текстовая область формы обзора { 
+ flex: 1; min-ширина: 200px; семейство шрифтов: inherit; размер шрифта: 13px; цвет: #fff; 
+ отступ: 8 пикселей на 10 пикселей; фон: rgba (38,30,46,0.95);
+ border: 1px solid rgba(242,193,78,0.45); border-radius: 10px; outline: none; resize: vertical; min-height: 40px;
 }
 body.light .review-form textarea { background: #fff; color: #1a1722; }
 .review-form textarea:focus { border-color: var(--gold); }
 .review-add {
-  font-family: inherit; font-size: 13px; font-weight: 700; padding: 8px 16px;
-  background: var(--gold); color: #1a1722; border: none; border-radius: 10px; cursor: pointer;
+ font-family: inherit; font-size: 13px; font-weight: 700; padding: 8px 16px;
+ background: var(--gold); color: #1a1722; border: none; border-radius: 10px; cursor: pointer;
 }
 .review-add:hover { filter: brightness(1.1); }
 .review-empty { font-size: 12px; color: var(--text-soft); }
 /* Модальное окно */
 .modal-overlay {
-  position: fixed; inset: 0; z-index: 200; display: none;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-  align-items: center; justify-content: center; padding: 20px;
+ position: fixed; inset: 0; z-index: 200; display: none;
+ background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+ align-items: center; justify-content: center; padding: 20px;
 }
 .modal-overlay.open { display: flex; }
 .modal-box {
-  background: rgba(26,23,34,0.98); border: 1px solid rgba(242,193,78,0.4);
-  border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  max-width: 640px; width: 100%; max-height: 85vh; overflow-y: auto;
-  padding: 28px 24px; animation: popIn 0.3s ease; position: relative;
+ background: rgba(26,23,34,0.98); border: 1px solid rgba(242,193,78,0.4);
+ border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+ max-width: 640px; width: 100%; max-height: 85vh; overflow-y: auto;
+ padding: 28px 24px; animation: popIn 0.3s ease; position: relative;
 }
 body.light .modal-box { background: #fff; }
 .modal-close {
-  position: absolute; top: 12px; right: 14px; font-size: 22px;
-  background: none; border: none; color: var(--text-soft); cursor: pointer; transition: color 0.2s;
+ position: absolute; top: 12px; right: 14px; font-size: 22px;
+ background: none; border: none; color: var(--text-soft); cursor: pointer; transition: color 0.2s;
 }
-.modal-close:hover { color: var(--red); }
-.modal-title { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
-.modal-year { color: var(--gold); font-size: 14px; margin-bottom: 12px; }
-.modal-facts { font-size: 14px; line-height: 1.7; margin-bottom: 14px; }
-.modal-facts b { color: var(--gold); }
-.modal-desc { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.75); margin-bottom: 14px; }
-body.light .modal-desc { color: rgba(26,23,34,0.75); }
+.modal-закрыть: наведите курсор { цвет: var(--красный); } 
+.modal-заголовок { размер шрифта: 24px; вес шрифта: 800; нижнее поле: 4px; } 
+.modal-year { цвет: var(--gold); размер шрифта: 14 пикселей; нижнее поле: 12 пикселей; } 
+.modal-facts { размер шрифта: 14 пикселей; высота строки: 1.7; нижнее поле: 14 пикселей; } 
+.modal-facts b { цвет: var (--золотой); } 
+.modal-desc { размер шрифта: 14 пикселей; высота строки: 1.6; цвет: rgba (255,255,255,0.75); нижнее поле: 14 пикселей; } 
+body.light .modal-desc { цвет: rgba(26,23,34,0.75); }
 /* Чат-помощник */
 #chat-btn {
-  position: fixed; left: 20px; bottom: 20px; z-index: 250;
-  width: 52px; height: 52px; border-radius: 50%;
-  font-size: 22px; background: var(--gold); color: #1a1722;
-  border: none; cursor: pointer; box-shadow: var(--shadow);
-  transition: all 0.2s ease; padding: 0; overflow: hidden;
+ position: fixed; left: 20px; bottom: 20px; z-index: 250;
+ width: 52px; height: 52px; border-radius: 50%;
+ font-size: 22px; background: var(--gold); color: #1a1722;
+ border: none; cursor: pointer; box-shadow: var(--shadow);
+ transition: all 0.2s ease; padding: 0; overflow: hidden;
 }
 #chat-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(242,193,78,0.6); }
 .chat-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
 #chat-panel {
-  position: fixed; left: 20px; bottom: 82px; z-index: 250;
-  width: 320px; max-height: 420px; overflow-y: auto;
-  background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.4);
-  border-radius: 16px; box-shadow: var(--shadow); padding: 16px;
-  display: none; animation: popIn 0.25s ease;
+ position: fixed; left: 20px; bottom: 82px; z-index: 250;
+ width: 320px; max-height: 420px; overflow-y: auto;
+ background: rgba(26,23,34,0.97); border: 1px solid rgba(242,193,78,0.4);
+ border-radius: 16px; box-shadow: var(--shadow); padding: 16px;
+ display: none; animation: popIn 0.25s ease;
 }
 #chat-panel.open { display: block; }
 body.light #chat-panel { background: #fff; }
 .chat-title { font-size: 13px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 .chat-q {
-  display: block; width: 100%; text-align: left; font-family: inherit; font-size: 13px;
-  padding: 8px 12px; margin-bottom: 6px; border-radius: 10px; cursor: pointer;
-  background: rgba(38,30,46,0.9); color: #f5f0e6;
-  border: 1px solid rgba(242,193,78,0.35); transition: all 0.2s ease;
+ display: block; width: 100%; text-align: left; font-family: inherit; font-size: 13px;
+ padding: 8px 12px; margin-bottom: 6px; border-radius: 10px; cursor: pointer;
+ background: rgba(38,30,46,0.9); color: #f5f0e6;
+ border: 1px solid rgba(242,193,78,0.35); transition: all 0.2s ease;
 }
 body.light .chat-q { background: #f4f1ea; color: #1a1722; }
 .chat-q:hover { border-color: var(--gold); }
 .chat-a {
-  font-size: 13px; line-height: 1.5; padding: 10px 12px; margin-top: 6px;
-  border-radius: 10px; background: rgba(78,203,125,0.1);
-  border: 1px solid rgba(78,203,125,0.4); display: none;
+ font-size: 13px; line-height: 1.5; padding: 10px 12px; margin-top: 6px;
+ border-radius: 10px; background: rgba(78,203,125,0.1);
+ border: 1px solid rgba(78,203,125,0.4); display: none;
 }
 .chat-a.show { display: block; animation: fadeIn 0.25s ease; }
 /* Тосты */
 #toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
 .toast {
-  padding: 12px 18px; border-radius: 12px; font-size: 14px; font-weight: 600;
-  background: rgba(38,30,46,0.95); color: #f5f0e6;
-  border: 1px solid rgba(242,193,78,0.5); box-shadow: var(--shadow);
-  animation: toastIn 0.25s ease;
+ padding: 12px 18px; border-radius: 12px; font-size: 14px; font-weight: 600;
+ background: rgba(38,30,46,0.95); color: #f5f0e6;
+ border: 1px solid rgba(242,193,78,0.5); box-shadow: var(--shadow);
+ animation: toastIn 0.25s ease;
 }
 body.light .toast { background: #fff; color: #1a1722; }
 .toast.ok { border-color: rgba(78,203,125,0.6); }
 @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
 .stats-box {
-  background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25);
-  border-radius: 18px; box-shadow: var(--shadow); padding: 24px 20px; margin-bottom: 16px;
+ background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25);
+ border-radius: 18px; box-shadow: var(--shadow); padding: 24px 20px; margin-bottom: 16px;
 }
 body.light .stats-box { background: #fff; }
 .stats-title { font-size: 13px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
 .stat-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
-  font-size: 15px; color: #f5f0e6;
+ display: flex; align-items: center; justify-content: space-between; gap: 12px;
+ padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+ font-size: 15px; color: #f5f0e6;
 }
-body.light .stat-row { color: #1a1722; border-bottom-color: rgba(26,23,34,0.08); }
-.stat-row:last-child { border-bottom: none; }
-.stat-value { font-weight: 800; color: var(--gold); flex-shrink: 0; }
-.stat-bar { margin-top: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.1); overflow: hidden; }
-body.light .stat-bar { background: rgba(26,23,34,0.1); }
-.stat-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #f2c14e, #d6382f); transition: width 0.4s ease; }
-.stats-hint { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 10px; }
-body.light .stats-hint { color: rgba(26,23,34,0.6); }
+body.light .stat-строка { цвет: #1a1722; border-bottom-цвет: rgba(26,23,34,0.08); } 
+.stat-строка: последний дочерний элемент { border-bottom: отсутствует; } 
+.stat-значение { font-weight: 800; color: var (--золотой); flex-shrink: 0; } 
+.stat-bar { margin-top: 8 пикселей; height: 8 пикселей; border-radius: 999 пикселей; background: rgba(255,255,255,0.1); overflow: скрытый; } 
+body.light .stat-bar { фон: rgba(26,23,34,0.1); } 
+.stat-bar-заливка { высота: 100%; радиус границы: 999 пикселей; фон: линейно-градиентный (90 градусов, #f2c14e, #d6382f); переход: ширина с легкостью 0,4 секунды; } 
+.статистика-подсказка { размер шрифта: 13 пикселей; цвет: rgba (255,255,255,0.6); верхнее поле: 10 пикселей; } 
+body.light .stats-подсказка { цвет: rgba(26,23,34,0.6); }
 #no-stats, #no-favorites, #no-watched {
-  text-align: center; padding: 40px 20px; background: rgba(26,23,34,0.88);
-  border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow);
+ text-align: center; padding: 40px 20px; background: rgba(26,23,34,0.88);
+ border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow);
 }
 body.light #no-stats, body.light #no-favorites, body.light #no-watched { background: #fff; }
 @media (max-width: 560px) {
-  h1 { font-size: 26px; }
-  .mood-buttons { grid-template-columns: 1fr 1fr; }
-  .card { flex-direction: column; }
-  .card-poster { width: 100%; height: 300px; margin: 0; border-radius: 0; }
-  .card-body { padding: 16px; }
-  .top-bar { padding: 8px 10px; }
-  .top-bar-title { font-size: 14px; }
-  .fav-counter, .watched-counter, .stats-counter, .theme-btn { font-size: 12px; padding: 6px 10px; gap: 5px; }
-  .couple-row { flex-direction: column; align-items: stretch; }
-  .couple-row select { max-width: none; }
-  #toast-container { right: 10px; bottom: 10px; left: 10px; }
-  #chat-panel { width: calc(100vw - 40px); }
+ h1 { font-size: 26px; }
+ .mood-buttons { grid-template-columns: 1fr 1fr; }
+ .card { flex-direction: column; }
+ .card-poster { width: 100%; height: 300px; margin: 0; border-radius: 0; }
+ .card-body { padding: 16px; }
+ .top-bar { padding: 8px 10px; }
+ .top-bar-title { font-size: 14px; }
+ .fav-counter, .watched-counter, .stats-counter, .theme-btn { font-size: 12px; padding: 6px 10px; gap: 5px; }
+ .couple-row { flex-direction: column; align-items: stretch; }
+ .couple-row select { max-width: none; }
+ #toast-container { right: 10px; bottom: 10px; left: 10px; }
+ #chat-panel { width: calc(100vw - 40px); }
 }
 
 /* === Адаптация и ИИ-чат (блок Алисы) === */
-:root { --header-h: 118px; }
-.ai-btn { background: rgba(122,31,143,0.14); color: #d9a5f2; border: 1px solid rgba(178,112,235,0.55); display: block; margin: 12px auto 0; }
-.ai-btn:hover { filter: brightness(1.15); box-shadow: 0 0 20px rgba(122,31,143,0.5); }
-.ai-chat { background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow); padding: 14px; }
-body.light .ai-chat { background: #fff; }
-.ai-messages { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; max-height: 55vh; padding: 4px; scroll-behavior: smooth; }
-.ai-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
-.ai-msg.bot { align-self: flex-start; background: rgba(38,30,46,0.95); color: #f5f0e6; border-left: 3px solid var(--gold); }
-body.light .ai-msg.bot { background: #f4f1ea; color: #1a1722; }
-.ai-msg.user { align-self: flex-end; background: linear-gradient(135deg, #d6382f, #7a1f8f); color: #fff; border-right: 3px solid var(--gold); }
+:root { --заголовок-h: 118 пикселей; } 
+.ai-btn { фон: rgba (122,31,143,0.14); цвет: #d9a5f2; граница: сплошная rgba в 1 пиксель (178,112,235,0.55); отображение: блок; поле: 12 пикселей, авто 0; } 
+.ai-btn: наведите курсор { фильтр: яркость (1.15); поле-тень: 0 0 20 пикселей rgba(122,31,143,0.5); }
+.ai-чат { фон: rgba (26,23,34,0.88); граница: сплошная rgba в 1 пиксель (242,193,78,0.25); радиус границы: 18 пикселей; поле-тень: var(--shadow); отступ: 14 пикселей; } 
+body.light .ai-чат { фон: #fff; } 
+.ai-сообщения { отображение: гибкое; направление изгиба: столбец; разрыв: 10 пикселей; переполнение-y: автоматическое; максимальная высота: 55 пикселей; отступ: 4 пикселя; прокрутка- плавная; } 
+.ai-сообщение { максимальная ширина: 85%; отступ: 10 пикселей на 14 пикселей; радиус границы: 14 пикселей; размер шрифта: 14 пикселей; высота строки: 1.5; пробел: предварительный перенос; разрыв слова: разрыв слова; }
+.ai-сообщение.bot { выровнять по себе: flex-start; фон: rgba(38,30,46,0.95); цвет: #f5f0e6; граница слева: 3 пикселя сплошным шрифтом var(--gold); } 
+body.light .ai-сообщение.bot { фон: #f4f1ea; цвет: #1a1722; } 
+.ai-сообщение.user { выравнивание-self: flex-end; фон: линейно-градиентный (135deg, #d6382f, #7a1f8f); цвет: #fff; правая граница: 3px сплошной var (--золотой); }
 .ai-msg b { color: var(--gold); }
 .ai-typing { align-self: flex-start; font-size: 13px; color: var(--text-soft); font-style: italic; padding: 8px 4px; animation: pulse 1.2s ease infinite; }
 @keyframes pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
-.ai-input-row { display: flex; gap: 8px; margin-top: 12px; }
-.ai-input-row input { flex: 1; font-family: inherit; font-size: 16px; color: #fff; padding: 12px 14px; background: rgba(38,30,46,0.95); border: 1px solid rgba(242,193,78,0.45); border-radius: 12px; outline: none; }
-body.light .ai-input-row input { background: #fff; color: #1a1722; }
-.ai-input-row input:focus { border-color: var(--gold); box-shadow: 0 0 12px rgba(242,193,78,0.3); }
+.ai-input-строка { отображение: гибкое; пробел: 8 пикселей; верхнее поле: 12 пикселей; } 
+.ai-input-ввод строки { flex: 1; семейство шрифтов: inherit; размер шрифта: 16px; цвет: #fff; отступ: 12x14px; фон: rgba (38,30,46,0.95); граница: 1px сплошная rgba (242,193,78,0.45); радиус границы: 12px; контур: отсутствует; } 
+body.light .ai-input-ввод строки { фон: #fff; цвет: #1a1722; } 
+.ai-input-ввод строки: фокус { цвет границы: var (--gold); поле-тень: 0 0 12px rgba (242,193,78,0.3); }
 .ai-send-btn { font-size: 18px; padding: 10px 18px; background: var(--gold); color: #1a1722; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
 .ai-send-btn:hover { filter: brightness(1.1); }
 
 @media (max-width: 560px) {
-  .top-bar { flex-wrap: wrap; row-gap: 9px; padding: 10px 14px; }
-  .top-bar-left { width: 100%; justify-content: space-between; }
-  .top-bar-right { width: 100%; flex-wrap: nowrap; gap: 6px; }
-  .stats-counter, .watched-counter, .fav-counter { flex: 1 1 0; justify-content: center; padding: 8px 4px; font-size: 13px; gap: 6px; }
-  .stats-count, .watched-count, .fav-count { min-width: 20px; height: 20px; font-size: 11px; }
-  .card { flex-direction: column; }
-  .card-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain; margin: 14px 14px 0; background: rgba(0,0,0,0.35); }
-  .card-body { padding: 16px; }
-  .ai-messages { max-height: 48vh; }
+ .top-bar { flex-wrap: wrap; row-gap: 9px; padding: 10px 14px; }
+ .top-bar-left { width: 100%; justify-content: space-between; }
+ .top-bar-right { width: 100%; flex-wrap: nowrap; gap: 6px; }
+ .stats-counter, .watched-counter, .fav-counter { flex: 1 1 0; justify-content: center; padding: 8px 4px; font-size: 13px; gap: 6px; }
+ .stats-count, .watched-count, .fav-count { min-width: 20px; height: 20px; font-size: 11px; }
+ .card { flex-direction: column; }
+ .card-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain; margin: 14px 14px 0; background: rgba(0,0,0,0.35); }
+ .card-body { padding: 16px; }
+ .ai-messages { max-height: 48vh; }
 }
 @media (max-width: 380px) {
-  .top-bar-title { font-size: 15px; }
-  .theme-btn { padding: 7px 10px; font-size: 13px; }
-  .stats-counter, .watched-counter, .fav-counter { font-size: 11.5px; padding: 7px 3px; }
+ .top-bar-title { font-size: 15px; }
+ .theme-btn { padding: 7px 10px; font-size: 13px; }
+ .stats-counter, .watched-counter, .fav-counter { font-size: 11.5px; padding: 7px 3px; }
 }
 @media (min-width: 561px) and (max-width: 1024px) {
-  h1 { font-size: clamp(28px, 4.5vw, 34px); }
-  .mood-buttons { grid-template-columns: 1fr 1fr; }
-  .couple-row { flex-direction: column; align-items: stretch; }
-  .couple-row select { max-width: none; }
-  .filters-row { gap: 8px; }
+ h1 { font-size: clamp(28px, 4.5vw, 34px); }
+ .mood-buttons { grid-template-columns: 1fr 1fr; }
+ .couple-row { flex-direction: column; align-items: stretch; }
+ .couple-row select { max-width: none; }
+ .filters-row { gap: 8px; }
 }
 
 /* Быстрые действия на главном */
 .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 2px 0 20px; }
 .quick-btn {
-  font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 14px;
-  background: linear-gradient(135deg, #d6382f, #7a1f8f); color: #fff;
-  border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+ font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 14px;
+ background: linear-gradient(135deg, #d6382f, #7a1f8f); color: #fff;
+ border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
 }
 .quick-btn:hover { filter: brightness(1.15); box-shadow: 0 0 18px rgba(214,56,47,0.5); transform: translateY(-2px); }
 .quick-btn.ai-quick { background: rgba(122,31,143,0.14); color: #d9a5f2; border: 1px solid rgba(178,112,235,0.55); }
 .quick-btn.ai-quick:hover { background: #7a1f8f; color: #fff; }
-/* Мягкая ИИ-кнопка (единый стиль с соседями) */
+/* Мягкая ИИ-кнопка (единый стиль с соседними элементами) */
 .ai-soft {
-  font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px;
-  background: rgba(122,31,143,0.14); color: #d9a5f2;
-  border: 1px solid rgba(178,112,235,0.55); border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+ font-family: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px;
+ background: rgba(122,31,143,0.14); color: #d9a5f2;
+ border: 1px solid rgba(178,112,235,0.55); border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
 }
 .ai-soft:hover { background: #7a1f8f; color: #fff; box-shadow: 0 0 14px rgba(122,31,143,0.5); }
 /* Герой «Фильма дня» + карусель */
-.fod-row { display: flex; align-items: center; gap: 16px; }
-.fod-side { flex: 0 0 120px; text-align: center; cursor: pointer; opacity: 0.85; transition: opacity 0.2s; }
-.fod-side:hover { opacity: 1; }
-.fod-side img { width: 110px; aspect-ratio: 2/3; object-fit: cover; border-radius: 10px; border: 1px solid rgba(242,193,78,0.35); }
+.fod-строка { отображение: flex; выравнивание элементов: по центру; разрыв: 16 пикселей; } 
+.fod-side { flex: 0 0 120px; выравнивание текста: по центру; курсор: указатель; непрозрачность: 0.85; переход: непрозрачность 0.2 с; } 
+.fod-side:наведение курсора { непрозрачность: 1; } 
+. изображение с обратной стороны { ширина: 110 пикселей; соотношение сторон: 2/3; размер объекта: обложка; радиус границы: 10 пикселей; граница: 1 пиксель сплошная rgba (242,193,78,0.35); }
 .fod-side-title { font-size: 12px; margin-top: 6px; color: rgba(255,255,255,0.75); }
 body.light .fod-side-title { color: rgba(26,23,34,0.7); }
-.fod-hero { flex: 1; display: flex; gap: 22px; background: rgba(26,23,34,0.88); border: 1px solid rgba(242,193,78,0.25); border-radius: 18px; box-shadow: var(--shadow); padding: 20px; }
-body.light .fod-hero { background: #fff; }
-.fod-poster { width: 220px; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px; flex-shrink: 0; cursor: pointer; }
-.fod-info { flex: 1; min-width: 0; }
-.fod-info .card-title { font-size: 26px; }
-.fod-arrows { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 12px; }
-.fod-arrow {
-  width: 44px; height: 44px; border-radius: 50%; font-size: 22px; line-height: 1;
-  background: rgba(38,30,46,0.9); color: var(--gold); border: 1px solid rgba(242,193,78,0.5);
-  cursor: pointer; transition: all 0.2s ease;
+.fod-hero { flex: 1; дисплей: flex; пробел: 22px; фон: rgba (26,23,34,0.88); граница: сплошная rgba в 1 пиксель (242,193,78,0.25); радиус границы: 18px; поле-тень: var(--shadow); отступ: 20px; } 
+body.light .fod-герой { фон: #fff; } 
+.fod-плакат { ширина: 220 пикселей; соотношение сторон: 2/3; подгонка объекта: обложка; радиус границы: 12 пикселей; сгибание-сжатие: 0; курсор: указатель; } 
+.fod-info { flex: 1; min-width: 0; } 
+.fod-info .card-заголовок { размер шрифта: 26 пикселей; }
+.fod-стрелки { отобразить: сгиб; выровнять-элементы: по центру; выровнять-содержимое: по центру; пробел: 14 пикселей; верхнее поле: 12 пикселей; } 
+.fod-стрелки { 
+ ширина: 44px; высота: 44px; радиус границы: 50%; размер шрифта: 22px; высота линии: 1; 
+ фон: rgba (38,30,46,0.9); цвет: var (--золотой); граница: сплошная rgba в 1 пиксель (242,193,78,0.5);
+ cursor: pointer; transition: all 0.2s ease;
 }
 .fod-arrow:hover { background: var(--gold); color: #1a1722; box-shadow: 0 0 16px rgba(242,193,78,0.5); }
 .fod-counter { font-size: 13px; color: var(--text-soft); min-width: 64px; text-align: center; }
 @media (max-width: 900px) {
-  .fod-side { display: none; }
-  .fod-hero { flex-direction: column; align-items: center; }
-  .fod-poster { width: 180px; }
-  .fod-info .card-title { font-size: 20px; }
+ .fod-side { display: none; }
+ .fod-hero { flex-direction: column; align-items: center; }
+ .fod-poster { width: 180px; }
+ .fod-info .card-title { font-size: 20px; }
 }
 @media (min-width: 1100px) { .screen { max-width: 1080px; } }
 /* Модалка: прокрутка без видимой полосы */
@@ -510,494 +510,494 @@ body.light .fod-hero { background: #fff; }
 /* === Шапка: поиск и слоган === */
 body { overflow-x: hidden; }
 .top-bar-search { display: flex; gap: 8px; flex: 1 1 320px; max-width: 620px; margin: 0 auto; }
-.top-bar-search .search-btn { font-size: 15px; padding: 9px 16px; background: var(--gold); color: #1a1722; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
-.top-bar-search .search-btn:hover { filter: brightness(1.1); box-shadow: 0 0 12px rgba(242,193,78,0.4); }
+.верхняя панель-search .search-btn { размер шрифта: 15 пикселей; отступ: 9x16 пикселей; фон: var (--gold); цвет: #1a1722; граница: отсутствует; радиус границы: 12 пикселей; вес шрифта: 700; курсор: указатель; } 
+.верхняя панель-search .search-btn: наведите курсор { фильтр: яркость (1.1); поле-тень: 0 0 12 пикселей rgba (242,193,78,0.4); }
 .top-bar-slogan { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.78); white-space: nowrap; }
 body.light .top-bar-slogan { color: rgba(26,23,34,0.72); }
 @media (max-width: 1100px) { .top-bar-slogan { display: none; } }
-/* === Главный экран: колонка слева + Фильм дня, ровно и в один экран === */
-#screen-home.active { display: flex; align-items: center; justify-content: center; height: calc(100vh - var(--header-h, 118px)); max-height: calc(100vh - var(--header-h, 118px)); overflow: hidden; padding: 10px 24px 12px; }
-.home-layout { display: flex; align-items: center; justify-content: center; gap: 30px; width: 100%; max-width: 1180px; }
-.side-col { display: flex; flex-direction: column; gap: 10px; width: 224px; flex-shrink: 0; }
-.side-btn { font-family: inherit; font-size: 14px; font-weight: 700; padding: 12px 14px; text-align: left; display: flex; align-items: center; gap: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: rgba(38,30,46,0.72); color: #d9a5f2; border: 1px solid rgba(178,112,235,0.55); border-radius: 14px; cursor: pointer; transition: all 0.2s ease; }
-body.light .side-btn { background: rgba(255,255,255,0.78); color: #7a1f8f; border-color: rgba(122,31,143,0.4); }
-.side-btn:hover { background: #7a1f8f; color: #fff; box-shadow: 0 0 16px rgba(122,31,143,0.5); transform: translateY(-2px); }
-body.light .side-btn:hover { background: #7a1f8f; color: #fff; }
-.side-menu-wrap { position: relative; }
-.dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; width: 100%; display: none; flex-direction: column; gap: 6px; padding: 10px; background: rgba(26,23,34,0.97); border: 1px solid rgba(178,112,235,0.5); border-radius: 14px; box-shadow: var(--shadow); z-index: 80; max-height: min(430px, 58vh); overflow-y: auto; }
-.dropdown-menu.open { display: flex; }
-body.light .dropdown-menu { background: #fff; }
-.dropdown-menu .mood-btn, .dropdown-menu .cat-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; font-family: inherit; font-size: 13.5px; font-weight: 600; text-align: left; color: #f5f0e6; background: transparent; border: 1px solid rgba(178,112,235,0.35); border-radius: 10px; cursor: pointer; transition: all 0.15s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-body.light .dropdown-menu .mood-btn, body.light .dropdown-menu .cat-item { color: #1a1722; }
+/* === Главный экран: колонка слева + Фильм дня, ровно на весь экран === */
+#экран-главная страница.активный { отображать: гибкий; выровнять-элементы: по центру; выровнять-содержимое: по центру; высота: calc(100vh - var(--header-h, 118px)); максимальная высота: calc(100vh - var(--header-h, 118px)); переполнение: скрыто; отступ: 10px 24px 12px; } 
+.главная страница-макет { отображение: гибкое; выровнять-элементы: по центру; выровнять-содержимое: по центру; пробел: 30 пикселей; ширина: 100%; максимальная ширина: 1180 пикселей; } 
+.side-col { отображение: flex; направление изгиба: столбец; зазор: 10 пикселей; ширина: 224 пикселя; усадка при изгибе: 0; }
+.side-btn { семейство шрифтов: inherit; размер шрифта: 14 пикселей; вес шрифта: 700; отступ: 12x14 пикселей; выравнивание текста: по левому краю; отображение: flex; выравнивание элементов: по центру; пробел: 10 пикселей; пробел: nowrap; переполнение: скрытое; переполнение текста: многоточие; фон: rgba (38,30,46,0.72); цвет: #d9a5f2; граница: 1px сплошная rgba (178,112,235,0.55); граница -радиус: 14 пикселей; курсор: указатель; переход: всего 0,2 секунды; } 
+body.light .side-btn { фон: rgba(255,255,255,0.78); цвет: #7a1f8f; цвет границы: rgba(122,31,143,0.4); } 
+.side-btn: наведите курсор { фон: #7a1f8f; цвет: #fff; поле-тень: 0 0 16px rgba(122,31,143,0.5); преобразование: translateY(-2px); } 
+body.light .side-btn: наведите курсор { фон: #7a1f8f; цвет: #fff; } 
+.боковое меню-перенос {положение: относительное; } 
+.выпадающее меню { позиция: абсолютная; вверху: calc (100% + 8 пикселей); слева: 0; ширина: 100%; отображение: отсутствует; направление изгиба: столбец; пробел: 6 пикселей; отступ: 10 пикселей; фон: rgba (26,23,34,0.97); граница: сплошная rgba в 1 пиксель (178,112,235,0.5); радиус границы: 14 пикселей; поле-тень: var (--shadow); z-индекс: 80; максимальная высота: min ( 430 пикселей, 58vh); режим переполнения: автоматический; } 
+.выпадающее меню.открыть { дисплей: гибкий; } 
+тело.свет .выпадающее меню { фон: #fff; }
+.dropdown-menu .mood-btn, .dropdown-menu .cat-item { отображение: гибкое; выравнивание элементов: по центру; разрыв: 10 пикселей; ширина: 100%; заполнение: 10x12px; семейство шрифтов: унаследовать; размер шрифта: 13,5 пикселей; вес шрифта: 600; выравнивание текста: по левому краю; цвет: #f5f0e6; фон: прозрачный; граница: 1px сплошной rgba (178,112,235,0.35); радиус границы: 10px; курсор: указатель ; переход: всего за 0,15 секунды; пробел: nowrap; переполнение: скрытый; текстовое переполнение: многоточие; } 
+body.light .выпадающее меню .настроение-btn, body.light .выпадающее меню .кошка-элемент { цвет: #1a1722; }
 .dropdown-menu .mood-btn:hover, .dropdown-menu .cat-item:hover { background: rgba(122,31,143,0.25); border-color: rgba(178,112,235,0.7); }
 .fod-col { flex: 1; min-width: 0; max-width: 940px; display: flex; flex-direction: column; }
 .fod-col .fod-label { margin: 0 0 10px; }
 /* «Фильм дня» — прозрачный, но читаемый */
 .fod-hero { background: rgba(26,23,34,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 body.light .fod-hero { background: rgba(255,252,246,0.66); }
-/* Компактность: всё в один экран без прокрутки */
+/* Компактность: все на одном экране без прокрутки */
 .fod-hero { padding: 16px 18px; gap: 18px; }
 .fod-poster { width: 186px; }
 .fod-info .card-title { font-size: 23px; }
-.fod-hero .card-desc { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; font-size: 13.5px; }
-.fod-side { flex: 0 0 104px; }
-.fod-side img { width: 94px; }
-.fod-arrows { margin-top: 10px; }
-.fod-arrow { width: 38px; height: 38px; font-size: 19px; }
-.fod-counter { font-size: 12px; }
+.fod-hero .card-desc { отображение: -webkit-box; -webkit-line-clamp: 6; -webkit-box-ориентация: вертикальная; переполнение: скрытое; размер шрифта: 13,5 пикселей; } 
+.fod-side { flex: 0 0 104 пикселей; } 
+.изображение на fod-side { ширина: 94 пикселя; } 
+.fod-arrows { верхнее поле: 10 пикселей; } 
+.fod-стрелка { ширина: 38 пикселей; высота: 38 пикселей; размер шрифта: 19 пикселей; } 
+.fod-счетчик { размер шрифта: 12 пикселей; }
 @media (max-height: 840px) {
-  .fod-poster { width: 158px; }
-  .fod-info .card-title { font-size: 20px; }
-  .fod-hero .card-desc { -webkit-line-clamp: 5; }
-  .side-btn { padding: 10px 12px; font-size: 13.5px; }
-  .side-col { gap: 8px; }
+ .fod-poster { width: 158px; }
+ .fod-info .card-title { font-size: 20px; }
+ .fod-hero .card-desc { -webkit-line-clamp: 5; }
+ .side-btn { padding: 10px 12px; font-size: 13.5px; }
+ .side-col { gap: 8px; }
 }
 @media (max-height: 720px) {
-  .fod-poster { width: 130px; }
-  .fod-info .card-title { font-size: 18px; }
-  .fod-hero .card-desc { -webkit-line-clamp: 4; }
-  .fod-hero { padding: 12px 14px; }
+ .fod-poster { width: 130px; }
+ .fod-info .card-title { font-size: 18px; }
+ .fod-hero .card-desc { -webkit-line-clamp: 4; }
+ .fod-hero { padding: 12px 14px; }
 }
 @media (max-width: 900px) {
-  #screen-home.active { height: auto; max-height: none; overflow: visible; padding: 16px 16px 40px; }
-  .home-layout { flex-direction: column; gap: 16px; }
-  .side-col { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
-  .side-col .side-menu-wrap { display: contents; }
-  .dropdown-menu { position: static; grid-column: 1 / -1; }
-  .dropdown-menu.open { display: grid; grid-template-columns: 1fr 1fr; }
+ #screen-home.active { height: auto; max-height: none; overflow: visible; padding: 16px 16px 40px; }
+ .home-layout { flex-direction: column; gap: 16px; }
+ .side-col { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+ .side-col .side-menu-wrap { display: contents; }
+ .dropdown-menu { position: static; grid-column: 1 / -1; }
+ .dropdown-menu.open { display: grid; grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 560px) {
-  .top-bar-search { order: 3; flex-basis: 100%; max-width: none; }
+ .top-bar-search { order: 3; flex-basis: 100%; max-width: none; }
 }
 </style>
 </head>
 <body>
 
 <header class="top-bar">
-  <div class="top-bar-left">
-    <div class="top-bar-title">🎬 Mood Movies</div>
-    <span class="top-bar-slogan">Выбери настроение — подберу фильм</span>
-    <button class="theme-btn" id="theme-btn">🌙 Тема</button>
-  </div>
-  <div class="top-bar-search">
-    <input type="text" id="search-input" placeholder="Найти фильм или режиссёра..." autocomplete="off">
-    <button class="search-btn" id="btn-search">🔍</button>
-  </div>
-  <div class="top-bar-right">
-    <button class="stats-counter" id="stats-counter">📊 Статистика <span class="stats-count" id="stats-count">0</span></button>
-    <button class="watched-counter" id="watched-counter">👁 Смотрел <span class="watched-count" id="watched-count">0</span></button>
-    <button class="fav-counter" id="fav-counter">❤️ Избранное <span class="fav-count" id="fav-count">0</span></button>
-  </div>
+ <div class="top-bar-left">
+ <div class="top-bar-title">🎬 Mood Movies</div>
+ <span class="top-bar-slogan">Выбери настроение — я подберу фильм</span>
+ <button class="theme-btn" id="theme-btn">🌙 Тема</button>
+ </div>
+ <div class="top-bar-search">
+ <input type="text" id="search-input" placeholder="Найти фильм или режиссера..." autocomplete="off">
+ <button class="search-btn" id="btn-search">🔍</button>
+ </div>
+ <div class="top-bar-right">
+ <button class="stats-counter" id="stats-counter">📊 Статистика <span class="stats-count" id="stats-count">0</span></button>
+ <button class="watched-counter" id="watched-counter">👁 Смотрел <span class="watched-count" id="watched-count">0</span></button>
+ <button class="fav-counter" id="fav-counter">❤️ Избранное <span class="fav-count" id="fav-count">0</span></button>
+ </div>
 </header>
 
 <div class="screen active" id="screen-home">
-    <div class="home-layout">
-    <div class="side-col">
-      <button class="side-btn" id="btn-random">🎲 Случайный фильм</button>
-      <button class="side-btn" id="btn-couple">👥 Фильм для двоих</button>
-      <button class="side-btn" id="btn-recommend">💡 Рекомендации</button>
-      <button class="side-btn" id="btn-ai" onclick="showScreen('screen-ai')">✨ Спросить ИИ</button>
-      <div class="side-menu-wrap">
-        <button class="side-btn" id="mood-toggle">🎭 Настроение</button>
-        <div class="dropdown-menu" id="mood-menu">
-          <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
-          <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
-          <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
-          <button class="mood-btn" data-mood="расслабленное"><span class="stone stone-green"></span>Расслабиться</button>
-          <button class="mood-btn" data-mood="философское"><span class="stone stone-blue"></span>Поразмышлять</button>
-          <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
-          <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
-          <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
-        </div>
-      </div>
-      <div class="side-menu-wrap">
-        <button class="side-btn" id="cats-toggle">🗂️ Категории</button>
-        <div class="dropdown-menu" id="cats-menu"></div>
-      </div>
-    </div>
-    <div class="fod-col">
-      <div class="fod-label">🎬 Фильм дня</div>
-      <div id="film-of-day"></div>
-    </div>
-  </div>
+ <div class="home-layout">
+ <div class="side-col">
+ <button class="side-btn" id="btn-random">🎲 Случайный фильм</button>
+ <button class="side-btn" id="btn-couple">👥 Фильм для двоих</button>
+ <button class="side-btn" id="btn-recommend">💡 Рекомендации</button>
+ <button class="side-btn" id="btn-ai" onclick="showScreen('screen-ai')">✨ Задать вопрос ИИ</button>
+ <div class="side-menu-wrap">
+ <button class="side-btn" id="mood-toggle">🎭 Настроение</button>
+ <div class="dropdown-menu" id="mood-menu">
+ <button class="mood-btn" data-mood="грустное"><span class="stone stone-purple"></span>Хочу плакать</button>
+ <button class="mood-btn" data-mood="смешное"><span class="stone stone-yellow"></span>Посмеяться</button>
+ <button class="mood-btn" data-mood="вдохновляющее"><span class="stone stone-orange"></span>Вдохновиться</button>
+ <button class="mood-btn" data-mood="расслабленное"><span class="stone stone-green"></span>Расслабиться</button>
+ <button class="mood-btn" data-mood="философское"><span class="stone stone-blue"></span>Поразмышлять</button>
+ <button class="mood-btn" data-mood="напряжённое"><span class="stone stone-red"></span>Напрячься</button>
+ <button class="mood-btn" data-mood="приключенческое"><span class="stone stone-purple"></span>Приключения</button>
+ <button class="mood-btn" data-mood="милое"><span class="stone stone-groot"></span>Что-то милое</button>
+ </div>
+ </div>
+ <div class="side-menu-wrap">
+ <button class="side-btn" id="cats-toggle">🗂️ Категории</button>
+ <div class="dropdown-menu" id="cats-menu"></div>
+ </div>
+ </div>
+ <div class="fod-col">
+ <div class="fod-label">🎬 Фильм дня</div>
+ <div id="film-of-day"></div>
+ </div>
+ </div>
 </div>
 
 <div class="screen" id="screen-couple">
-  <button class="back-btn" id="back-home-from-couple">← Назад</button>
-  <h1>Для двоих</h1>
-  <div class="couple-box">
-    <div class="couple-row">
-      <label>Моё настроение:</label>
-      <select id="mood-mine">
-        <option value="грустное">Хочу плакать</option>
-        <option value="смешное">Посмеяться</option>
-        <option value="вдохновляющее">Вдохновиться</option>
-        <option value="расслабленное">Расслабиться</option>
-        <option value="философское">Поразмышлять</option>
-        <option value="напряжённое">Напрячься</option>
-        <option value="приключенческое">Приключения</option>
-        <option value="милое">Что-то милое</option>
-      </select>
-    </div>
-    <div class="couple-row">
-      <label>Настроение партнёра:</label>
-      <select id="mood-partner">
-        <option value="грустное">Хочет плакать</option>
-        <option value="смешное">Хочет посмеяться</option>
-        <option value="вдохновляющее">Хочет вдохновиться</option>
-        <option value="расслабленное">Хочет расслабиться</option>
-        <option value="философское">Хочет поразмышлять</option>
-        <option value="напряжённое">Хочет напрячься</option>
-        <option value="приключенческое">Хочет приключений</option>
-        <option value="милое">Хочет чего-то милого</option>
-      </select>
-    </div>
-    <div class="couple-hint">Подберу фильмы, где есть оба настроения сразу — без компромисса «ну ладно, посмотрим твоё».</div>
-    <button class="random-btn" id="btn-couple-find" style="margin: 0 auto;">💛 Подобрать</button>
-  </div>
-  <div id="couple-note"></div>
-  <div id="couple-list"></div>
+ <button class="back-btn" id="back-home-from-couple">← Назад</button>
+ <h1>Для двоих</h1>
+ <div class="couple-box">
+ <div class="couple-row">
+ <label>Мое настроение:</label>
+ <select id="mood-mine">
+ <option value="грустное">Хочу поплакать</option>
+ <option value="смешное">Посмеяться</option>
+ <option value="вдохновляющее">Вдохновиться</option>
+ <option value="расслабленное">Расслабиться</option>
+ <option value="философское">Поразмышлять</option>
+ <option value="напряжённое">Напрячься</option>
+ <option value="приключенческое">Приключения</option>
+ <option value="милое">Что-то милое</option>
+ </select>
+ </div>
+ <div class="couple-row">
+ <label>Настроение партнера:</label>
+ <select id="mood-partner">
+ <option value="грустное">Хочет плакать</option>
+ <option value="смешное">Хочет посмеяться</option>
+ <option value="вдохновляющее">Хочет вдохновиться</option>
+ <option value="расслабленное">Хочет расслабиться</option>
+ <option value="философское">Хочет поразмышлять</option>
+ <option value="напряженное">Хочет напрячься</option>
+ <option value="приключенческое">Хочет приключений</option>
+ <option value="милое">Хочет чего-то милого</option>
+ </select>
+ </div>
+ <div class="couple-hint">Подберу фильмы, где есть оба настроения сразу — без компромисса «ну ладно, посмотрим твое».</div>
+ <button class="random-btn" id="btn-couple-find" style="margin: 0 auto;">💛 Подобрать</button>
+ </div>
+ <div id="couple-note"></div>
+ <div id="couple-list"></div>
 </div>
 
 <div class="screen" id="screen-results">
-  <button class="back-btn" id="back-home">← Назад</button>
-  <h1 id="results-title">Подборка для тебя</h1>
-  <div class="filters-panel">
-    <div class="filters-row">
-      <label>Показать:</label>
-      <select id="sel-count">
-        <option value="5">5 фильмов</option>
-        <option value="10">10 фильмов</option>
-        <option value="999">Все</option>
-      </select>
-      <label>Рейтинг:</label>
-      <select id="sel-rating">
-        <option value="0">Любой</option>
-        <option value="8">от 8.0</option>
-        <option value="8.5">от 8.5</option>
-      </select>
-      <label>Жанр:</label>
-      <select id="sel-genre"><option value="all">Любой</option></select>
-      <label>Год:</label>
-      <select id="sel-year"><option value="all">Любой</option></select>
-      <label>Сортировка:</label>
-      <select id="sel-sort">
-        <option value="rating">По рейтингу</option>
-        <option value="year">По году (новые)</option>
-        <option value="title">По алфавиту</option>
-      </select>
-    </div>
-  </div>
-  <div id="results-note" class="results-note" style="display: none;"></div>
-  <div id="results-list"></div>
-  <button class="more-btn" id="btn-more" style="display: none;">▶ Показать ещё</button>
-  <button class="random-btn" id="btn-next">🎲 Ещё фильм</button>
+ <button class="back-btn" id="back-home">← Назад</button>
+ <h1 id="results-title">Подборка для тебя</h1>
+ <div class="filters-panel">
+ <div class="filters-row">
+ <label>Показать:</label>
+ <select id="sel-count">
+ <option value="5">5 фильмов</option>
+ <option value="10">10 фильмов</option>
+ <option value="999">Все</option>
+ </select>
+ <label>Рейтинг:</label>
+ <select id="sel-rating">
+ <option value="0">Любой</option>
+ <option value="8">от 8.0</option>
+ <option value="8.5">от 8.5</option>
+ </select>
+ <label>Жанр:</label>
+ <select id="sel-genre"><option value="all">Любой</option></select>
+ <label>Год:</label>
+ <select id="sel-year"><option value="all">Любой</option></select>
+ <label>Сортировка:</label>
+ <select id="sel-sort">
+ <option value="rating">По рейтингу</option>
+ <option value="year">По годам (новые)</option>
+ <option value="title">По алфавиту</option>
+ </select>
+ </div>
+ </div>
+ <div id="results-note" class="results-note" style="display: none;"></div>
+ <div id="results-list"></div>
+ <button class="more-btn" id="btn-more" style="display: none;">▶ Показать еще</button>
+ <button class="random-btn" id="btn-next">🎲 Еще фильм</button>
 </div>
 
 <div class="screen" id="screen-favorites">
-  <button class="back-btn" id="back-home-from-favs">← Назад</button>
-  <h1>Моё избранное</h1>
-  <div id="favorites-list"></div>
-  <div id="no-favorites" style="display: none;">
-    Здесь пока пусто. Добавь фильмы через кнопку «Хочу посмотреть» 🙂
-  </div>
+ <button class="back-btn" id="back-home-from-favs">← Назад</button>
+ <h1>Избранное</h1>
+ <div id="favorites-list"></div>
+ <div id="no-favorites" style="display: none;">
+ Здесь пока пусто. Добавь фильмы через кнопку «Хочу посмотреть» 🙂
+ </div>
 </div>
 
 <div class="screen" id="screen-watched">
-  <button class="back-btn" id="back-home-from-watched">← Назад</button>
-  <h1>Уже смотрел</h1>
-  <div id="watched-note" class="results-note" style="display: none;"></div>
-  <div id="watched-list"></div>
-  <div id="no-watched" style="display: none;">
-    Пока ничего не отмечено. Жми «👁 Уже смотрел» на карточке — фильм появится здесь 🎬
-  </div>
+ <button class="back-btn" id="back-home-from-watched">← Назад</button>
+ <h1>Уже смотрел</h1>
+ <div id="watched-note" class="results-note" style="display: none;"></div>
+ <div id="watched-list"></div>
+ <div id="no-watched" style="display: none;">
+ Пока ничего не отмечено. Нажмите «👁 Уже смотрел» на карточке — фильм появится здесь 🎬
+ </div>
 </div>
 
 <div class="screen" id="screen-stats">
-  <button class="back-btn" id="back-home-from-stats">← Назад</button>
-  <h1>Статистика</h1>
-  <div id="stats-content"></div>
-  <div id="no-stats" style="display: none;">
-    Статистика появится, когда отметишь первый просмотренный фильм и поставишь пару оценок 🎬
-  </div>
+ <button class="back-btn" id="back-home-from-stats">← Назад</button>
+ <h1>Статистика</h1>
+ <div id="stats-content"></div>
+ <div id="no-stats" style="display: none;">
+ Статистика появится, когда вы отметите первый просмотренный фильм и поставите пару оценок 🎬
+ </div>
 </div>
 
 <button id="chat-btn" title="Помощник"><img class="chat-avatar" src="helper.png" alt="Помощник"></button>
 <div id="chat-panel">
-  <div class="chat-title">Помощник Mood Movies</div>
-  <button class="chat-q" data-a="Как добавить фильм в избранное?">Как добавить в избранное?</button>
-  <button class="chat-q" data-a="Как работает подборка по настроению?">Как работает подборка?</button>
-  <button class="chat-q" data-a="Как работают рекомендации по оценкам?">Как работают рекомендации?</button>
-  <button class="chat-q" data-a="Где хранятся мои данные?">Где мои данные?</button>
-  <button class="chat-q" data-a="Работает ли сайт без интернета?">Работает ли офлайн?</button>
-  <div class="chat-a" id="chat-a"></div>
+ <div class="chat-title">Помощник Mood Movies</div>
+ <button class="chat-q" data-a="Как добавить фильм в избранное?">Как добавить в избранное?</button>
+ <button class="chat-q" data-a="Как работает подборка по настроению?">Как работает подборка?</button>
+ <button class="chat-q" data-a="Как работают рекомендации по оценкам?">Как работают рекомендации?</button>
+ <button class="chat-q" data-a="Где хранятся мои данные?">Где мои данные?</button>
+ <button class="chat-q" data-a="Работает ли сайт без интернета?">Работает ли офлайн?</button>
+ <div class="chat-a" id="chat-a"></div>
 </div>
 
 <div class="modal-overlay" id="modal-overlay">
-  <div class="modal-box">
-    <button class="modal-close" id="modal-close">✕</button>
-    <div id="modal-content"></div>
-  </div>
+ <div class="modal-box">
+ <button class="modal-close" id="modal-close">✕</button>
+ <div id="modal-content"></div>
+ </div>
 </div>
 
 <div id="toast-container"></div>
 
 <script>const POSTER_URLS = {
-  "1": "https://upload.wikimedia.org/wikipedia/ru/1/1d/%D0%96%D0%B8%D0%B7%D0%BD%D1%8C_%D0%BF%D1%80%D0%B5%D0%BA%D1%80%D0%B0%D1%81%D0%BD%D0%B0_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "2": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cd/The_Hangover.jpg/330px-The_Hangover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "3": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Forrestgump-logo.svg/960px-Forrestgump-logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "4": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Interstellar_2014.jpg/330px-Interstellar_2014.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "6": "https://upload.wikimedia.org/wikipedia/ru/b/b9/Intouchables.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "7": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/bc/Poster_Inception_film_2010.jpg/330px-Poster_Inception_film_2010.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "8": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Punxsutawney_Phil_Groundhog_Day_2022_Pennsylvania_%2851858203861%29.jpg/960px-Punxsutawney_Phil_Groundhog_Day_2022_Pennsylvania_%2851858203861%29.jpg",
-  "9": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/b0/Green_mile_film.jpg/330px-Green_mile_film.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "10": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Back_left.JPG",
-  "11": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cd/Trumanshow.jpg/330px-Trumanshow.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "12": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/b9/Knockin%27_On_Heaven%27s_Door.jpg/330px-Knockin%27_On_Heaven%27s_Door.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "13": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Some_Like_It_Hot_%281959_poster%29.png/960px-Some_Like_It_Hot_%281959_poster%29.png",
-  "14": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/79/Pirates-of-the-Caribbean-The-Curse-of-the-Black-Pearl-.jpg/330px-Pirates-of-the-Caribbean-The-Curse-of-the-Black-Pearl-.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "15": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Jean-Leon_Gerome_Pollice_Verso.jpg/960px-Jean-Leon_Gerome_Pollice_Verso.jpg",
-  "16": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9d/Matrix-DVD.jpg/330px-Matrix-DVD.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "17": "https://upload.wikimedia.org/wikipedia/ru/c/cf/Kill_bill_vol_one_ver.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "19": "https://upload.wikimedia.org/wikipedia/ru/c/c4/WALL-E_poster.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "22": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Poster_-_Gone_With_the_Wind_01.jpg/960px-Poster_-_Gone_With_the_Wind_01.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "26": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Titanic_in_color.png/960px-Titanic_in_color.png",
-  "27": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Bundesarchiv_Bild_102-09430%2C_Lord_Arthur_Balfour.jpg/500px-Bundesarchiv_Bild_102-09430%2C_Lord_Arthur_Balfour.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "28": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/83/Knives_Out_%28film%29.jpg/330px-Knives_Out_%28film%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "29": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/de/Movie_poster_the_shawshank_redemption.jpg/330px-Movie_poster_the_shawshank_redemption.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "30": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Ratatouille.jpg/960px-Ratatouille.jpg",
-  "31": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/62/Lion_king_ver1.jpg/330px-Lion_king_ver1.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "33": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Finding_Nemo_logo.svg/960px-Finding_Nemo_logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "34": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Toy_Story_logo.svg/960px-Toy_Story_logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "35": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/SixPartWoodKnot.jpg/500px-SixPartWoodKnot.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "36": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/d7/Coco_%282017_film%29_logo.jpg/330px-Coco_%282017_film%29_logo.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "37": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/61/Spirited_away.jpg/330px-Spirited_away.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "38": "https://thumb.wikimedia.org/wikipedia/ru/thumb/a/ab/%D0%9C%D0%BE%D0%B9_%D1%81%D0%BE%D1%81%D0%B5%D0%B4_%D0%A2%D0%BE%D1%82%D0%BE%D1%80%D0%BE.jpg/330px-%D0%9C%D0%BE%D0%B9_%D1%81%D0%BE%D1%81%D0%B5%D0%B4_%D0%A2%D0%BE%D1%82%D0%BE%D1%80%D0%BE.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "39": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f3/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D0%B0%D0%BD%D0%B8%D0%BC%D0%B0%D0%BD%D0%B3%D0%B8_%C2%AB%D0%A5%D0%BE%D0%B4%D1%8F%D1%87%D0%B8%D0%B9_%D0%B7%D0%B0%D0%BC%D0%BE%D0%BA%C2%BB.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D0%B0%D0%BD%D0%B8%D0%BC%D0%B0%D0%BD%D0%B3%D0%B8_%C2%AB%D0%A5%D0%BE%D0%B4%D1%8F%D1%87%D0%B8%D0%B9_%D0%B7%D0%B0%D0%BC%D0%BE%D0%BA%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "40": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/91/Zootopia_poster.jpg/330px-Zootopia_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "41": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Despicable_Me_logo_2.svg/960px-Despicable_Me_logo_2.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "44": "https://upload.wikimedia.org/wikipedia/commons/1/12/Winnie-the-Pooh_20-2.png",
-  "48": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/25/Brat2_poster.jpg/330px-Brat2_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "52": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/17/%D0%91%D1%80%D0%B8%D0%BB%D0%BB%D0%B8%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%D0%B0%D1%8F_%D1%80%D1%83%D0%BA%D0%B0_Poster.jpg/330px-%D0%91%D1%80%D0%B8%D0%BB%D0%BB%D0%B8%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%D0%B0%D1%8F_%D1%80%D1%83%D0%BA%D0%B0_Poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "54": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0c/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_%D1%81%D0%BB%D0%B5%D0%B7%D0%B0%D0%BC_%D0%BD%D0%B5_%D0%B2%D0%B5%D1%80%D0%B8%D1%82.jpg/330px-%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_%D1%81%D0%BB%D0%B5%D0%B7%D0%B0%D0%BC_%D0%BD%D0%B5_%D0%B2%D0%B5%D1%80%D0%B8%D1%82.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "55": "https://upload.wikimedia.org/wikipedia/ru/a/a0/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9B%D0%B5%D0%B3%D0%B5%D0%BD%D0%B4%D0%B0_%E2%84%9617%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "56": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/b1/%D0%94%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B2%D0%B2%D0%B5%D1%80%D1%85_%282017%29.jpg/330px-%D0%94%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B2%D0%B2%D0%B5%D1%80%D1%85_%282017%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "58": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ef/%D0%A7%D0%B5%D0%B1%D1%83%D1%80%D0%B0%D1%88%D0%BA%D0%B0_%281971%29.jpg/330px-%D0%A7%D0%B5%D0%B1%D1%83%D1%80%D0%B0%D1%88%D0%BA%D0%B0_%281971%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "59": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f2/%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D1%82%D0%BE%D1%80_2_-_%D0%A1%D1%83%D0%B4%D0%BD%D1%8B%D0%B9_%D0%B4%D0%B5%D0%BD%D1%8C.webp/330px-%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D1%82%D0%BE%D1%80_2_-_%D0%A1%D1%83%D0%B4%D0%BD%D1%8B%D0%B9_%D0%B4%D0%B5%D0%BD%D1%8C.webp?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "63": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f4/%D0%A2%D1%91%D0%BC%D0%BD%D1%8B%D0%B9_%D1%80%D1%8B%D1%86%D0%B0%D1%80%D1%8C_%282008%29_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg/330px-%D0%A2%D1%91%D0%BC%D0%BD%D1%8B%D0%B9_%D1%80%D1%8B%D1%86%D0%B0%D1%80%D1%8C_%282008%29_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "65": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/d2/%D0%9E%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0_%D0%BF%D0%B5%D1%80%D0%B2%D0%BE%D0%B3%D0%BE_%D0%B8%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD%D0%B0_%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_%D0%B8_%D1%84%D0%B8%D0%BB%D0%BE%D1%81%D0%BE%D1%84%D1%81%D0%BA%D0%B8%D0%B9_%D0%BA%D0%B0%D0%BC%D0%B5%D0%BD%D1%8C.jpg/330px-%D0%9E%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0_%D0%BF%D0%B5%D1%80%D0%B2%D0%BE%D0%B3%D0%BE_%D0%B8%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD%D0%B0_%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_%D0%B8_%D1%84%D0%B8%D0%BB%D0%BE%D1%81%D0%BE%D1%84%D1%81%D0%BA%D0%B8%D0%B9_%D0%BA%D0%B0%D0%BC%D0%B5%D0%BD%D1%8C.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "66": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/93/1972_dzhentlmeny_udachi.jpg/330px-1972_dzhentlmeny_udachi.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "67": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/2c/Spider-Man_-_Into_the_Spider-Verse.jpg/330px-Spider-Man_-_Into_the_Spider-Verse.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "68": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/03/Home_Alone_dvd_rus.jpg/330px-Home_Alone_dvd_rus.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "69": "https://upload.wikimedia.org/wikipedia/ru/e/e3/%D0%A5%D0%B0%D1%82%D0%B8%D0%BA%D0%BE-%D1%84%D0%B8%D0%BB%D1%8C%D0%BC.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "70": "https://upload.wikimedia.org/wikipedia/ru/5/54/The_Big_Lebowski_Cover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "71": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/D%C3%BCne_S-Schlag_Sossusvlei.JPG/960px-D%C3%BCne_S-Schlag_Sossusvlei.JPG",
-  "74": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0d/Avengers_Endgame_poster.jpg/330px-Avengers_Endgame_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "75": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Symbol_from_Marvel%27s_The_Avengers_logo.svg/960px-Symbol_from_Marvel%27s_The_Avengers_logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "76": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Guardians_of_the_Galaxy-Logo.png",
-  "78": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6f/%D0%94%D0%B6%D0%BE%D0%BA%D0%B5%D1%80_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC_%D0%A2%D0%BE%D0%B4%D0%B4%D0%B0_%D0%A4%D0%B8%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%B0%29.jpg/330px-%D0%94%D0%B6%D0%BE%D0%BA%D0%B5%D1%80_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC_%D0%A2%D0%BE%D0%B4%D0%B4%D0%B0_%D0%A4%D0%B8%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "79": "https://upload.wikimedia.org/wikipedia/ru/c/ca/Deadpool.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "80": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6e/Mad_Max_Fury_Road.jpg/330px-Mad_Max_Fury_Road.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "84": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9b/%D0%91%D0%B5%D0%B3%D1%83%D1%89%D0%B8%D0%B9_%D0%BF%D0%BE_%D0%BB%D0%B5%D0%B7%D0%B2%D0%B8%D1%8E_2049.jpg/330px-%D0%91%D0%B5%D0%B3%D1%83%D1%89%D0%B8%D0%B9_%D0%BF%D0%BE_%D0%BB%D0%B5%D0%B7%D0%B2%D0%B8%D1%8E_2049.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "86": "https://upload.wikimedia.org/wikipedia/commons/6/62/CompendiumMaleficarumEngraving25.jpg",
-  "87": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/84/%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg/330px-%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "88": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Bohemian_Rhapsody_by_Queen_US_vinyl_red_label.png/500px-Bohemian_Rhapsody_by_Queen_US_vinyl_red_label.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "92": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/1c/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%D0%A1%D0%BF%D0%B0%D1%81%D1%82%D0%B8_%D1%80%D1%8F%D0%B4%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE_%D0%A0%D0%B0%D0%B9%D0%B0%D0%BD%D0%B0.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%D0%A1%D0%BF%D0%B0%D1%81%D1%82%D0%B8_%D1%80%D1%8F%D0%B4%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE_%D0%A0%D0%B0%D0%B9%D0%B0%D0%BD%D0%B0.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "93": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/38/Schindler%27s_List_movie.jpg/330px-Schindler%27s_List_movie.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "94": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Dashavtar_closeup_national_museum_india.JPG/500px-Dashavtar_closeup_national_museum_india.JPG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "95": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ed/%D0%9E%D1%82%D1%81%D1%82%D1%83%D0%BF%D0%BD%D0%B8%D0%BA%D0%B8_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg/330px-%D0%9E%D1%82%D1%81%D1%82%D1%83%D0%BF%D0%BD%D0%B8%D0%BA%D0%B8_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "96": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Monte_Carlo_Casino.jpg",
-  "97": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/38/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9E%D0%B4%D0%BD%D0%B0%D0%B6%D0%B4%D1%8B_%D0%B2_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B5%C2%BB_%28%D0%A1%D0%A8%D0%90%2C_1984%29.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9E%D0%B4%D0%BD%D0%B0%D0%B6%D0%B4%D1%8B_%D0%B2_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B5%C2%BB_%28%D0%A1%D0%A8%D0%90%2C_1984%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "98": "https://upload.wikimedia.org/wikipedia/ru/8/8a/%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC_%D0%B0%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "99": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/01/No_country_rus.jpg/330px-No_country_rus.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "100": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/d2/Batman_Begins_%28poster%29.jpg/330px-Batman_Begins_%28poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "102": "https://upload.wikimedia.org/wikipedia/ru/6/6a/%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_3.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "103": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f0/The_Lord_of_the_Rings._The_Two_Towers_%E2%80%94_movie.jpg/330px-The_Lord_of_the_Rings._The_Two_Towers_%E2%80%94_movie.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "104": "https://thumb.wikimedia.org/wikipedia/ru/thumb/5/53/The_Lord_of_the_Rings._The_Return_of_the_King_%E2%80%94_movie.jpg/330px-The_Lord_of_the_Rings._The_Return_of_the_King_%E2%80%94_movie.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "105": "https://upload.wikimedia.org/wikipedia/ru/3/32/The_Hobbit._An_Unexpected_Journey.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "106": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ed/Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg/330px-Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "111": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/1e/Gone_Girl_poster.jpg/330px-Gone_Girl_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "112": "https://upload.wikimedia.org/wikipedia/ru/6/67/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%98%D0%B3%D1%80%D1%8B_%D1%80%D0%B0%D0%B7%D1%83%D0%BC%D0%B0%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "113": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/04/Dead_Poets_Society.jpg/330px-Dead_Poets_Society.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "115": "https://upload.wikimedia.org/wikipedia/ru/b/ba/Django_Unchained.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "116": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Inglourious_Basterds_poster.jpg/330px-Inglourious_Basterds_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "117": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/d4/The_Hateful_Eight.jpg/330px-The_Hateful_Eight.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "118": "https://upload.wikimedia.org/wikipedia/ru/e/e9/A_Clockwork_Orange_%28cover%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "120": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/12_Angry_Men_%281957_film_poster%29.jpg/960px-12_Angry_Men_%281957_film_poster%29.jpg",
-  "124": "https://thumb.wikimedia.org/wikipedia/ru/thumb/5/54/Rain_man.jpg/330px-Rain_man.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "129": "https://upload.wikimedia.org/wikipedia/ru/f/fb/Mr._Nobody.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "130": "https://upload.wikimedia.org/wikipedia/commons/8/8a/AnalogClockAnimation1_2hands_1h_in_6sec.gif",
-  "131": "https://upload.wikimedia.org/wikipedia/ru/d/d7/Silver_Linings_Playbook.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "132": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/33/John_Wick.jpg/330px-John_Wick.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "133": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9a/Bourne.Legacy-poster.jpg/330px-Bourne.Legacy-poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "134": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/The_Great_Gatsby_Cover_1925_Retouched.jpg/960px-The_Great_Gatsby_Cover_1925_Retouched.jpg",
-  "135": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Musee_de_la_bible_et_Terre_Sainte_001.JPG",
-  "136": "https://upload.wikimedia.org/wikipedia/ru/3/3a/Dumb_dumber_cover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "137": "https://upload.wikimedia.org/wikipedia/ru/6/60/BruceAlmighty_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "138": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Miami_traffic_jam%2C_I-95_North_rush_hour.jpg/960px-Miami_traffic_jam%2C_I-95_North_rush_hour.jpg",
-  "139": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/JROppenheimer-LosAlamos.jpg/500px-JROppenheimer-LosAlamos.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "140": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/fb/%D0%92%D1%81%D1%91%D0%B2%D0%B5%D0%B7%D0%B4%D0%B5%D0%B8%D1%81%D1%80%D0%B0%D0%B7%D1%83.jpg/330px-%D0%92%D1%81%D1%91%D0%B2%D0%B5%D0%B7%D0%B4%D0%B5%D0%B8%D1%81%D1%80%D0%B0%D0%B7%D1%83.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "141": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Barbie_Logo.svg/960px-Barbie_Logo.svg.png",
-  "142": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/24/Pay_It_Forward_poster.jpg/330px-Pay_It_Forward_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "143": "https://upload.wikimedia.org/wikipedia/ru/9/9b/Amelie_DVD_box.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "144": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Singin%27_in_the_Rain_%281952_poster%29.jpg/960px-Singin%27_in_the_Rain_%281952_poster%29.jpg",
-  "145": "https://upload.wikimedia.org/wikipedia/commons/0/03/Portrait_of_Sherlock_Holmes_by_Sidney_Paget-Cropped.jpg",
-  "149": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Ecliptic_path.jpg/960px-Ecliptic_path.jpg",
-  "152": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/The_Conjuring_Universe_logo.jpg/960px-The_Conjuring_Universe_logo.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "153": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/40/Up%28poster%29.jpg/330px-Up%28poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "154": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/The_Incredibles_logo.svg/960px-The_Incredibles_logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "155": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Meister_von_Heiligenkreuz_001.jpg/960px-Meister_von_Heiligenkreuz_001.jpg",
-  "160": "https://upload.wikimedia.org/wikipedia/commons/b/bd/AntarcticaDomeCSnow.jpg",
-  "161": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Madagascar.svg/960px-Flag_of_Madagascar.svg.png",
-  "162": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Batten_-_Europa%27sFairyTales.jpg/500px-Batten_-_Europa%27sFairyTales.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "163": "https://upload.wikimedia.org/wikipedia/commons/6/66/Alad.jpg",
-  "165": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/78/Inside_Out_2.jpeg/330px-Inside_Out_2.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "169": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/07/Kiki%27s_Delivery_Service_%28Movie%29.jpg/330px-Kiki%27s_Delivery_Service_%28Movie%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "170": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/75/%D0%9F%D1%80%D0%B8%D0%BD%D1%86%D0%B5%D1%81%D1%81%D0%B0_%D0%9C%D0%BE%D0%BD%D0%BE%D0%BD%D0%BE%D0%BA%D0%B5_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg/330px-%D0%9F%D1%80%D0%B8%D0%BD%D1%86%D0%B5%D1%81%D1%81%D0%B0_%D0%9C%D0%BE%D0%BD%D0%BE%D0%BD%D0%BE%D0%BA%D0%B5_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "171": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/68/Grave_of_the_Fireflies_DVDcover.jpg/330px-Grave_of_the_Fireflies_DVDcover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "174": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/ba/%D0%A2%D1%80%D0%BE%D0%B5_%D0%B8%D0%B7_%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%BA%D0%B2%D0%B0%D1%88%D0%B8%D0%BD%D0%BE.jpg/330px-%D0%A2%D1%80%D0%BE%D0%B5_%D0%B8%D0%B7_%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%BA%D0%B2%D0%B0%D1%88%D0%B8%D0%BD%D0%BE.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "175": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/The_Soviet_Union_1988_CPA_5918_stamp_%28Well%2C_Just_You_Wait%21%29.jpg/960px-The_Soviet_Union_1988_CPA_5918_stamp_%28Well%2C_Just_You_Wait%21%29.jpg",
-  "176": "https://upload.wikimedia.org/wikipedia/commons/1/14/Bremen.band.500pix.jpg",
-  "177": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/81/%D0%9C%D0%B0%D0%BB%D1%8B%D1%88_%D0%B8_%D0%9A%D0%B0%D1%80%D0%BB%D1%81%D0%BE%D0%BD.jpg/330px-%D0%9C%D0%B0%D0%BB%D1%8B%D1%88_%D0%B8_%D0%9A%D0%B0%D1%80%D0%BB%D1%81%D0%BE%D0%BD.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "178": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/fb/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D1%8B%D0%B9_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD_%D0%BA%D0%B8%D0%BD%D0%BE%D0%B0%D1%84%D0%B8%D1%88%D0%B0.jpg/330px-%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D1%8B%D0%B9_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD_%D0%BA%D0%B8%D0%BD%D0%BE%D0%B0%D1%84%D0%B8%D1%88%D0%B0.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "179": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/40/1970_beloe_solntse_pustyni.jpg/330px-1970_beloe_solntse_pustyni.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "180": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/27/%D0%9C%D0%B8%D0%BC%D0%B8%D0%BD%D0%BE_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC.jpg/330px-%D0%9C%D0%B8%D0%BC%D0%B8%D0%BD%D0%BE_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "181": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0e/%D0%9A%D0%B8%D0%BD-%D0%B4%D0%B7%D0%B0-%D0%B4%D0%B7%D0%B0%21.jpg/330px-%D0%9A%D0%B8%D0%BD-%D0%B4%D0%B7%D0%B0-%D0%B4%D0%B7%D0%B0%21.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "182": "https://upload.wikimedia.org/wikipedia/ru/9/92/%D0%9F%D0%B8%D1%80%D0%B0%D1%82%D1%8B_XX_%D0%B2%D0%B5%D0%BA%D0%B0_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "183": "https://upload.wikimedia.org/wikipedia/ru/f/fe/%D0%90%D1%84%D0%BE%D0%BD%D1%8F.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "184": "https://upload.wikimedia.org/wikipedia/ru/d/df/Letat-Juravli.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "185": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Solaris%2C_various_editions_02.jpg/960px-Solaris%2C_various_editions_02.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "186": "https://upload.wikimedia.org/wikipedia/ru/1/12/%D0%97%D0%B0%D0%B1%D1%80%D0%BE%D1%88%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B4%D0%BE%D0%BC.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "187": "https://upload.wikimedia.org/wikipedia/ru/2/23/%D0%94%D1%83%D1%80%D0%B0%D0%BA_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "188": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9f/Geograf_poster_700x1000.jpg/330px-Geograf_poster_700x1000.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "189": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Salyut_7_drawing.png/960px-Salyut_7_drawing.png",
-  "190": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/%D0%A2-34-76_%D0%BE%D0%B1%D1%80._1943%2C_%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%BA%D0%BE-%D0%BA%D1%83%D0%BB%D1%8C%D1%82%D1%83%D1%80%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81_%C2%AB%D0%9B%D0%B8%D0%BD%D0%B8%D1%8F_%D0%A1%D1%82%D0%B0%D0%BB%D0%B8%D0%BD%D0%B0%C2%BB.jpg/960px-%D0%A2-34-76_%D0%BE%D0%B1%D1%80._1943%2C_%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%BA%D0%BE-%D0%BA%D1%83%D0%BB%D1%8C%D1%82%D1%83%D1%80%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81_%C2%AB%D0%9B%D0%B8%D0%BD%D0%B8%D1%8F_%D0%A1%D1%82%D0%B0%D0%BB%D0%B8%D0%BD%D0%B0%C2%BB.jpg",
-  "191": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/IceBlockNearJoekullsarlon.jpg/960px-IceBlockNearJoekullsarlon.jpg",
-  "192": "https://upload.wikimedia.org/wikipedia/ru/f/ff/Bitva_za_sevas_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "193": "https://upload.wikimedia.org/wikipedia/ru/9/91/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%D0%9E_%D1%87%D0%B5%D0%BC_%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%D1%8F%D1%82_%D0%BC%D1%83%D0%B6%D1%87%D0%B8%D0%BD%D1%8B_.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "194": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Gorskii_00955u.jpg/960px-Gorskii_00955u.jpg",
-  "196": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/4a/Sing_2016_poster.jpg/330px-Sing_2016_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "197": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Megamind_2010.jpg/330px-Megamind_2010.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "203": "https://upload.wikimedia.org/wikipedia/ru/5/5f/Les_Choristes.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "205": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Boy_with_a_hoop._%2851915119994%29.jpg/960px-Boy_with_a_hoop._%2851915119994%29.jpg",
-  "206": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/64/Mulholland_Drive_%28poster%29.jpg/330px-Mulholland_Drive_%28poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "207": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/61/Lock_Stock_and_Two_Smoking_Barrels_Poster.jpg/330px-Lock_Stock_and_Two_Smoking_Barrels_Poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "209": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/FA-18-Afterburners.jpg/500px-FA-18-Afterburners.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "216": "https://upload.wikimedia.org/wikipedia/ru/3/3f/Bronson_2009.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "217": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Hostage_exercise.jpeg/500px-Hostage_exercise.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "218": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Cabs.jpg/960px-Cabs.jpg",
-  "219": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/7a/Mission_cleopatre_poster.jpg/330px-Mission_cleopatre_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "220": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Musee_de_la_bible_et_Terre_Sainte_001.JPG",
-  "221": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Portobello_Road%2C_Notting_Hill_-_geograph.org.uk_-_1279480.jpg/500px-Portobello_Road%2C_Notting_Hill_-_geograph.org.uk_-_1279480.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "222": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9d/Meet_the_Parents.jpg/330px-Meet_the_Parents.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "223": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Eastern_Phoebe-nest-Brown-headed-Cowbird-egg.jpg/500px-Eastern_Phoebe-nest-Brown-headed-Cowbird-egg.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "224": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/60/%D0%91%D0%B5%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%8C_%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D1%8F.jpg/330px-%D0%91%D0%B5%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%8C_%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D1%8F.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "225": "https://upload.wikimedia.org/wikipedia/ru/9/93/%D0%94%D0%B5%D0%B2%D1%87%D0%B0%D1%82%D0%B0.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "226": "https://upload.wikimedia.org/wikipedia/ru/f/fe/%D0%90%D1%84%D0%BE%D0%BD%D1%8F.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "227": "https://upload.wikimedia.org/wikipedia/ru/7/72/%D0%94%D0%B5%D0%BD%D1%8C_%D0%B2%D1%8B%D0%B1%D0%BE%D1%80%D0%BE%D0%B2_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D0%BA_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D1%83%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "229": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Lilo_%26_Stitch_The_Series_Disney%2B_wordmark.png/960px-Lilo_%26_Stitch_The_Series_Disney%2B_wordmark.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "230": "https://upload.wikimedia.org/wikipedia/commons/c/c8/%E7%95%AB%E9%BA%97%E7%8F%A0%E8%90%83%E7%A7%80_Gathering_Gems_of_Beauty_%28%E6%A2%81%E6%9C%A8%E8%98%AD%29_2.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "234": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/81/%D0%9C%D0%B0%D0%BB%D1%8B%D1%88_%D0%B8_%D0%9A%D0%B0%D1%80%D0%BB%D1%81%D0%BE%D0%BD.jpg/330px-%D0%9C%D0%B0%D0%BB%D1%8B%D1%88_%D0%B8_%D0%9A%D0%B0%D1%80%D0%BB%D1%81%D0%BE%D0%BD.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "237": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/09/Kaze_no_tani_no_Naushika.jpg/330px-Kaze_no_tani_no_Naushika.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "238": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/07/Kiki%27s_Delivery_Service_%28Movie%29.jpg/330px-Kiki%27s_Delivery_Service_%28Movie%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "240": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6b/Weathering_with_You.jpg/330px-Weathering_with_You.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "241": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/StarWarsOST.jpg/960px-StarWarsOST.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "242": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/e0/Empire20strikes20back_old.jpg/330px-Empire20strikes20back_old.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "248": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Thehobbittrilogy.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "251": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Ruinen_von_Troja_Karlsruher_Unterhaltungsblatt_1835.jpg/500px-Ruinen_von_Troja_Karlsruher_Unterhaltungsblatt_1835.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "253": "https://upload.wikimedia.org/wikipedia/ru/a/a6/The_Pianist_movie.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "254": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/75/%D0%9A%D1%83%D0%B4%D0%B0_%D0%BF%D1%80%D0%B8%D0%B2%D0%BE%D0%B4%D1%8F%D1%82_%D0%BC%D0%B5%D1%87%D1%82%D1%8B_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpg/330px-%D0%9A%D1%83%D0%B4%D0%B0_%D0%BF%D1%80%D0%B8%D0%B2%D0%BE%D0%B4%D1%8F%D1%82_%D0%BC%D0%B5%D1%87%D1%82%D1%8B_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "255": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/72/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "256": "https://upload.wikimedia.org/wikipedia/ru/e/e9/A_Clockwork_Orange_%28cover%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "257": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/84/%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg/330px-%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "258": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/PrideAndPrejudiceTitlePage.jpg/500px-PrideAndPrejudiceTitlePage.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "259": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/86/Posternotebook.jpg/330px-Posternotebook.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "261": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Destruction_of_Leviathan.png/500px-Destruction_of_Leviathan.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "262": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/dc/Bummer_poster.jpg/330px-Bummer_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "263": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Moscow_2017.jpg/500px-Moscow_2017.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "265": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/Mamayev_Kurgan_Volgograd.jpg/500px-Mamayev_Kurgan_Volgograd.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "266": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Brest_Brest_Fortress_Kholm_Gate_9209_2150.jpg/500px-Brest_Brest_Fortress_Kholm_Gate_9209_2150.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "268": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Scarface_%281932_film_poster%29.jpg/960px-Scarface_%281932_film_poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "269": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/38/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9E%D0%B4%D0%BD%D0%B0%D0%B6%D0%B4%D1%8B_%D0%B2_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B5%C2%BB_%28%D0%A1%D0%A8%D0%90%2C_1984%29.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9E%D0%B4%D0%BD%D0%B0%D0%B6%D0%B4%D1%8B_%D0%B2_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B5%C2%BB_%28%D0%A1%D0%A8%D0%90%2C_1984%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "270": "https://upload.wikimedia.org/wikipedia/ru/b/ba/Django_Unchained.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "272": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/1e/Gone_Girl_poster.jpg/330px-Gone_Girl_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "273": "https://upload.wikimedia.org/wikipedia/ru/f/fb/Mr._Nobody.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "274": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Boy_with_a_hoop._%2851915119994%29.jpg/500px-Boy_with_a_hoop._%2851915119994%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "276": "https://upload.wikimedia.org/wikipedia/commons/1/1c/The_Astral_Sleep_-_by_Jeroen_van_Valkenburg.PNG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "278": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/33/John_Wick.jpg/330px-John_Wick.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "279": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/FA-18-Afterburners.jpg/500px-FA-18-Afterburners.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "282": "https://upload.wikimedia.org/wikipedia/ru/9/9b/Amelie_DVD_box.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "284": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Bohemian_Rhapsody_by_Queen_US_vinyl_red_label.png/500px-Bohemian_Rhapsody_by_Queen_US_vinyl_red_label.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "285": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/A_Star_Is_Born_%281937_film_poster%29.jpg/960px-A_Star_Is_Born_%281937_film_poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "286": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Portrait_of_Sherlock_Holmes_by_Sidney_Paget-Cropped.jpg/500px-Portrait_of_Sherlock_Holmes_by_Sidney_Paget-Cropped.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "288": "https://upload.wikimedia.org/wikipedia/commons/1/18/Mimnermus.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "291": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Inglourious_Basterds_poster.jpg/330px-Inglourious_Basterds_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "292": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ed/Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg/330px-Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "293": "https://upload.wikimedia.org/wikipedia/ru/6/6a/%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_3.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "294": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Dashavtar_closeup_national_museum_india.JPG/500px-Dashavtar_closeup_national_museum_india.JPG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "296": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6f/%D0%94%D0%B6%D0%BE%D0%BA%D0%B5%D1%80_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC_%D0%A2%D0%BE%D0%B4%D0%B4%D0%B0_%D0%A4%D0%B8%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%B0%29.jpg/330px-%D0%94%D0%B6%D0%BE%D0%BA%D0%B5%D1%80_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC_%D0%A2%D0%BE%D0%B4%D0%B4%D0%B0_%D0%A4%D0%B8%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "298": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c4/%D0%98%D0%B2%D0%B0%D0%BD_%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%B5%D0%B2%D0%B8%D1%87_%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D1%82_%D0%BF%D1%80%D0%BE%D1%84%D0%B5%D1%81%D1%81%D0%B8%D1%8E_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg/330px-%D0%98%D0%B2%D0%B0%D0%BD_%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%B5%D0%B2%D0%B8%D1%87_%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D1%82_%D0%BF%D1%80%D0%BE%D1%84%D0%B5%D1%81%D1%81%D0%B8%D1%8E_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "299": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/99/%D0%93%D0%BE%D1%81%D1%82%D1%8C%D1%8F_%D0%B8%D0%B7_%D0%B1%D1%83%D0%B4%D1%83%D1%89%D0%B5%D0%B3%D0%BE.jpg/330px-%D0%93%D0%BE%D1%81%D1%82%D1%8C%D1%8F_%D0%B8%D0%B7_%D0%B1%D1%83%D0%B4%D1%83%D1%89%D0%B5%D0%B3%D0%BE.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "300": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/de/%D0%A1%D0%BF%D0%BE%D1%80%D1%82%D0%BB%D0%BE%D1%82%D0%BE-82.jpg/330px-%D0%A1%D0%BF%D0%BE%D1%80%D1%82%D0%BB%D0%BE%D1%82%D0%BE-82.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "301": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Ocean%27s_11_%281960_film_poster%29.jpeg/960px-Ocean%27s_11_%281960_film_poster%29.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "302": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9d/Naked_Gun_Poster.jpg/330px-Naked_Gun_Poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "303": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cc/Police_Academy_1.jpg/330px-Police_Academy_1.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "304": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Miami_traffic_jam%2C_I-95_North_rush_hour.jpg/960px-Miami_traffic_jam%2C_I-95_North_rush_hour.jpg",
-  "305": "https://upload.wikimedia.org/wikipedia/commons/6/62/Mrbeanlogo.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "306": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Dunkerque_Mole1_aerien.JPG/960px-Dunkerque_Mole1_aerien.JPG",
-  "307": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ef/1917_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpeg/330px-1917_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "308": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/88/Fury_%28movie_2014%29.jpg/330px-Fury_%28movie_2014%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "309": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Lima_Company_Crucible_140417-M-MJ974-507.jpg/960px-Lima_Company_Crucible_140417-M-MJ974-507.jpg",
-  "310": "https://upload.wikimedia.org/wikipedia/ru/f/fb/Rush.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "311": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/FA-18-Afterburners.jpg/960px-FA-18-Afterburners.jpg",
-  "313": "https://upload.wikimedia.org/wikipedia/ru/6/6a/%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_3.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "314": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ed/Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg/330px-Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "315": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Madagascar.svg/960px-Flag_of_Madagascar.svg.png",
-  "316": "https://upload.wikimedia.org/wikipedia/commons/b/bd/AntarcticaDomeCSnow.jpg",
-  "317": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/7c/%D0%A2%D0%B0%D1%87%D0%BA%D0%B8_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg/330px-%D0%A2%D0%B0%D1%87%D0%BA%D0%B8_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "318": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Megamind_2010.jpg/330px-Megamind_2010.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "321": "https://upload.wikimedia.org/wikipedia/ru/d/df/Letat-Juravli.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "322": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/46/%D0%A1%D1%83%D0%B4%D1%8C%D0%B1%D0%B0_%D1%87%D0%B5%D0%BB%D0%BE%D0%B2%D0%B5%D0%BA%D0%B0.jpeg/330px-%D0%A1%D1%83%D0%B4%D1%8C%D0%B1%D0%B0_%D1%87%D0%B5%D0%BB%D0%BE%D0%B2%D0%B5%D0%BA%D0%B0.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "326": "https://upload.wikimedia.org/wikipedia/ru/6/67/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%98%D0%B3%D1%80%D1%8B_%D1%80%D0%B0%D0%B7%D1%83%D0%BC%D0%B0%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "328": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/72/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "330": "https://upload.wikimedia.org/wikipedia/commons/1/1c/The_Astral_Sleep_-_by_Jeroen_van_Valkenburg.PNG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "333": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/86/Posternotebook.jpg/330px-Posternotebook.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "334": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Aventures-de-Tintin.svg/960px-Aventures-de-Tintin.svg.png",
-  "336": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Male_Lion_and_Cub_Chitwa_South_Africa_Luca_Galuzzi_2004.JPG/500px-Male_Lion_and_Cub_Chitwa_South_Africa_Luca_Galuzzi_2004.JPG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "339": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cd/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BD%D0%B8%D0%B9_%D0%B1%D0%BE%D0%B3%D0%B0%D1%82%D1%8B%D1%80%D1%8C%C2%BB.jpg/330px-%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BD%D0%B8%D0%B9_%D0%B1%D0%BE%D0%B3%D0%B0%D1%82%D1%8B%D1%80%D1%8C%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "340": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/b5/Beetlejuice_%281988%29.jpg/330px-Beetlejuice_%281988%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "341": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c4/Godfather_vhs.jpg/330px-Godfather_vhs.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "342": "https://thumb.wikimedia.org/wikipedia/ru/thumb/a/a1/Godfather_2.jpg/330px-Godfather_2.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "343": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Cabs.jpg/500px-Cabs.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "344": "https://upload.wikimedia.org/wikipedia/ru/9/99/Goodfellas_Cover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "345": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/18/Once-upon-a-time-in-the-west-charles-bronson-henry-fonda.jpg/330px-Once-upon-a-time-in-the-west-charles-bronson-henry-fonda.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "346": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Lawrence_of_arabia_ver3_xxlg.jpg/960px-Lawrence_of_arabia_ver3_xxlg.jpg",
-  "347": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/25/Unforgiven.jpg/330px-Unforgiven.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "348": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/82/Dances_with_Wolves_poster.jpg/330px-Dances_with_Wolves_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "349": "https://upload.wikimedia.org/wikipedia/ru/8/8a/%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC_%D0%B0%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "350": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Inglourious_Basterds_poster.jpg/330px-Inglourious_Basterds_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "351": "https://upload.wikimedia.org/wikipedia/ru/b/ba/Django_Unchained.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "352": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/61/Lock_Stock_and_Two_Smoking_Barrels_Poster.jpg/330px-Lock_Stock_and_Two_Smoking_Barrels_Poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "353": "https://upload.wikimedia.org/wikipedia/ru/4/47/Even_money.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "354": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f6/Die_Hard.gif/330px-Die_Hard.gif?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "358": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/RockyPeakBernal_inQueretaroMexico.jpg/960px-RockyPeakBernal_inQueretaroMexico.jpg",
-  "363": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Guardians_of_the_Galaxy-Logo.png",
-  "364": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0d/Avengers_Endgame_poster.jpg/330px-Avengers_Endgame_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "365": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6e/Spider-Man_%E2%80%94_No_Way_Home_poster.jpg/330px-Spider-Man_%E2%80%94_No_Way_Home_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "366": "https://thumb.wikimedia.org/wikipedia/ru/thumb/a/a2/Batman_Jim_Lee.jpg/330px-Batman_Jim_Lee.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "367": "https://thumb.wikimedia.org/wikipedia/ru/thumb/5/54/Rain_man.jpg/330px-Rain_man.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "368": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/86/Posternotebook.jpg/330px-Posternotebook.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "369": "https://upload.wikimedia.org/wikipedia/ru/9/90/%D0%A1%D0%BF%D0%B5%D1%88%D0%B8_%D0%BB%D1%8E%D0%B1%D0%B8%D1%82%D1%8C_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "370": "https://upload.wikimedia.org/wikipedia/ru/f/fb/Mr._Nobody.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "374": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Holma_Boat_Club_by_the_light_of_the_moon.jpg/960px-Holma_Boat_Club_by_the_light_of_the_moon.jpg",
-  "379": "https://upload.wikimedia.org/wikipedia/commons/6/61/Tarzan_of_the_Apes.jpg",
-  "380": "https://upload.wikimedia.org/wikipedia/commons/b/bd/AntarcticaDomeCSnow.jpg",
-  "381": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Madagascar.svg/960px-Flag_of_Madagascar.svg.png",
-  "382": "https://upload.wikimedia.org/wikipedia/ru/4/45/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9C%D0%BE%D0%BD%D1%81%D1%82%D1%80%D1%8B_%D0%BD%D0%B0_%D0%BA%D0%B0%D0%BD%D0%B8%D0%BA%D1%83%D0%BB%D0%B0%D1%85%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "383": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0e/The_Boss_Baby_poster.jpg/330px-The_Boss_Baby_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "384": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/45/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%A2%D0%B8%D1%85%D0%BE%D0%B5_%D0%BC%D0%B5%D1%81%D1%82%D0%BE%C2%BB.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%A2%D0%B8%D1%85%D0%BE%D0%B5_%D0%BC%D0%B5%D1%81%D1%82%D0%BE%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "385": "https://upload.wikimedia.org/wikipedia/ru/c/cd/Annihilation_%28film%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-  "386": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/62/%D0%9C%D1%83%D0%BB%D0%B5%D0%BD_%D0%A0%D1%83%D0%B6%21_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%2C_2001%29.jpg/330px-%D0%9C%D1%83%D0%BB%D0%B5%D0%BD_%D0%A0%D1%83%D0%B6%21_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%2C_2001%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "1": "https://upload.wikimedia.org/wikipedia/ru/1/1d/%D0%96%D0%B8%D0%B7%D0%BD%D1%8C_%D0%BF%D1%80%D0%B5%D0%BA%D1%80%D0%B0%D1%81%D0%BD%D0%B0_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "2": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cd/The_Hangover.jpg/330px-The_Hangover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "3": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Forrestgump-logo.svg/960px-Forrestgump-logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "4": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Interstellar_2014.jpg/330px-Interstellar_2014.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "6": "https://upload.wikimedia.org/wikipedia/ru/b/b9/Intouchables.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "7": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/bc/Poster_Inception_film_2010.jpg/330px-Poster_Inception_film_2010.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "8": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Punxsutawney_Phil_Groundhog_Day_2022_Pennsylvania_%2851858203861%29.jpg/960px-Punxsutawney_Phil_Groundhog_Day_2022_Pennsylvania_%2851858203861%29.jpg", 
+ "9": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/b0/Green_mile_film.jpg/330px-Green_mile_film.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "10":"https://upload.wikimedia.org/wikipedia/commons/6/6a/Back_left.JPG", 
+ "11": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cd/Trumanshow.jpg/330px-Trumanshow.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "12": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/b9/Knockin%27_On_Heaven%27s_Door.jpg/330px-Knockin%27_On_Heaven%27s_Door.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "13": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Some_Like_It_Hot_%281959_poster%29.png/960px-Some_Like_It_Hot_%281959_poster%29.png",
+ "14": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/79/Pirates-of-the-Caribbean-The-Curse-of-the-Black-Pearl-.jpg/330px-Pirates-of-the-Caribbean-The-Curse-of-the-Black-Pearl-.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "15": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Jean-Leon_Gerome_Pollice_Verso.jpg/960px-Jean-Leon_Gerome_Pollice_Verso.jpg", 
+ "16": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9d/Matrix-DVD.jpg/330px-Matrix-DVD.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "17": "https://upload.wikimedia.org/wikipedia/ru/c/cf/Kill_bill_vol_one_ver.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "19": "https://upload.wikimedia.org/wikipedia/ru/c/c4/WALL-E_poster.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "22": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Poster_-_Gone_With_the_Wind_01.jpg/960px-Poster_-_Gone_With_the_Wind_01.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "26": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Titanic_in_color.png/960px-Titanic_in_color.png", 
+ "27": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Bundesarchiv_Bild_102-09430%2C_Lord_Arthur_Balfour.jpg/500px-Bundesarchiv_Bild_102-09430%2C_Lord_Arthur_Balfour.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "28": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/83/Knives_Out_%28film%29.jpg/330px-Knives_Out_%28film%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "29": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/de/Movie_poster_the_shawshank_redemption.jpg/330px-Movie_poster_the_shawshank_redemption.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "30": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Ratatouille.jpg/960px-Ratatouille.jpg", 
+ "31": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/62/Lion_king_ver1.jpg/330px-Lion_king_ver1.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "33": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Finding_Nemo_logo.svg/960px-Finding_Nemo_logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "34": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Toy_Story_logo.svg/960px-Toy_Story_logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "35": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/SixPartWoodKnot.jpg/500px-SixPartWoodKnot.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "36": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/d7/Coco_%282017_film%29_logo.jpg/330px-Coco_%282017_film%29_logo.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "37": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/61/Spirited_away.jpg/330px-Spirited_away.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "38": "https://thumb.wikimedia.org/wikipedia/ru/thumb/a/ab/%D0%9C%D0%BE%D0%B9_%D1%81%D0%BE%D1%81%D0%B5%D0%B4_%D0%A2%D0%BE%D1%82%D0%BE%D1%80%D0%BE.jpg/330px-%D0%9C%D0%BE%D0%B9_%D1%81%D0%BE%D1%81%D0%B5%D0%B4_%D0%A2%D0%BE%D1%82%D0%BE%D1%80%D0%BE.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "39": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f3/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D0%B0%D0%BD%D0%B8%D0%BC%D0%B0%D0%BD%D0%B3%D0%B8_%C2%AB%D0%A5%D0%BE%D0%B4%D1%8F%D1%87%D0%B8%D0%B9_%D0%B7%D0%B0%D0%BC%D0%BE%D0%BA%C2%BB.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D0%B0%D0%BD%D0%B8%D0%BC%D0%B0%D0%BD%D0%B3%D0%B8_%C2%AB%D0%A5%D0%BE%D0%B4%D1%8F%D1%87%D0%B8%D0%B9_%D0%B7%D0%B0%D0%BC%D0%BE%D0%BA%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "40": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/91/Zootopia_poster.jpg/330px-Zootopia_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "41": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Despicable_Me_logo_2.svg/960px-Despicable_Me_logo_2.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "44": "https://upload.wikimedia.org/wikipedia/commons/1/12/Winnie-the-Pooh_20-2.png", 
+ "48": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/25/Brat2_poster.jpg/330px-Brat2_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "52": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/17/%D0%91%D1%80%D0%B8%D0%BB%D0%BB%D0%B8%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%D0%B0%D1%8F_%D1%80%D1%83%D0%BA%D0%B0_Poster.jpg/330px-%D0%91%D1%80%D0%B8%D0%BB%D0%BB%D0%B8%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%D0%B0%D1%8F_%D1%80%D1%83%D0%BA%D0%B0_Poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "54": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0c/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_%D1%81%D0%BB%D0%B5%D0%B7%D0%B0%D0%BC_%D0%BD%D0%B5_%D0%B2%D0%B5%D1%80%D0%B8%D1%82.jpg/330px-%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_%D1%81%D0%BB%D0%B5%D0%B7%D0%B0%D0%BC_%D0%BD%D0%B5_%D0%B2%D0%B5%D1%80%D0%B8%D1%82.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "55": "https://upload.wikimedia.org/wikipedia/ru/a/a0/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9B%D0%B5%D0%B3%D0%B5%D0%BD%D0%B4%D0%B0_%E2%84%9617%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "56": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/b1/%D0%94%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B2%D0%B2%D0%B5%D1%80%D1%85_%282017%29.jpg/330px-%D0%94%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B2%D0%B2%D0%B5%D1%80%D1%85_%282017%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "58": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ef/%D0%A7%D0%B5%D0%B1%D1%83%D1%80%D0%B0%D1%88%D0%BA%D0%B0_%281971%29.jpg/330px-%D0%A7%D0%B5%D0%B1%D1%83%D1%80%D0%B0%D1%88%D0%BA%D0%B0_%281971%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "59": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f2/%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D1%82%D0%BE%D1%80_2_-_%D0%A1%D1%83%D0%B4%D0%BD%D1%8B%D0%B9_%D0%B4%D0%B5%D0%BD%D1%8C.webp/330px-%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%B0%D1%82%D0%BE%D1%80_2_-_%D0%A1%D1%83%D0%B4%D0%BD%D1%8B%D0%B9_%D0%B4%D0%B5%D0%BD%D1%8C.webp?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "63": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f4/%D0%A2%D1%91%D0%BC%D0%BD%D1%8B%D0%B9_%D1%80%D1%8B%D1%86%D0%B0%D1%80%D1%8C_%282008%29_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg/330px-%D0%A2%D1%91%D0%BC%D0%BD%D1%8B%D0%B9_%D1%80%D1%8B%D1%86%D0%B0%D1%80%D1%8C_%282008%29_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "65": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/d2/%D0%9E%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0_%D0%BF%D0%B5%D1%80%D0%B2%D0%BE%D0%B3%D0%BE_%D0%B8%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD%D0%B0_%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_%D0%B8_%D1%84%D0%B8%D0%BB%D0%BE%D1%81%D0%BE%D1%84%D1%81%D0%BA%D0%B8%D0%B9_%D0%BA%D0%B0%D0%BC%D0%B5%D0%BD%D1%8C.jpg/330px-%D0%9E%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0_%D0%BF%D0%B5%D1%80%D0%B2%D0%BE%D0%B3%D0%BE_%D0%B8%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD%D0%B0_%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_%D0%B8_%D1%84%D0%B8%D0%BB%D0%BE%D1%81%D0%BE%D1%84%D1%81%D0%BA%D0%B8%D0%B9_%D0%BA%D0%B0%D0%BC%D0%B5%D0%BD%D1%8C.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "66": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/93/1972_dzhentlmeny_udachi.jpg/330px-1972_dzhentlmeny_udachi.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "67": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/2c/Spider-Man_-_Into_the_Spider-Verse.jpg/330px-Spider-Man_-_Into_the_Spider-Verse.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "68": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/03/Home_Alone_dvd_rus.jpg/330px-Home_Alone_dvd_rus.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "69": "https://upload.wikimedia.org/wikipedia/ru/e/e3/%D0%A5%D0%B0%D1%82%D0%B8%D0%BA%D0%BE-%D1%84%D0%B8%D0%BB%D1%8C%D0%BC.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "70": "https://upload.wikimedia.org/wikipedia/ru/5/54/The_Big_Lebowski_Cover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "71": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/D%C3%BCne_S-Schlag_Sossusvlei.JPG/960px-D%C3%BCne_S-Schlag_Sossusvlei.JPG",
+ "74": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0d/Avengers_Endgame_poster.jpg/330px-Avengers_Endgame_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "75": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Symbol_from_Marvel%27s_The_Avengers_logo.svg/960px-Symbol_from_Marvel%27s_The_Avengers_logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "76": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Guardians_of_the_Galaxy-Logo.png", 
+ "78": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6f/%D0%94%D0%B6%D0%BE%D0%BA%D0%B5%D1%80_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC_%D0%A2%D0%BE%D0%B4%D0%B4%D0%B0_%D0%A4%D0%B8%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%B0%29.jpg/330px-%D0%94%D0%B6%D0%BE%D0%BA%D0%B5%D1%80_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC_%D0%A2%D0%BE%D0%B4%D0%B4%D0%B0_%D0%A4%D0%B8%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "79": "https://upload.wikimedia.org/wikipedia/ru/c/ca/Deadpool.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "80": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6e/Mad_Max_Fury_Road.jpg/330px-Mad_Max_Fury_Road.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "84": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9b/%D0%91%D0%B5%D0%B3%D1%83%D1%89%D0%B8%D0%B9_%D0%BF%D0%BE_%D0%BB%D0%B5%D0%B7%D0%B2%D0%B8%D1%8E_2049.jpg/330px-%D0%91%D0%B5%D0%B3%D1%83%D1%89%D0%B8%D0%B9_%D0%BF%D0%BE_%D0%BB%D0%B5%D0%B7%D0%B2%D0%B8%D1%8E_2049.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "86": "https://upload.wikimedia.org/wikipedia/commons/6/62/CompendiumMaleficarumEngraving25.jpg", 
+ "87": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/84/%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg/330px-%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "88": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Bohemian_Rhapsody_by_Queen_US_vinyl_red_label.png/500px-Bohemian_Rhapsody_by_Queen_US_vinyl_red_label.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "92": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/1c/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%D0%A1%D0%BF%D0%B0%D1%81%D1%82%D0%B8_%D1%80%D1%8F%D0%B4%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE_%D0%A0%D0%B0%D0%B9%D0%B0%D0%BD%D0%B0.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%D0%A1%D0%BF%D0%B0%D1%81%D1%82%D0%B8_%D1%80%D1%8F%D0%B4%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE_%D0%A0%D0%B0%D0%B9%D0%B0%D0%BD%D0%B0.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "93": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/38/Schindler%27s_List_movie.jpg/330px-Schindler%27s_List_movie.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "94": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Dashavtar_closeup_national_museum_india.JPG/500px-Dashavtar_closeup_national_museum_india.JPG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "95": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ed/%D0%9E%D1%82%D1%81%D1%82%D1%83%D0%BF%D0%BD%D0%B8%D0%BA%D0%B8_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg/330px-%D0%9E%D1%82%D1%81%D1%82%D1%83%D0%BF%D0%BD%D0%B8%D0%BA%D0%B8_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "96": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Monte_Carlo_Casino.jpg", 
+ "97": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/38/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9E%D0%B4%D0%BD%D0%B0%D0%B6%D0%B4%D1%8B_%D0%B2_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B5%C2%BB_%28%D0%A1%D0%A8%D0%90%2C_1984%29.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9E%D0%B4%D0%BD%D0%B0%D0%B6%D0%B4%D1%8B_%D0%B2_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B5%C2%BB_%28%D0%A1%D0%A8%D0%90%2C_1984%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "98": "https://upload.wikimedia.org/wikipedia/ru/8/8a/%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC_%D0%B0%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "99": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/01/No_country_rus.jpg/330px-No_country_rus.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "100": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/d2/Batman_Begins_%28poster%29.jpg/330px-Batman_Begins_%28poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "102": "https://upload.wikimedia.org/wikipedia/ru/6/6a/%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_3.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "103":"https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f0/The_Lord_of_the_Rings._The_Two_Towers_%E2%80%94_movie.jpg/330px-The_Lord_of_the_Rings._The_Two_Towers_%E2%80%94_movie.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ «104»: https://thumb.wikimedia.org/wikipedia/ru/thumb/5/53/The_Lord_of_the_Rings._The_Return_of_the_King_%E2%80%94_movie.jpg/330px-The_Lord_of_the_Rings._The_Return_of_the_King_%E2%80%94_movie.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "105": "https://upload.wikimedia.org/wikipedia/ru/3/32/The_Hobbit._An_Unexpected_Journey.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "106": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ed/Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg/330px-Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "111": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/1e/Gone_Girl_poster.jpg/330px-Gone_Girl_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "112": "https://upload.wikimedia.org/wikipedia/ru/6/67/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%98%D0%B3%D1%80%D1%8B_%D1%80%D0%B0%D0%B7%D1%83%D0%BC%D0%B0%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "113": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/04/Dead_Poets_Society.jpg/330px-Dead_Poets_Society.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "115": "https://upload.wikimedia.org/wikipedia/ru/b/ba/Django_Unchained.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "116": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Inglourious_Basterds_poster.jpg/330px-Inglourious_Basterds_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "117": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/d4/The_Hateful_Eight.jpg/330px-The_Hateful_Eight.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "118": "https://upload.wikimedia.org/wikipedia/ru/e/e9/A_Clockwork_Orange_%28cover%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "120": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/12_Angry_Men_%281957_film_poster%29.jpg/960px-12_Angry_Men_%281957_film_poster%29.jpg",
+ "124": "https://thumb.wikimedia.org/wikipedia/ru/thumb/5/54/Rain_man.jpg/330px-Rain_man.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "129": "https://upload.wikimedia.org/wikipedia/ru/f/fb/Mr._Nobody.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "130": "https://upload.wikimedia.org/wikipedia/commons/8/8a/AnalogClockAnimation1_2hands_1h_in_6sec.gif", 
+ "131": "https://upload.wikimedia.org/wikipedia/ru/d/d7/Silver_Linings_Playbook.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "132": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/33/John_Wick.jpg/330px-John_Wick.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "133":"https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9a/Bourne.Legacy-poster.jpg/330px-Bourne.Legacy-poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "134": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/The_Great_Gatsby_Cover_1925_Retouched.jpg/960px-The_Great_Gatsby_Cover_1925_Retouched.jpg",
+ "135": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Musee_de_la_bible_et_Terre_Sainte_001.JPG", 
+ "136": "https://upload.wikimedia.org/wikipedia/ru/3/3a/Dumb_dumber_cover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "137": "https://upload.wikimedia.org/wikipedia/ru/6/60/BruceAlmighty_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "138": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Miami_traffic_jam%2C_I-95_North_rush_hour.jpg/960px-Miami_traffic_jam%2C_I-95_North_rush_hour.jpg", 
+ "139": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/JROppenheimer-LosAlamos.jpg/500px-JROppenheimer-LosAlamos.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "140": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/fb/%D0%92%D1%81%D1%91%D0%B2%D0%B5%D0%B7%D0%B4%D0%B5%D0%B8%D1%81%D1%80%D0%B0%D0%B7%D1%83.jpg/330px-%D0%92%D1%81%D1%91%D0%B2%D0%B5%D0%B7%D0%B4%D0%B5%D0%B8%D1%81%D1%80%D0%B0%D0%B7%D1%83.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "141": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Barbie_Logo.svg/960px-Barbie_Logo.svg.png", 
+ "142": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/24/Pay_It_Forward_poster.jpg/330px-Pay_It_Forward_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "143": "https://upload.wikimedia.org/wikipedia/ru/9/9b/Amelie_DVD_box.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "144": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Singin%27_in_the_Rain_%281952_poster%29.jpg/960px-Singin%27_in_the_Rain_%281952_poster%29.jpg", 
+ "145": "https://upload.wikimedia.org/wikipedia/commons/0/03/Portrait_of_Sherlock_Holmes_by_Sidney_Paget-Cropped.jpg", 
+ "149": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Ecliptic_path.jpg/960px-Ecliptic_path.jpg", 
+ "152": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/The_Conjuring_Universe_logo.jpg/960px-The_Conjuring_Universe_logo.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "153": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/40/Up%28poster%29.jpg/330px-Up%28poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "154": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/The_Incredibles_logo.svg/960px-The_Incredibles_logo.svg.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "155": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Meister_von_Heiligenkreuz_001.jpg/960px-Meister_von_Heiligenkreuz_001.jpg", 
+ "160": "https://upload.wikimedia.org/wikipedia/commons/b/bd/AntarcticaDomeCSnow.jpg", 
+ "161": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Madagascar.svg/960px-Flag_of_Madagascar.svg.png", 
+ "162": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Batten_-_Europa%27sFairyTales.jpg/500px-Batten_-_Europa%27sFairyTales.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "163": "https://upload.wikimedia.org/wikipedia/commons/6/66/Alad.jpg", 
+ "165": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/78/Inside_Out_2.jpeg/330px-Inside_Out_2.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "169": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/07/Kiki%27s_Delivery_Service_%28Movie%29.jpg/330px-Kiki%27s_Delivery_Service_%28Movie%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "170": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/75/%D0%9F%D1%80%D0%B8%D0%BD%D1%86%D0%B5%D1%81%D1%81%D0%B0_%D0%9C%D0%BE%D0%BD%D0%BE%D0%BD%D0%BE%D0%BA%D0%B5_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg/330px-%D0%9F%D1%80%D0%B8%D0%BD%D1%86%D0%B5%D1%81%D1%81%D0%B0_%D0%9C%D0%BE%D0%BD%D0%BE%D0%BD%D0%BE%D0%BA%D0%B5_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "171": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/68/Grave_of_the_Fireflies_DVDcover.jpg/330px-Grave_of_the_Fireflies_DVDcover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "174": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/ba/%D0%A2%D1%80%D0%BE%D0%B5_%D0%B8%D0%B7_%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%BA%D0%B2%D0%B0%D1%88%D0%B8%D0%BD%D0%BE.jpg/330px-%D0%A2%D1%80%D0%BE%D0%B5_%D0%B8%D0%B7_%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%BA%D0%B2%D0%B0%D1%88%D0%B8%D0%BD%D0%BE.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "175": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/The_Soviet_Union_1988_CPA_5918_stamp_%28Well%2C_Just_You_Wait%21%29.jpg/960px-The_Soviet_Union_1988_CPA_5918_stamp_%28Well%2C_Just_You_Wait%21%29.jpg", 
+ "176": "https://upload.wikimedia.org/wikipedia/commons/1/14/Bremen.band.500pix.jpg", 
+ "177": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/81/%D0%9C%D0%B0%D0%BB%D1%8B%D1%88_%D0%B8_%D0%9A%D0%B0%D1%80%D0%BB%D1%81%D0%BE%D0%BD.jpg/330px-%D0%9C%D0%B0%D0%BB%D1%8B%D1%88_%D0%B8_%D0%9A%D0%B0%D1%80%D0%BB%D1%81%D0%BE%D0%BD.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "178": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/fb/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D1%8B%D0%B9_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD_%D0%BA%D0%B8%D0%BD%D0%BE%D0%B0%D1%84%D0%B8%D1%88%D0%B0.jpg/330px-%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D1%8B%D0%B9_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD_%D0%BA%D0%B8%D0%BD%D0%BE%D0%B0%D1%84%D0%B8%D1%88%D0%B0.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "179": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/40/1970_beloe_solntse_pustyni.jpg/330px-1970_beloe_solntse_pustyni.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "180": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/27/%D0%9C%D0%B8%D0%BC%D0%B8%D0%BD%D0%BE_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC.jpg/330px-%D0%9C%D0%B8%D0%BC%D0%B8%D0%BD%D0%BE_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "181": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0e/%D0%9A%D0%B8%D0%BD-%D0%B4%D0%B7%D0%B0-%D0%B4%D0%B7%D0%B0%21.jpg/330px-%D0%9A%D0%B8%D0%BD-%D0%B4%D0%B7%D0%B0-%D0%B4%D0%B7%D0%B0%21.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "182": "https://upload.wikimedia.org/wikipedia/ru/9/92/%D0%9F%D0%B8%D1%80%D0%B0%D1%82%D1%8B_XX_%D0%B2%D0%B5%D0%BA%D0%B0_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "183": "https://upload.wikimedia.org/wikipedia/ru/f/fe/%D0%90%D1%84%D0%BE%D0%BD%D1%8F.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "184": "https://upload.wikimedia.org/wikipedia/ru/d/df/Letat-Juravli.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "185": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Solaris%2C_various_editions_02.jpg/960px-Solaris%2C_various_editions_02.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "186": "https://upload.wikimedia.org/wikipedia/ru/1/12/%D0%97%D0%B0%D0%B1%D1%80%D0%BE%D1%88%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B4%D0%BE%D0%BC.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "187": "https://upload.wikimedia.org/wikipedia/ru/2/23/%D0%94%D1%83%D1%80%D0%B0%D0%BA_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "188": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9f/Geograf_poster_700x1000.jpg/330px-Geograf_poster_700x1000.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "189": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Salyut_7_drawing.png/960px-Salyut_7_drawing.png", 
+ "190": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/%D0%A2-34-76_%D0%BE%D0%B1%D1%80._1943%2C_%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%BA%D0%BE-%D0%BA%D1%83%D0%BB%D1%8C%D1%82%D1%83%D1%80%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81_%C2%AB%D0%9B%D0%B8%D0%BD%D0%B8%D1%8F_%D0%A1%D1%82%D0%B0%D0%BB%D0%B8%D0%BD%D0%B0%C2%BB.jpg/960px-%D0%A2-34-76_%D0%BE%D0%B1%D1%80._1943%2C_%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%BA%D0%BE-%D0%BA%D1%83%D0%BB%D1%8C%D1%82%D1%83%D1%80%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81_%C2%AB%D0%9B%D0%B8%D0%BD%D0%B8%D1%8F_%D0%A1%D1%82%D0%B0%D0%BB%D0%B8%D0%BD%D0%B0%C2%BB.jpg",
+ "191": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/IceBlockNearJoekullsarlon.jpg/960px-IceBlockNearJoekullsarlon.jpg", 
+ "192": "https://upload.wikimedia.org/wikipedia/ru/f/ff/Bitva_za_sevas_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "193": "https://upload.wikimedia.org/wikipedia/ru/9/91/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%D0%9E_%D1%87%D0%B5%D0%BC_%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%D1%8F%D1%82_%D0%BC%D1%83%D0%B6%D1%87%D0%B8%D0%BD%D1%8B_.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "194": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Gorskii_00955u.jpg/960px-Gorskii_00955u.jpg", 
+ "196": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/4a/Sing_2016_poster.jpg/330px-Sing_2016_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "197": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Megamind_2010.jpg/330px-Megamind_2010.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "203": "https://upload.wikimedia.org/wikipedia/ru/5/5f/Les_Choristes.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "205": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Boy_with_a_hoop._%2851915119994%29.jpg/960px-Boy_with_a_hoop._%2851915119994%29.jpg", 
+ "206": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/64/Mulholland_Drive_%28poster%29.jpg/330px-Mulholland_Drive_%28poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "207": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/61/Lock_Stock_and_Two_Smoking_Barrels_Poster.jpg/330px-Lock_Stock_and_Two_Smoking_Barrels_Poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "209": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/FA-18-Afterburners.jpg/500px-FA-18-Afterburners.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "216": "https://upload.wikimedia.org/wikipedia/ru/3/3f/Bronson_2009.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "217": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Hostage_exercise.jpeg/500px-Hostage_exercise.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "218": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Cabs.jpg/960px-Cabs.jpg", 
+ "219": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/7a/Mission_cleopatre_poster.jpg/330px-Mission_cleopatre_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "220": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Musee_de_la_bible_et_Terre_Sainte_001.JPG", 
+ "221": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Portobello_Road%2C_Notting_Hill_-_geograph.org.uk_-_1279480.jpg/500px-Portobello_Road%2C_Notting_Hill_-_geograph.org.uk_-_1279480.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "222": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9d/Meet_the_Parents.jpg/330px-Meet_the_Parents.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "223": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Eastern_Phoebe-nest-Brown-headed-Cowbird-egg.jpg/500px-Eastern_Phoebe-nest-Brown-headed-Cowbird-egg.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "224": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/60/%D0%91%D0%B5%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%8C_%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D1%8F.jpg/330px-%D0%91%D0%B5%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%8C_%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D1%8F.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "225": "https://upload.wikimedia.org/wikipedia/ru/9/93/%D0%94%D0%B5%D0%B2%D1%87%D0%B0%D1%82%D0%B0.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "226": "https://upload.wikimedia.org/wikipedia/ru/f/fe/%D0%90%D1%84%D0%BE%D0%BD%D1%8F.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "227": "https://upload.wikimedia.org/wikipedia/ru/7/72/%D0%94%D0%B5%D0%BD%D1%8C_%D0%B2%D1%8B%D0%B1%D0%BE%D1%80%D0%BE%D0%B2_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D0%BA_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D1%83%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "229": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Lilo_%26_Stitch_The_Series_Disney%2B_wordmark.png/960px-Lilo_%26_Stitch_The_Series_Disney%2B_wordmark.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "230": "https://upload.wikimedia.org/wikipedia/commons/c/c8/%E7%95%AB%E9%BA%97%E7%8F%A0%E8%90%83%E7%A7%80_Gathering_Gems_of_Beauty_%28%E6%A2%81%E6%9C%A8%E8%98%AD%29_2.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "234": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/81/%D0%9C%D0%B0%D0%BB%D1%8B%D1%88_%D0%B8_%D0%9A%D0%B0%D1%80%D0%BB%D1%81%D0%BE%D0%BD.jpg/330px-%D0%9C%D0%B0%D0%BB%D1%8B%D1%88_%D0%B8_%D0%9A%D0%B0%D1%80%D0%BB%D1%81%D0%BE%D0%BD.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "237": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/09/Kaze_no_tani_no_Naushika.jpg/330px-Kaze_no_tani_no_Naushika.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "238": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/07/Kiki%27s_Delivery_Service_%28Movie%29.jpg/330px-Kiki%27s_Delivery_Service_%28Movie%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "240": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6b/Weathering_with_You.jpg/330px-Weathering_with_You.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "241": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/StarWarsOST.jpg/960px-StarWarsOST.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "242": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/e0/Empire20strikes20back_old.jpg/330px-Empire20strikes20back_old.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "248": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Thehobbittrilogy.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "251": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Ruinen_von_Troja_Karlsruher_Unterhaltungsblatt_1835.jpg/500px-Ruinen_von_Troja_Karlsruher_Unterhaltungsblatt_1835.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "253": "https://upload.wikimedia.org/wikipedia/ru/a/a6/The_Pianist_movie.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "254": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/75/%D0%9A%D1%83%D0%B4%D0%B0_%D0%BF%D1%80%D0%B8%D0%B2%D0%BE%D0%B4%D1%8F%D1%82_%D0%BC%D0%B5%D1%87%D1%82%D1%8B_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpg/330px-%D0%9A%D1%83%D0%B4%D0%B0_%D0%BF%D1%80%D0%B8%D0%B2%D0%BE%D0%B4%D1%8F%D1%82_%D0%BC%D0%B5%D1%87%D1%82%D1%8B_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "255": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/72/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "256": "https://upload.wikimedia.org/wikipedia/ru/e/e9/A_Clockwork_Orange_%28cover%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "257": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/84/%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg/330px-%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "258": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/PrideAndPrejudiceTitlePage.jpg/500px-PrideAndPrejudiceTitlePage.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "259": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/86/Posternotebook.jpg/330px-Posternotebook.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "261": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Destruction_of_Leviathan.png/500px-Destruction_of_Leviathan.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "262": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/dc/Bummer_poster.jpg/330px-Bummer_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "263": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Moscow_2017.jpg/500px-Moscow_2017.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "265": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/Mamayev_Kurgan_Volgograd.jpg/500px-Mamayev_Kurgan_Volgograd.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "266": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Brest_Brest_Fortress_Kholm_Gate_9209_2150.jpg/500px-Brest_Brest_Fortress_Kholm_Gate_9209_2150.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "268": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Scarface_%281932_film_poster%29.jpg/960px-Scarface_%281932_film_poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "269": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/38/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9E%D0%B4%D0%BD%D0%B0%D0%B6%D0%B4%D1%8B_%D0%B2_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B5%C2%BB_%28%D0%A1%D0%A8%D0%90%2C_1984%29.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9E%D0%B4%D0%BD%D0%B0%D0%B6%D0%B4%D1%8B_%D0%B2_%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B5%C2%BB_%28%D0%A1%D0%A8%D0%90%2C_1984%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "270": "https://upload.wikimedia.org/wikipedia/ru/b/ba/Django_Unchained.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "272": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/1e/Gone_Girl_poster.jpg/330px-Gone_Girl_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "273": "https://upload.wikimedia.org/wikipedia/ru/f/fb/Mr._Nobody.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "274": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Boy_with_a_hoop._%2851915119994%29.jpg/500px-Boy_with_a_hoop._%2851915119994%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "276": "https://upload.wikimedia.org/wikipedia/commons/1/1c/The_Astral_Sleep_-_by_Jeroen_van_Valkenburg.PNG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "278": "https://thumb.wikimedia.org/wikipedia/ru/thumb/3/33/John_Wick.jpg/330px-John_Wick.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "279": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/FA-18-Afterburners.jpg/500px-FA-18-Afterburners.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "282": "https://upload.wikimedia.org/wikipedia/ru/9/9b/Amelie_DVD_box.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "284": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Bohemian_Rhapsody_by_Queen_US_vinyl_red_label.png/500px-Bohemian_Rhapsody_by_Queen_US_vinyl_red_label.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "285": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/A_Star_Is_Born_%281937_film_poster%29.jpg/960px-A_Star_Is_Born_%281937_film_poster%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "286": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Portrait_of_Sherlock_Holmes_by_Sidney_Paget-Cropped.jpg/500px-Portrait_of_Sherlock_Holmes_by_Sidney_Paget-Cropped.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "288": "https://upload.wikimedia.org/wikipedia/commons/1/18/Mimnermus.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "291": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Inglourious_Basterds_poster.jpg/330px-Inglourious_Basterds_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "292": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ed/Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg/330px-Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "293": "https://upload.wikimedia.org/wikipedia/ru/6/6a/%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_3.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "294": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Dashavtar_closeup_national_museum_india.JPG/500px-Dashavtar_closeup_national_museum_india.JPG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "296": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6f/%D0%94%D0%B6%D0%BE%D0%BA%D0%B5%D1%80_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC_%D0%A2%D0%BE%D0%B4%D0%B4%D0%B0_%D0%A4%D0%B8%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%B0%29.jpg/330px-%D0%94%D0%B6%D0%BE%D0%BA%D0%B5%D1%80_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC_%D0%A2%D0%BE%D0%B4%D0%B4%D0%B0_%D0%A4%D0%B8%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "298": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c4/%D0%98%D0%B2%D0%B0%D0%BD_%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%B5%D0%B2%D0%B8%D1%87_%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D1%82_%D0%BF%D1%80%D0%BE%D1%84%D0%B5%D1%81%D1%81%D0%B8%D1%8E_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg/330px-%D0%98%D0%B2%D0%B0%D0%BD_%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%B5%D0%B2%D0%B8%D1%87_%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D1%82_%D0%BF%D1%80%D0%BE%D1%84%D0%B5%D1%81%D1%81%D0%B8%D1%8E_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "299": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/99/%D0%93%D0%BE%D1%81%D1%82%D1%8C%D1%8F_%D0%B8%D0%B7_%D0%B1%D1%83%D0%B4%D1%83%D1%89%D0%B5%D0%B3%D0%BE.jpg/330px-%D0%93%D0%BE%D1%81%D1%82%D1%8C%D1%8F_%D0%B8%D0%B7_%D0%B1%D1%83%D0%B4%D1%83%D1%89%D0%B5%D0%B3%D0%BE.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "300": "https://thumb.wikimedia.org/wikipedia/ru/thumb/d/de/%D0%A1%D0%BF%D0%BE%D1%80%D1%82%D0%BB%D0%BE%D1%82%D0%BE-82.jpg/330px-%D0%A1%D0%BF%D0%BE%D1%80%D1%82%D0%BB%D0%BE%D1%82%D0%BE-82.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "301": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Ocean%27s_11_%281960_film_poster%29.jpeg/960px-Ocean%27s_11_%281960_film_poster%29.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "302": "https://thumb.wikimedia.org/wikipedia/ru/thumb/9/9d/Naked_Gun_Poster.jpg/330px-Naked_Gun_Poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "303": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cc/Police_Academy_1.jpg/330px-Police_Academy_1.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "304": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Miami_traffic_jam%2C_I-95_North_rush_hour.jpg/960px-Miami_traffic_jam%2C_I-95_North_rush_hour.jpg", 
+ "305": "https://upload.wikimedia.org/wikipedia/commons/6/62/Mrbeanlogo.png?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "306": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Dunkerque_Mole1_aerien.JPG/960px-Dunkerque_Mole1_aerien.JPG", 
+ "307": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ef/1917_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpeg/330px-1917_%28%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%29.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "308": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/88/Fury_%28movie_2014%29.jpg/330px-Fury_%28movie_2014%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "309": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Lima_Company_Crucible_140417-M-MJ974-507.jpg/960px-Lima_Company_Crucible_140417-M-MJ974-507.jpg", 
+ "310": "https://upload.wikimedia.org/wikipedia/ru/f/fb/Rush.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "311": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/FA-18-Afterburners.jpg/960px-FA-18-Afterburners.jpg", 
+ "313": "https://upload.wikimedia.org/wikipedia/ru/6/6a/%D0%93%D0%B0%D1%80%D1%80%D0%B8_%D0%9F%D0%BE%D1%82%D1%82%D0%B5%D1%80_3.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "314": "https://thumb.wikimedia.org/wikipedia/ru/thumb/e/ed/Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg/330px-Kinopoisk.ru-Pirates-of-the-Caribbean_3A-Dead-Man_27s-Chest-380676.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "315": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Madagascar.svg/960px-Flag_of_Madagascar.svg.png", 
+ "316": "https://upload.wikimedia.org/wikipedia/commons/b/bd/AntarcticaDomeCSnow.jpg", 
+ "317": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/7c/%D0%A2%D0%B0%D1%87%D0%BA%D0%B8_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg/330px-%D0%A2%D0%B0%D1%87%D0%BA%D0%B8_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "318": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Megamind_2010.jpg/330px-Megamind_2010.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "321": "https://upload.wikimedia.org/wikipedia/ru/d/df/Letat-Juravli.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "322": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/46/%D0%A1%D1%83%D0%B4%D1%8C%D0%B1%D0%B0_%D1%87%D0%B5%D0%BB%D0%BE%D0%B2%D0%B5%D0%BA%D0%B0.jpeg/330px-%D0%A1%D1%83%D0%B4%D1%8C%D0%B1%D0%B0_%D1%87%D0%B5%D0%BB%D0%BE%D0%B2%D0%B5%D0%BA%D0%B0.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "326": "https://upload.wikimedia.org/wikipedia/ru/6/67/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%98%D0%B3%D1%80%D1%8B_%D1%80%D0%B0%D0%B7%D1%83%D0%BC%D0%B0%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "328": "https://thumb.wikimedia.org/wikipedia/ru/thumb/7/72/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%92%D0%BE%D0%BB%D0%BA_%D1%81_%D0%A3%D0%BE%D0%BB%D0%BB-%D1%81%D1%82%D1%80%D0%B8%D1%82%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "330": "https://upload.wikimedia.org/wikipedia/commons/1/1c/The_Astral_Sleep_-_by_Jeroen_van_Valkenburg.PNG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "333": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/86/Posternotebook.jpg/330px-Posternotebook.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "334": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Aventures-de-Tintin.svg/960px-Aventures-de-Tintin.svg.png",
+ "336": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Male_Lion_and_Cub_Chitwa_South_Africa_Luca_Galuzzi_2004.JPG/500px-Male_Lion_and_Cub_Chitwa_South_Africa_Luca_Galuzzi_2004.JPG?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "339": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cd/%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BD%D0%B8%D0%B9_%D0%B1%D0%BE%D0%B3%D0%B0%D1%82%D1%8B%D1%80%D1%8C%C2%BB.jpg/330px-%D0%92%D1%82%D0%BE%D1%80%D0%BE%D0%B9_%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BD%D0%B8%D0%B9_%D0%B1%D0%BE%D0%B3%D0%B0%D1%82%D1%8B%D1%80%D1%8C%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "340": "https://thumb.wikimedia.org/wikipedia/ru/thumb/b/b5/Beetlejuice_%281988%29.jpg/330px-Beetlejuice_%281988%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "341": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c4/Godfather_vhs.jpg/330px-Godfather_vhs.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "342": "https://thumb.wikimedia.org/wikipedia/ru/thumb/a/a1/Godfather_2.jpg/330px-Godfather_2.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "343": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Cabs.jpg/500px-Cabs.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "344": "https://upload.wikimedia.org/wikipedia/ru/9/99/Goodfellas_Cover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "345": "https://thumb.wikimedia.org/wikipedia/ru/thumb/1/18/Once-upon-a-time-in-the-west-charles-bronson-henry-fonda.jpg/330px-Once-upon-a-time-in-the-west-charles-bronson-henry-fonda.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "346": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Lawrence_of_arabia_ver3_xxlg.jpg/960px-Lawrence_of_arabia_ver3_xxlg.jpg",
+ "347": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/25/Unforgiven.jpg/330px-Unforgiven.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "348": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/82/Dances_with_Wolves_poster.jpg/330px-Dances_with_Wolves_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "349": "https://upload.wikimedia.org/wikipedia/ru/8/8a/%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC_%D0%B0%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "350": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/c3/Inglourious_Basterds_poster.jpg/330px-Inglourious_Basterds_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "351": "https://upload.wikimedia.org/wikipedia/ru/b/ba/Django_Unchained.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "352": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/61/Lock_Stock_and_Two_Smoking_Barrels_Poster.jpg/330px-Lock_Stock_and_Two_Smoking_Barrels_Poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "353": "https://upload.wikimedia.org/wikipedia/ru/4/47/Even_money.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "354": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/f6/Die_Hard.gif/330px-Die_Hard.gif?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "358": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/RockyPeakBernal_inQueretaroMexico.jpg/960px-RockyPeakBernal_inQueretaroMexico.jpg", 
+ "363": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Guardians_of_the_Galaxy-Logo.png", 
+ "364": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0d/Avengers_Endgame_poster.jpg/330px-Avengers_Endgame_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "365": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/6e/Spider-Man_%E2%80%94_No_Way_Home_poster.jpg/330px-Spider-Man_%E2%80%94_No_Way_Home_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "366": "https://thumb.wikimedia.org/wikipedia/ru/thumb/a/a2/Batman_Jim_Lee.jpg/330px-Batman_Jim_Lee.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "367": "https://thumb.wikimedia.org/wikipedia/ru/thumb/5/54/Rain_man.jpg/330px-Rain_man.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "368": "https://thumb.wikimedia.org/wikipedia/ru/thumb/8/86/Posternotebook.jpg/330px-Posternotebook.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "369": "https://upload.wikimedia.org/wikipedia/ru/9/90/%D0%A1%D0%BF%D0%B5%D1%88%D0%B8_%D0%BB%D1%8E%D0%B1%D0%B8%D1%82%D1%8C_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpeg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "370": "https://upload.wikimedia.org/wikipedia/ru/f/fb/Mr._Nobody.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "374": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Holma_Boat_Club_by_the_light_of_the_moon.jpg/960px-Holma_Boat_Club_by_the_light_of_the_moon.jpg", 
+ "379": "https://upload.wikimedia.org/wikipedia/commons/6/61/Tarzan_of_the_Apes.jpg", 
+ "380": "https://upload.wikimedia.org/wikipedia/commons/b/bd/AntarcticaDomeCSnow.jpg",
+ "381": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Madagascar.svg/960px-Flag_of_Madagascar.svg.png", 
+ "382": "https://upload.wikimedia.org/wikipedia/ru/4/45/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%9C%D0%BE%D0%BD%D1%81%D1%82%D1%80%D1%8B_%D0%BD%D0%B0_%D0%BA%D0%B0%D0%BD%D0%B8%D0%BA%D1%83%D0%BB%D0%B0%D1%85%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "383": "https://thumb.wikimedia.org/wikipedia/ru/thumb/0/0e/The_Boss_Baby_poster.jpg/330px-The_Boss_Baby_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail", 
+ "384": "https://thumb.wikimedia.org/wikipedia/ru/thumb/4/45/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%A2%D0%B8%D1%85%D0%BE%D0%B5_%D0%BC%D0%B5%D1%81%D1%82%D0%BE%C2%BB.jpg/330px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%C2%AB%D0%A2%D0%B8%D1%85%D0%BE%D0%B5_%D0%BC%D0%B5%D1%81%D1%82%D0%BE%C2%BB.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "385": "https://upload.wikimedia.org/wikipedia/ru/c/cd/Annihilation_%28film%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled", 
+ "386": "https://thumb.wikimedia.org/wikipedia/ru/thumb/6/62/%D0%9C%D1%83%D0%BB%D0%B5%D0%BD_%D0%A0%D1%83%D0%B6%21_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%2C_2001%29.jpg/330px-%D0%9C%D1%83%D0%BB%D0%B5%D0%BD_%D0%A0%D1%83%D0%B6%21_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%2C_2001%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "387": "https://thumb.wikimedia.org/wikipedia/ru/thumb/f/fc/The_Phantom_of_the_Opera_2004.jpg/330px-The_Phantom_of_the_Opera_2004.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "388": "https://upload.wikimedia.org/wikipedia/ru/1/16/Inside_Llewyn_Davis_poster.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
   "389": "https://thumb.wikimedia.org/wikipedia/ru/thumb/2/2e/%D0%9C%D0%B5%D1%81%D1%82%D0%BE_%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87%D0%B8_%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B8%D1%82%D1%8C_%D0%BD%D0%B5%D0%BB%D1%8C%D0%B7%D1%8F_%28%D0%BF%D0%BB%D0%B0%D0%BA%D0%B0%D1%82_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg/330px-%D0%9C%D0%B5%D1%81%D1%82%D0%BE_%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87%D0%B8_%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B8%D1%82%D1%8C_%D0%BD%D0%B5%D0%BB%D1%8C%D0%B7%D1%8F_%28%D0%BF%D0%BB%D0%B0%D0%BA%D0%B0%D1%82_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
