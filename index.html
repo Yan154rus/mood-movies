@@ -1206,7 +1206,7 @@ const POSTER_URLS_EXTRA = {
   "451": "https://wikimultia.org/wiki/Special:FilePath/Laputa_Castle_in_the_Sky.jpg?width=400",
   "452": "https://en.wikipedia.org/wiki/Special:FilePath/Ponyo.png?width=400",
   "453": "https://ru.wikipedia.org/wiki/Special:FilePath/Kimetsu_no_Yaiba_Mugen_Ressha_Hen_Poster.jpg?width=400",
-  "468": "https://en.wikipedia.org/wiki/Special:FilePath/The_Grand_Budapest_Hotel.jpg?width=400",
+  "468": "https://ru.wikipedia.org/wiki/Special:FilePath/Goodbadugly.JPG",
   "470": "https://ru.wikipedia.org/wiki/Special:FilePath/Interstate_60_(DVD_cover).jpg?width=400",
   "479": "https://ru.wikipedia.org/wiki/Special:FilePath/Requiem_for_a_dream.jpg?width=400",
   "481": "https://ru.wikipedia.org/wiki/Special:FilePath/Gravity_poster.jpg?width=400",
@@ -1668,7 +1668,7 @@ const movies = [
 { id: "464", age: "12+", title: "Иллюзионист", year: 2006, director: "Нил Бёргер", country: "США", duration: 109, genres: ["драма", "триллер"], icon: "🎩", colors: ["#4a148c", "#ffcc80"], emotions: ["загадочное", "стильное", "красивое"], description: "Венский иллюзионист Айзенхейм вызывает слухи о разговорах с мёртвыми — а в его любви к аристократке вплетается заговор. Стамбул, Вена и очень стильная тайна.", rating: 7.7 },
 { id: "465", age: "16+", title: "Престиж", year: 2006, director: "Кристофер Нолан", country: "США", duration: 130, genres: ["драма", "триллер", "фантастика"], icon: "🔮", colors: ["#263238", "#ffb74d"], emotions: ["загадочное", "умное", "напряжённое"], description: "Два фокусника ведут смертельную дуэль иллюзий, и каждый готов отдать всё ради главного трюка. Нолан загадывает загадку, которую невозможно забыть.", rating: 8.4 },
 { id: "467", age: "16+", title: "Легенды осени", year: 1994, director: "Эдвард Цвик", country: "США", duration: 133, genres: ["драма", "мелодрама", "военный"], icon: "🍁", colors: ["#5d4037", "#ffb74d"], emotions: ["драматичное", "красивое", "трогательное"], description: "Три брата любят одну женщину и по-разному переживают Первую мировую. Эпическая семейная драма с Брэдом Питтом и великолепными пейзажами Монтаны.", rating: 7.7 },
-{ id: "468", age: "12+", title: "Отель «Гранд Будапешт", year: 1966, director: "Серджио Леоне", country: "Италия", duration: 178, genres: ["вестерн", "приключения"], icon: "🌵", colors: ["#bf360c", "#ffe082"], emotions: ["эпичное", "культовое", "напряжённое"], description: "Трое стрелков ищут клад конфедератов на фоне Гражданской войны. Эталонный спагетти-вестерн с музыкой Морриконе, который можно слушать глазами.", rating: 8.8 },
+{ id: "468", age: "12+", title: "Хороший, плохой, злой", year: 1966, director: "Серджио Леоне", country: "Италия", duration: 178, genres: ["вестерн", "приключения"], icon: "🌵", colors: ["#bf360c", "#ffe082"], emotions: ["эпичное", "культовое", "напряжённое"], description: "Трое стрелков ищут клад конфедератов на фоне Гражданской войны. Эталонный спагетти-вестерн с музыкой Морриконе, который можно слушать глазами.", rating: 8.8 },
 { id: "469", age: "12+", title: "Мумия", year: 1999, director: "Стивен Соммерс", country: "США", duration: 124, genres: ["приключения", "фэнтези", "боевик"], icon: "🏺", colors: ["#8d6e63", "#ffe082"], emotions: ["приключенческое", "зрелищное", "весёлое"], description: "Археолог и авантюристка Брендан Фрейзер будят древнее проклятие в египетских песках. Стильное приключенческое кино, которое идеально смотрится с попкорном.", rating: 7.7 },
 { id: "470", age: "12+", title: "Трасса 60", year: 2002, director: "Боб Гейл", country: "Канада", duration: 116, genres: ["фэнтези", "драма", "комедия"], icon: "🛣️", colors: ["#f57f17", "#b0bec5"], emotions: ["философское", "загадочное", "милое"], description: "Художник-бездельник едет по дороге, которой нет на картах, — и по пути встречает необъяснимое. Тёплый и умный фильм про выбор себя.", rating: 7.8 },
 { id: "473", age: "16+", title: "Схватка", year: 1995, director: "Майкл Манн", country: "США", duration: 170, genres: ["криминал", "триллер", "драма"], icon: "💥", colors: ["#212121", "#e65100"], emotions: ["напряжённое", "умное", "стильное"], description: "Профессиональный грабитель Нил и одержимый детектив Винсент Ханна идут по одну и ту же сторону и понимают друг друга лучше, чем своих жён. Лос-Анджелес, ограбления и лучшая перестрелка в кино.", rating: 8.1 },
@@ -2153,6 +2153,52 @@ function closeModal() {
   if (overlay) overlay.classList.remove('open');
 }
 
+
+/* ПОСТЕРЫ: локальные файлы в приоритете для 67 фильмов; внешние ссылки — запас */
+(function(){
+  var IDS = [5,10,21,27,43,44,58,65,79,88,96,102,107,118,121,125,126,134,135,145,147,149,155,162,163,174,176,177,186,189,190,209,217,221,230,235,236,249,260,263,265,268,274,276,288,298,305,309,324,334,336,341,342,358,399,421,426,427,430,433,442,450,451,464,498,377,468];
+  var MAPS = [POSTER_URLS_A, POSTER_URLS_LAST, POSTER_URLS_FIX, POSTER_URLS_FINAL, POSTER_URLS_EXTRA, POSTER_URLS];
+  var EXT = {};
+  IDS.forEach(function(n){
+    var k = '' + n;
+    for (var i = 0; i < MAPS.length; i++) {
+      if (MAPS[i][k]) { EXT[k] = MAPS[i][k]; delete MAPS[i][k]; break; }
+    }
+  });
+  window.__extPosters = EXT;
+  var PID = /(?:^|\/)(\d+)\.(?:jpg|jpeg|png|webp)(?:$|\?)/i;
+  function fallback(el, id, stage) {
+    if (stage === 1 && EXT[id]) {
+      el.onerror = function(){ fallback(el, id, 2); };
+      el.src = EXT[id];
+      return;
+    }
+    el.onerror = null;
+    var mv = null;
+    try { mv = (typeof movies !== 'undefined') ? movies.find(function(x){ return String(x.id) === id; }) : null; } catch(e){}
+    if (mv && typeof buildPlaceholder === 'function') {
+      try { el.src = buildPlaceholder(mv); } catch(e){}
+    }
+  }
+  window.addEventListener('error', function(e){
+    var t = e.target;
+    if (!t || t.tagName !== 'IMG') return;
+    var m = PID.exec(t.getAttribute('src') || '');
+    if (m) fallback(t, m[1], 1);
+  }, true);
+  document.addEventListener('DOMContentLoaded', function(){
+    var imgs = document.getElementsByTagName('img');
+    for (var i = 0; i < imgs.length; i++) {
+      var m = PID.exec(imgs[i].getAttribute('src') || '');
+      if (m && EXT[m[1]]) {
+        (function(el, id){
+          el.onerror = function(){ fallback(el, id, 2); };
+          el.src = id + '.jpg';
+        })(imgs[i], m[1]);
+      }
+    }
+  });
+})();
 // ===== Карточки =====
 window.__fodOffset = 0;
 function fodPoster(id) {
@@ -3084,49 +3130,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 })();
 
-</script>
-<script>
-(function(){
-  var IDS = [5,10,21,27,43,44,58,65,79,88,96,102,107,118,121,125,126,134,135,145,147,149,155,162,163,174,176,177,186,189,190,209,217,221,230,235,236,249,260,263,265,268,274,276,288,298,305,309,324,334,336,341,342,358,399,421,426,427,430,433,442,450,451,464,498,377,468];
-  var EXT = {};
-  var maps = [POSTER_URLS_A, POSTER_URLS_LAST, POSTER_URLS_FIX, POSTER_URLS_FINAL, POSTER_URLS_EXTRA, POSTER_URLS];
-  IDS.forEach(function(id){
-    var k = String(id);
-    for (var i = 0; i < maps.length; i++) {
-      if (maps[i] && maps[i][k]) { EXT[k] = maps[i][k]; break; }
-    }
-  });
-  // Убираем внешние ссылки для 67 фильмов — цепочка доходит до локального id.jpg
-  Object.keys(EXT).forEach(function(k){
-    maps.forEach(function(mp){ if (mp[k]) delete mp[k]; });
-  });
-  // Если локального файла нет — подставляем внешний постер, иначе заглушку
-  window.addEventListener('error', function(e){
-    var el = e.target;
-    if (!el || el.tagName !== 'IMG') return;
-    var src = el.getAttribute('src') || '';
-    var m = src.match(/(?:^|\/)(\d+)\.(?:jpg|jpeg|png)(?:\?|$)/);
-    if (!m) return;
-    var id = m[1];
-    if (!EXT[id]) return;
-    if (!el.dataset.p1) { el.dataset.p1 = '1'; el.onerror = null; el.src = id + '.webp'; return; }
-    if (!el.dataset.p2) { el.dataset.p2 = '1'; el.onerror = null; el.src = EXT[id]; return; }
-    el.onerror = null;
-    try {
-      var mv = movies.find(function(x){ return String(x.id) === id; });
-      if (mv) el.src = buildPlaceholder(mv);
-    } catch(e2){}
-  }, true);
-  // Если что-то уже успело отрисоваться — заменяем на локальные файлы
-  Array.prototype.forEach.call(document.querySelectorAll('img'), function(el){
-    var m = (el.getAttribute('src') || '').match(/(?:^|\/)(\d+)\.(?:jpg|jpeg|png)(?:\?|$)/);
-    if (m && EXT[m[1]]) {
-      el.dataset.p1 = '1';
-      el.onerror = function(){ el.onerror = null; el.src = EXT[m[1]]; };
-      el.src = m[1] + '.jpg';
-    }
-  });
-})();
 </script>
 
 </body>
