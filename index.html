@@ -9,7 +9,8 @@
 <link rel="icon" href="icon-192.png">
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
+  navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ r.unregister(); }); });
+  if (window.caches && caches.keys) { caches.keys().then(function(ks){ ks.forEach(function(k){ caches.delete(k); }); }); }
 }
 </script>
 <title>Mood Movies — фильмы под настроение</title>
@@ -3003,33 +3004,179 @@ document.addEventListener('DOMContentLoaded', function() {
     return attempt(0);
   }
 
-  function localScore(t){
-    var s = (t || '').toLowerCase();
-    return movies.map(function(m){
-      var hay = (m.title + ' ' + m.genres.join(' ') + ' ' + m.emotions.join(' ') + ' ' + m.description).toLowerCase();
-      var words = s.replace(/[^а-яё\s]/gi, ' ').split(/\s+/).filter(function(w){ return w.length > 4; });
-      var hit = 0;
-      words.forEach(function(w){ if(hay.indexOf(w) >= 0) hit++; });
-      return { m: m, hit: hit };
-    }).sort(function(a, b){ return b.hit - a.hit || b.m.rating - a.m.rating; }).filter(function(x){ return x.hit > 0; }).slice(0, 3);
+    /* === УМНЫЙ ОФЛАЙН-СОВЕТНИК: понимает настроение, жанр, год и ваш вкус === */
+  function aiNorm(t){ return String(t || '').toLowerCase().replace(/ё/g, 'е').replace(/[^а-я0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim(); }
+
+  var MOOD_WORDS = [
+    { tags: ['грустное', 'трогательное'], words: ['груст', 'печал', 'плака', 'плачу', 'слез', 'тоск', 'депресс'] },
+    { tags: ['смешное', 'весёлое', 'игривое'], words: ['смеш', 'смех', 'весел', 'юмор', 'шутк', 'поржат', 'смешно'] },
+    { tags: ['вдохновляющее', 'жизнеутверждающее', 'энергичное'], words: ['вдохнов', 'мотивац', 'энерг', 'заряд', 'подбодр', 'бодр'] },
+    { tags: ['расслабленное', 'доброе', 'милое'], words: ['расслаб', 'споко', 'успоко', 'уют', 'тих', 'нежн'] },
+    { tags: ['философское', 'умное', 'глубокое'], words: ['поразмысл', 'философ', 'смыс', 'подумат', 'задумат', 'глубок', 'умн'] },
+    { tags: ['напряжённое', 'страшное'], words: ['напряж', 'страх', 'страшн', 'ужас', 'жестк', 'жётк', 'щекот'] },
+    { tags: ['приключенческое', 'зрелищное', 'эпичное'], words: ['приключ', 'драйв', 'динам', 'зрелищ', 'эпич', 'масштаб', 'батали'] },
+    { tags: ['милое', 'доброе', 'трогательное'], words: ['мило', 'тепл', 'обним', 'семейн', 'уютн', 'добр'] },
+    { tags: ['романтичное'], words: ['романтик', 'любов', 'свидан', 'влюбл'] }
+  ];
+
+  var GENRE_WORDS = [
+    { g: 'комедия', w: ['комед'] },
+    { g: 'хоррор', w: ['хоррор', 'ужастик', 'страшн'] },
+    { g: 'фантастика', w: ['фантаст', 'космос', 'sci-fi', 'sci fi'] },
+    { g: 'фэнтези', w: ['фэнтез', 'сказк', 'волшебн'] },
+    { g: 'мультфильм', w: ['мульт', 'анимац'] },
+    { g: 'аниме', w: ['аниме', 'анимэ'] },
+    { g: 'боевик', w: ['боевик', 'драк', 'стрельб'] },
+    { g: 'драма', w: ['драм'] },
+    { g: 'детектив', w: ['детектив', 'загадк', 'расследован', 'убийств'] },
+    { g: 'криминал', w: ['кримин', 'мафи', 'бандит', 'гангст'] },
+    { g: 'исторический', w: ['истор'] },
+    { g: 'военный', w: ['военн', 'войн'] },
+    { g: 'приключения', w: ['приключ'] },
+    { g: 'мелодрама', w: ['мелодрам', 'романти', 'любовн'] },
+    { g: 'спорт', w: ['спорт', 'бокс', 'футбол', 'хоккей'] },
+    { g: 'триллер', w: ['триллер'] },
+    { g: 'вестерн', w: ['вестерн', 'ковбой'] },
+    { g: 'мюзикл', w: ['мюзикл', 'музыкальн'] },
+    { g: 'семейный', w: ['семейн', 'всей семьи'] },
+    { g: 'биография', w: ['биограф'] }
+  ];
+
+  function aiGetData(){
+    var f = [], w = [], r = {};
+    try { f = JSON.parse(localStorage.getItem('mood_movies_favorites')) || []; } catch(e){}
+    try { w = JSON.parse(localStorage.getItem('mood_movies_watched')) || []; } catch(e){}
+    try { r = JSON.parse(localStorage.getItem('mood_movies_ratings')) || {}; } catch(e){}
+    if (!Array.isArray(f)) f = [];
+    if (!Array.isArray(w)) w = [];
+    if (!r || typeof r !== 'object' || Array.isArray(r)) r = {};
+    return { fav: f, watched: w, ratings: r };
+  }
+
+  function aiMovieById(id){
+    id = String(id);
+    for (var i = 0; i < movies.length; i++) { if (String(movies[i].id) === id) return movies[i]; }
+    return null;
+  }
+
+  function aiDecades(s){
+    var res = [], md = s.match(/(\d)0\s?х/g), yrs = s.match(/\b(19|20)\d{2}\b/g);
+    if (md) md.forEach(function(x){
+      var d = parseInt(x.charAt(0), 10);
+      if (!isNaN(d)) res.push([1900 + d * 10, 1909 + d * 10]);
+    });
+    if (yrs) yrs.forEach(function(y){ var n = parseInt(y, 10); if (n >= 1920 && n <= 2026) res.push([n - 2, n + 2]); });
+    return res;
+  }
+
+  function aiPick(q){
+    var s = aiNorm(q);
+    var data = aiGetData();
+    var watchedSet = {};
+    data.watched.forEach(function(x){ watchedSet[String(x)] = 1; });
+    var favGenres = {};
+    data.fav.forEach(function(id){ var m = aiMovieById(id); if (m) m.genres.forEach(function(g){ favGenres[g] = (favGenres[g] || 0) + 1; }); });
+    var wantMood = [], wantGenres = [], decades = aiDecades(s);
+    var wantsTop = /лучш|топ |шедевр|велики/.test(s);
+    if (/стар |классик|ретро/.test(s)) decades.push([1900, 1999]);
+    if (/нов(ый|ое|еньк)|свеж/.test(s)) decades.push([2015, 2026]);
+    MOOD_WORDS.forEach(function(pair){ pair.words.forEach(function(w){ if (s.indexOf(w) >= 0) wantMood = wantMood.concat(pair.tags); }); });
+    GENRE_WORDS.forEach(function(pair){ pair.w.forEach(function(w){ if (s.indexOf(w) >= 0) wantGenres.push(pair.g); }); });
+    if (/двоих|вдвоем|вдвоём|с парнем|с девушкой|с подругой|с другом/.test(s)) wantMood = wantMood.concat(['романтичное', 'смешное', 'приключенческое']);
+    var rescore = /пересмотр|снова посмотреть/.test(s);
+    var scored = movies.map(function(m){
+      var rr = Number(m.rating) || 0, sc = rr / 10, why = [];
+      if (watchedSet[String(m.id)] && !rescore) sc -= 100;
+      wantMood.forEach(function(tag){ if (m.emotions.indexOf(tag) >= 0) { sc += 3; if (why.indexOf('под настроение') < 0) why.push('под настроение'); } });
+      wantGenres.forEach(function(g){ if (m.genres.indexOf(g) >= 0) { sc += 4; if (why.indexOf(g) < 0) why.push(g); } });
+      decades.forEach(function(d){ if (m.year >= d[0] && m.year <= d[1]) { sc += 2; if (why.indexOf('год ' + m.year) < 0) why.push('год ' + m.year); } });
+      Object.keys(favGenres).forEach(function(g){ if (m.genres.indexOf(g) >= 0) sc += Math.min(favGenres[g], 3) * 0.5; });
+      if (wantsTop) sc += rr;
+      return { m: m, sc: sc, why: why };
+    }).sort(function(a, b){ return b.sc - a.sc || (Number(b.m.rating) || 0) - (Number(a.m.rating) || 0); });
+    return { picks: scored.slice(0, 3), wantMood: wantMood, wantGenres: wantGenres };
+  }
+
+  function aiDescribe(m){
+    var parts = [];
+    parts.push('🎬 «' + m.title + '» (' + m.year + (m.country ? ', ' + m.country : '') + ')');
+    if (m.director) parts.push('Режиссёр: ' + m.director + '.');
+    parts.push('Жанры: ' + m.genres.join(', ') + '. Настроение: ' + m.emotions.join(', ') + '.');
+    parts.push('Рейтинг: ' + m.rating + '/10, ' + (m.age || '') + ', ' + m.duration + ' мин.');
+    if (m.description) parts.push(m.description);
+    return parts.join('\n');
+  }
+
+  function aiLead(){
+    var opts = ['Вот что я нашла в каталоге под твой запрос:', 'Мой выбор для тебя:', 'Подходит по духу:', 'Смотри это:'];
+    return opts[Math.floor(Math.random() * opts.length)];
   }
 
   function localAdvice(userText){
-    var picks = localScore(userText);
-    var list;
-    if(picks.length){
-      list = picks.map(function(p){ return '🎬 «' + p.m.title + '» (' + p.m.year + ') — ' + p.m.genres.join(', ') + ', рейтинг ' + p.m.rating; }).join('\n');
-    } else {
-      var r = movies[Math.floor(Math.random() * movies.length)];
-      list = '🎬 «' + r.title + '» (' + r.year + ') — ' + r.genres.join(', ') + ', рейтинг ' + r.rating;
+    var q = String(userText || '');
+    var s = aiNorm(q);
+    if (!s) return '';
+    var data = aiGetData();
+    var favNames = data.fav.map(aiMovieById).filter(Boolean).map(function(m){ return m.title; });
+    /* Приветствие */
+    if (/^(привет|здравств|хай|hi|hello|ку)\b/.test(s) && s.length < 30) {
+      return 'Привет! Я тут, даже без интернета 😊 Назови настроение или жанр — например «что-то смешное», «аниме на вечер» или «лучшие 90-х» — и я подберу фильм из каталога.';
     }
-    return 'ИИ-сервис сейчас недоступен, но я подобрала по твоему запросу из каталога:\n\n' + list + '\n\nПопробуй спросить ещё раз через минуту — ИИ может ожить.';
+    /* Про конкретный фильм */
+    var m = findMovieInText(q);
+    if (m) {
+      return aiDescribe(m) + '\n\nХочешь больше подробностей об этом фильме — спроси ещё раз, когда ИИ будет на связи.';
+    }
+    /* «Случайный» */
+    if (/случайн|рандом|какой-нибудь фильм|что угодно/.test(s)) {
+      var r = movies[Math.floor(Math.random() * movies.length)];
+      return 'Держи случайный билет в кино:\n\n' + aiDescribe(r);
+    }
+    /* Подбор */
+    var res = aiPick(q);
+    var strong = res.picks.filter(function(p){ return p.sc > 1; });
+    if (strong.length) {
+      var lines = strong.map(function(p){
+        var tail = p.why.length ? ' — ' + Array.from(new Set(p.why)).slice(0, 2).join(', ') : '';
+        return '🎬 «' + p.m.title + '» (' + p.m.year + '), ' + p.m.genres.slice(0, 3).join(', ') + ', рейтинг ' + p.m.rating + tail;
+      });
+      var out = aiLead() + '\n\n' + lines.join('\n');
+      if (!res.wantMood.length && !res.wantGenres.length) out += '\n\nУточни настроение или жанр — подберу точнее.';
+      else if (data.watched.length) out += '\n\n(Уже просмотренное я убрала из подбора.)';
+      return out;
+    }
+    /* Совсем нет подсказок — предлагаю варианты */
+    var best = movies.filter(function(x){ return Number(x.rating) >= 7.5; });
+    var r2 = best[Math.floor(Math.random() * best.length)] || movies[Math.floor(Math.random() * movies.length)];
+    return 'Не совсем поняла запрос — а так я умею лучше 😊 Скажи настроение («поржать», «поразмышлять», «страшно»), жанр («аниме», «комедия») или эпоху («90-е», «что-то новое»).\n\nА пока — ' + aiDescribe(r2);
+  }
+
+  function buildProfile(){
+    try {
+      var data = aiGetData();
+      var lines = [];
+      var favs = data.fav.map(aiMovieById).filter(Boolean).map(function(m){ return m.title; }).slice(0, 10);
+      if (favs.length) lines.push('Избранное пользователя: ' + favs.join(', ') + '.');
+      var seen = data.watched.map(aiMovieById).filter(Boolean).map(function(m){ return m.title; }).slice(0, 20);
+      if (seen.length) lines.push('Уже смотрел: ' + seen.join(', ') + '.');
+      var hi = Object.keys(data.ratings).map(function(id){ return { id: id, r: Number(data.ratings[id]) }; })
+        .filter(function(x){ return x.r >= 8; })
+        .map(function(x){ var m = aiMovieById(x.id); return m ? (m.title + ' — ' + x.r + '/10') : null; })
+        .filter(Boolean).slice(0, 10);
+      if (hi.length) lines.push('Высоко оценил: ' + hi.join(', ') + '.');
+      if (!lines.length) return '';
+      return '\nПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ:\n' + lines.join('\n') + '\nУчитывай вкус пользователя и не советуй то, что он уже смотрел.';
+    } catch(e){ return ''; }
   }
 
   function fallbackText(err){
     var code = err && err.message ? String(err.message) : 'ошибка';
-    var r = movies[Math.floor(Math.random() * movies.length)];
-    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + '. Попробуй задать вопрос ещё раз через минуту.';
+    var data = aiGetData();
+    var pool = movies;
+    if (data.watched.length) pool = movies.filter(function(m){ return data.watched.indexOf(String(m.id)) < 0 && data.watched.indexOf(m.id) < 0; });
+    if (!pool.length) pool = movies;
+    var r = pool[Math.floor(Math.random() * pool.length)];
+    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога:\n\n' + aiDescribe(r) + '\n\nПопробуй задать вопрос ещё раз через минуту.';
   }
 
   function throttle(){
@@ -3058,7 +3205,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var typing = aiAdd('ai-typing', 'ИИ думает…');
     var t0 = Date.now();
     getWikiContext(txt).then(function(wiki){
-      var sys = buildSystem();
+      var sys = buildSystem() + buildProfile();
       if (wiki) sys = sys + '\n\n' + wiki;
       return throttle().then(function(){ return aiChain(sys, txt); });
     }).then(function(reply){
