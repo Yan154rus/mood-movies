@@ -2963,7 +2963,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function buildSystem(){
-    return 'Ты — ИИ-кинокритик сайта Mood Movies. Отвечай всегда на грамотном русском языке: без опечаток, без обрывков и выдуманных слов. НЕ выдумывай сюжеты, имена и факты: о фильмах из каталога рассказывай строго по данным каталога. Всегда указывай возрастной рейтинг фильма, о котором говоришь. Если фильм или сериала нет в каталоге — сначала честно скажи, что его в каталоге нет, и только потом дай краткую справку с пометкой «по общедоступным данным»: год, жанры, возрастной рейтинг, краткое описание; при рейтинге 18+ прямо предупреди, что детям смотреть нельзя. Если просят сериал — честно поясни, что в каталоге только полнометражные фильмы, и предложи похожие по духу фильмы из каталога. Если пользователь упомянул ребёнка или детей — предлагай только фильмы с рейтингом до 12+. Подбирая похожее — выбирай только логично близкие по жанру, эпохе и духу фильмы из каталога, без случайных названий и без процентов совпадения. Оформляй ответ только простым текстом: без таблиц, без звёздочек **, без заголовков и решёток, без квадратных скобок и сносок. Название каждого фильма или сериала пиши в кавычках-«ёлочках». НЕ упоминай фильмов, в существовании которых не уверен. Конкретные цифры (число серий, даты, бюджеты) называй только если твёрдо уверен — иначе честно напиши «точно не скажу». Отвечай живо и коротко (до 120 слов).\n\n' + buildProfile() + '\n\nКАТАЛОГ:\n' + buildCatalog();
+    return 'Ты — ИИ-кинокритик сайта Mood Movies. Отвечай всегда на грамотном русском языке: без опечаток, без обрывков и выдуманных слов. НЕ выдумывай сюжеты, имена и факты: о фильмах из каталога рассказывай строго по данным каталога. Всегда указывай возрастной рейтинг фильма, о котором говоришь. Если фильм или сериала нет в каталоге — сначала честно скажи, что его в каталоге нет, и только потом дай краткую справку с пометкой «по общедоступным данным»: год, жанры, возрастной рейтинг, краткое описание; при рейтинге 18+ прямо предупреди, что детям смотреть нельзя. Если просят сериал — честно поясни, что в каталоге только полнометражные фильмы, и предложи похожие по духу фильмы из каталога. Если пользователь упомянул ребёнка или детей — предлагай только фильмы с рейтингом до 12+. Подбирая похожее — выбирай только логично близкие по жанру, эпохе и духу фильмы из каталога, без случайных названий и без процентов совпадения. НЕ используй markdown: никаких таблиц, звёздочек, решёток и списков с тире — только обычные абзацы. Названия фильмов пиши только в «ёлочках». Не упоминай фильмов, в которых не уверен на сто процентов: не уверен — не называй. Не выдумывай цифры (годы, количество серий, сезонов): если не уверен — напиши «точно не скажу». Отвечай живо и коротко (до 120 слов).\n\n' + buildProfile() + '\n\nКАТАЛОГ:\n' + buildCatalog();
   }
 
   function fetchTO(url, opts, ms){
@@ -3067,9 +3067,9 @@ document.addEventListener('DOMContentLoaded', function() {
   function aiH(s){
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
-  function aiWhereBtns(title, noLabel){
+  function aiWhereBtns(title){
     var q = encodeURIComponent(String(title || ''));
-    var out = '<div class="ai-where">' + (noLabel ? '' : '<span>Где посмотреть:</span>');
+    var out = '<div class="ai-where"><span>Где посмотреть:</span>';
     for (var i = 0; i < AI_SERVICES.length; i++) {
       out += '<a class="ai-where-btn" href="' + AI_SERVICES[i].u + q + '" target="_blank" rel="noopener">' + aiH(AI_SERVICES[i].n) + '</a>';
     }
@@ -3260,46 +3260,75 @@ document.addEventListener('DOMContentLoaded', function() {
     return d;
   }
 
-    function aiCleanText(t){
+  
+  function aiCleanReply(t){
     var lines = String(t || '').split('\n');
-    var keep = [];
-    for (var i = 0; i < lines.length; i++) {
-      var s = lines[i].trim();
-      if (!s) { keep.push(''); continue; }
-      if (/^(\|+|\+-[-+]+\+-)/.test(s)) continue;
-      keep.push(lines[i]);
-    }
+    var keep = lines.filter(function(l){
+      var x = l.trim();
+      if (!x) return true;
+      if (/^[|+=_-]{3,}$/.test(x)) return false;
+      if (x.charAt(0) === '|' || (/[|]/.test(x) && x.split('|').length > 2)) return false;
+      return true;
+    });
     return keep.join('\n')
-      .replace(/\*\*/g, '')
-      .replace(/^#{1,6}\s+/gm, '')
-      .replace(/\(\s*\?\?\s*\)/g, '')
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/[*_#`]{1,3}/g, '')
+      .replace(/\((?:\s*\?\?\s*)\)/g, '')
       .replace(/\n{3,}/g, '\n\n')
       .trim();
   }
-  function aiEnrichOnline(reply){
-    var text = aiCleanText(reply) || 'Пустой ответ, попробуй ещё раз.';
-    var seen = {}, found = [], missing = [];
-    var rx = /[«"]([^«»"]{2,50})[»"]/g, mm;
-    while ((mm = rx.exec(text)) !== null) {
-      var t = mm[1].replace(/\s+/g, ' ').trim();
-      if (t.length < 2 || t.length > 40) continue;
-      var m = aiFindMovie(t);
-      if (m) {
-        if (!seen[m.id] && found.length < 3) { seen[m.id] = 1; found.push(m); }
-      } else if (missing.length < 2 && missing.indexOf(t) < 0 && /^[А-ЯЁA-Z]/.test(t)) {
-        missing.push(t);
-      }
+  function aiTitlesIn(text){
+    var out = [], re = /«([^»]{2,60})»/g, mm;
+    while ((mm = re.exec(String(text || '')))) {
+      var t = mm[1].trim();
+      if (t && out.indexOf(t) < 0) out.push(t);
     }
-    var html = '<div>' + aiH(text).replace(/\n/g, '<br>') + '</div>';
-    for (var i = 0; i < found.length; i++) {
-      html += '<div>' + aiChipBtn(found[i]) + '</div>' + aiInfoBlock(found[i]);
-    }
-    for (var k = 0; k < missing.length; k++) {
-      html += '<div class="ai-note">«' + aiH(missing[k]) + '» — этого фильма в каталоге нет.</div>' + aiWhereBtns(missing[k], true);
-    }
-    return html;
+    return out;
   }
-
+  var AI_GENRE_WORDS = ['комедия','комедию','драма','драму','ужасы','триллер','боевик','фантастика','мелодрама','документальный','аниме','приключения','криминал','детектив','фэнтези','вестерн','хоррор'];
+  function aiUserCandidate(q){
+    var t = String(q || '').toLowerCase().replace(/[«»"']/g, ' ')
+      .replace(/хочу посмотреть|посмотреть|посмортеть|посоветуй|подскажи|порекомендуй|расскажи|про|сериал[а-я]*|фильм[а-я]*|мультфильм[а-я]*|кино|какой|что|где|почему|хочу|нравится/g, ' ')
+      .replace(/[^a-zа-яё0-9 ]/gi, ' ')
+      .replace(/\s+/g, ' ').trim();
+    if (!t) return '';
+    var words = t.split(' ').filter(function(w){ return w.length >= 3 || /[0-9]/.test(w); });
+    if (!words.length || words.length > 2) return '';
+    var joined = words.join(' ');
+    if (AI_GENRE_WORDS.indexOf(joined) >= 0) return '';
+    return joined;
+  }
+  function aiShowReply(userText, replyText){
+    var clean = aiCleanReply(replyText);
+    var titles = aiTitlesIn(clean);
+    aiTitlesIn(userText).forEach(function(t){ if (titles.indexOf(t) < 0) titles.push(t); });
+    var cand = aiUserCandidate(userText);
+    if (cand && titles.indexOf(cand) < 0) titles.push(cand);
+    var found = [], missing = [];
+    titles.forEach(function(t){
+      var m = aiFindMovie(t);
+      if (m) { if (found.indexOf(m) < 0) found.push(m); }
+      else if (missing.indexOf(t) < 0) missing.push(t);
+    });
+    var d = aiAdd('bot', clean);
+    if (!d) return;
+    var html = '';
+    if (found.length) {
+      html += '<div class="ai-note">Карточки из каталога — нажмите, чтобы открыть полное описание:</div><div>' + found.map(aiChipBtn).join('') + '</div>';
+      found.slice(0, 2).forEach(function(m){ html += aiInfoBlock(m); });
+    }
+    if (missing.length) {
+      html += '<div class="ai-note">Этого в каталоге Mood Movies нет — можно поискать на площадках:</div>';
+      missing.slice(0, 3).forEach(function(t){ html += '<div><b>' + aiH(t) + '</b>' + aiWhereBtns(t) + '</div>'; });
+    }
+    if (html) {
+      var wrap = document.createElement('div');
+      wrap.innerHTML = html;
+      d.appendChild(wrap);
+      var box = document.getElementById('ai-messages');
+      if (box) box.scrollTop = box.scrollHeight;
+    }
+  }
   window.aiSend = function(){
     var inp = document.getElementById('ai-input');
     if(!inp) return;
@@ -3316,7 +3345,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }).then(function(reply){
       if(typing) typing.remove();
       lastReq = Date.now();
-      aiAddHTML(aiEnrichOnline(reply || 'Пустой ответ, попробуй ещё раз.'));
+      aiShowReply(txt, reply || 'Пустой ответ, попробуй ещё раз.');
     }).catch(function(e){
       if(typing) typing.remove();
       var s = localAdvice(txt);
