@@ -2963,7 +2963,32 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function buildSystem(){
-    return 'Ты — ИИ-кинокритик и энциклопедия кино: ты знаешь мировое кино целиком. Отвечай на грамотном русском: БЕЗ markdown — никаких таблиц, звёздочек, решёток и строк из дефисов; только чистый текст; названия фильмов пиши в «ёлочках». Любое название в вопросе — это фильм, сериал или мультфильм, а не что-либо другое: не описывай города, сёла, реки и случайных однофамильцев. Не выдумывай факты: не придумывай продюсеров, студий, правообладателей и «похожих фильмов» — если факт не в справке и ты не уверен, что он общеизвестен, не называй его. Если ниже есть КРАТКАЯ СПРАВКА ИЗ ВИКИПЕДИИ или ПРОВЕРЕННЫЕ ФАКТЫ — строй ответ строго по ним и приводи факты уверенно: год, страну, жанр, создателей, актёров и озвучку, бюджет и кассовые сборы — ставь такие факты в начало. Если справки нет — отвечай по общеизвестным данным о фильме: это твоя сильная сторона, ты знаешь знаменитые картины. ЗАПРЕЩЕНЫ фразы: «нет данных», «в каталоге нет», «не присутствует», «мне недоступны», «поищите в других источниках», «обратитесь к внешним базам», «проверьте актуальные данные», «в нашей базе нет сведений», «уточните год выпуска» — вместо них уверенно отвечай по существу о кино. НЕ упоминай каталог Mood Movies и не предлагай ничего «нажать». Всегда указывай возрастной рейтинг; при 18+ предупреди, что детям нельзя. Если пользователь упомянул ребёнка или детей — предлагай только фильмы с рейтингом до 12+. Подбирая похожее — выбирай только близкие по жанру, эпохе и духу фильмы из каталога. Пиши связным текстом без списков и дефисов в начале строк. Отвечай живо и коротко (до 120 слов).\n\n' + buildProfile() + '\n\nКАТАЛОГ:\n' + buildCatalog();
+    return 'Ты — ИИ-кинокритик и энциклопедия кино: ты знаешь мировое кино целиком. Отвечай на грамотном русском: БЕЗ markdown — никаких таблиц, звёздочек, решёток и строк из дефисов; только чистый текст; названия фильмов пиши в «ёлочках». Любое название в вопросе — это фильм, сериал или мультфильм, а не что-либо другое: не описывай города, сёла, реки и случайных однофамильцев. Не выдумывай факты: если ниже есть КРАТКАЯ СПРАВКА ИЗ ВИКИПЕДИИ или ПРОВЕРЕННЫЕ ФАКТЫ — строй ответ строго по ним и приводи факты уверенно: год, страну, жанр, создателей, актёров и озвучку, бюджет и кассовые сборы — ставь такие факты в начало. Если справки нет — отвечай по общеизвестным данным о знаменитых картинах, но НИКОГДА не сочиняй конкретные имена актёров, режиссёров, продюсеров и цифры: если не уверен в имени или числе — просто не называй его. ЗАПРЕЩЕНЫ фразы: «нет данных», «в каталоге нет», «не присутствует», «мне недоступны», «поищите в других источниках», «обратитесь к внешним базам», «проверьте актуальные данные», «в нашей базе нет», «нет сведений», «к сожалению», «уточните» — вместо них уверенно отвечай по существу о кино. НЕ упоминай каталог Mood Movies и не предлагай ничего «нажать». Всегда указывай возрастной рейтинг; при 18+ предупреди, что детям нельзя. Если пользователь упомянул ребёнка или детей — предлагай только фильмы с рейтингом до 12+. Подбирая похожее — выбирай только близкие по жанру, эпохе и духу фильмы из каталога. Пиши связным текстом без списков и дефисов в начале строк. Отвечай живо и коротко (до 120 слов).\n\n' + buildProfile() + '\n\nКАТАЛОГ:\n' + buildCatalog();
+  }
+
+  var TMDB_KEY = '65d74b18432def614e220862fb83f816';
+  var aiWhereSeq = 0;
+  function tmdbWhere(title){
+    if (!TMDB_KEY) return Promise.resolve(null);
+    var u = 'https://api.themoviedb.org/3/search/multi?api_key=' + TMDB_KEY + '&language=ru-RU&query=' + encodeURIComponent(title);
+    return fetchTO(u, {}, 8000).then(function(t){
+      try {
+        var j = JSON.parse(t);
+        var r = j && j.results && j.results[0];
+        if (!r) return null;
+        return fetchTO('https://api.themoviedb.org/3/' + r.media_type + '/' + r.id + '/watch/providers?api_key=' + TMDB_KEY + '&language=ru-RU', {}, 8000).then(function(t2){
+          try {
+            var j2 = JSON.parse(t2);
+            var ru = j2 && j2.results && j2.results.RU;
+            if (!ru) return null;
+            var list = [];
+            function push(arr, c){ (arr || []).forEach(function(p){ if (p.provider_name && !list.some(function(x){ return x.n === p.provider_name; })) list.push({ n: p.provider_name, c: c }); }); }
+            push(ru.free, 'free'); push(ru.ads, 'free'); push(ru.flatrate, 'sub'); push(ru.rent, 'rent'); push(ru.buy, 'buy');
+            return list.length ? list : null;
+          } catch(e){ return null; }
+        });
+      } catch(e){ return null; }
+    }).catch(function(){ return null; });
   }
 
   function fetchTO(url, opts, ms){
@@ -2981,11 +3006,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  function viaPost(sys, user){
+  function viaPost(sys, user, model){
     return fetchTO('https://text.pollinations.ai/openai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'openai', messages: [ {role:'system', content: sys}, {role:'user', content: user} ] })
+      body: JSON.stringify({ model: model || 'openai-large', messages: [ {role:'system', content: sys}, {role:'user', content: user} ] })
     }, 25000).then(function(txt){
       try {
         var j = JSON.parse(txt);
@@ -2998,9 +3023,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function viaGet(sys, user){
-    var catalog = buildCatalog();
-    if(catalog.length > 1200) catalog = catalog.split('\n').slice(0, 25).join('\n');
-    var prompt = 'Ответь коротко по-русски (до 80 слов). Каталог фильмов: ' + catalog + '. Вопрос: ' + user;
+    var wikiPart = '';
+    var wi = sys.indexOf('КРАТКАЯ СПРАВКА');
+    if (wi >= 0) wikiPart = 'СТРОГО ПО ЭТИМ ПРОВЕРЕННЫМ ФАКТАМ ИЗ ВИКИПЕДИИ (чего нет в справке — не называй, имена и цифры не выдумывай): ' + sys.slice(wi).slice(0, 1600) + ' ';
+    var prompt = wikiPart + 'Ответь коротко по-русски (до 80 слов), без отговорок, уверенно. Вопрос: ' + user;
     return fetchTO('https://text.pollinations.ai/' + encodeURIComponent(prompt), {}, 25000).then(function(t){
       if(!t || !String(t).trim() || String(t).trim().charAt(0) === '{') throw new Error('пусто');
       return String(t).trim();
@@ -3049,25 +3075,20 @@ document.addEventListener('DOMContentLoaded', function() {
     return translit(v).replace(/[^а-я0-9]/g, '');
   }
   function titleMatch(candTitle, query){
-    var TYPEW = /(телесериал|мультсериал|сериал|мультфильм|фильм|кинокартина|аниме|анимационный)/g;
-    var a = normTitle(query).replace(TYPEW, ' ').replace(/\s+/g, ' ').trim();
-    var b = normTitle(candTitle).replace(TYPEW, ' ').replace(/\s+/g, ' ').trim();
+    var a = normTitle(query), b = normTitle(candTitle);
+    a = a.split(' ').filter(function(x){ return !/^(сериал|телесериал|фильм|мультфильм|мульт)$/.test(x); }).join(' ');
+    b = b.split(' ').filter(function(x){ return !/^(сериал|телесериал|фильм|мультфильм|мульт)$/.test(x); }).join(' ');
     if (!a || !b) return false;
     if (b.indexOf(a) >= 0 || a.indexOf(b) >= 0) return true;
-    var ac = compactNorm(a), bc = compactNorm(b);
-    if (ac.length >= 4){
-      if (bc === ac) return true;
-      if (bc.indexOf(ac) === 0 && /^[^0-9]/.test(bc.slice(ac.length))) return true;
-      if (ac.indexOf(bc) === 0 && /^[^0-9]/.test(ac.slice(bc.length))) return true;
-      if (Math.abs(bc.length - ac.length) <= 2 && !/[0-9]$/.test(bc) && !/[0-9]$/.test(ac) && lev1(bc, ac)) return true;
-    }
     var at = a.split(' ').filter(function(x){ return x.length >= 3; });
     var bt = b.split(' ').filter(function(x){ return x.length >= 3; });
     if (!at.length || !bt.length) return false;
+    var ac = compactNorm(query), bc = compactNorm(candTitle);
+    if (ac.length >= 4 && (bc === ac || bc.indexOf(ac) === 0 || ac.indexOf(bc) === 0 || lev1(bc, ac))) return true;
     var hit = 0;
     at.forEach(function(x){
       var st = x.slice(0, 4);
-      for (var k = 0; k < bt.length; k++) if (bt[k].slice(0, 4) === st) { hit++; break; }
+      for (var i = 0; i < bt.length; i++) if (bt[i].slice(0, 4) === st) { hit++; break; }
     });
     return hit / at.length >= 0.6;
   }
@@ -3165,17 +3186,15 @@ document.addEventListener('DOMContentLoaded', function() {
     return String(str || '').toLowerCase().split('').map(function(ch){ return map[ch] !== undefined ? map[ch] : ch; }).join('');
   }
   function titleMatchLat(candTitle, query){
-    var TYPEEN = /(teleserial|serial|series|film|movie|cartoon|multfilm)/g;
-    var a = translitLat(query).replace(/[^a-z0-9\s]/g, ' ').replace(TYPEEN, ' ').replace(/\s+/g, ' ').trim();
-    var b = String(candTitle || '').toLowerCase().replace(/ç/g, 'c').replace(/ş/g, 's').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ı/g, 'i').replace(/ə/g, 'e');
+    var a = translitLat(query).replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    var b = String(candTitle || '').toLowerCase();
     if (!a) return false;
-    var aC = a.replace(/ch/g, 'c');
-    if (b.indexOf(a) >= 0 || a.indexOf(b) >= 0 || b.indexOf(aC) >= 0 || aC.indexOf(b) >= 0) return true;
+    if (b.indexOf(a) >= 0 || a.indexOf(b) >= 0) return true;
     var at = a.split(' ').filter(function(x){ return x.length >= 3; });
     var bt = b.split(' ').filter(function(x){ return x.length >= 3; });
     if (!at.length || !bt.length) return false;
     var hit = 0;
-    at.forEach(function(x){ var st = x.slice(0, 4); for (var k = 0; k < bt.length; k++) if (bt[k].slice(0, 4) === st) { hit++; break; } });
+    at.forEach(function(x){ var st = x.slice(0, 4); for (var i = 0; i < bt.length; i++) if (bt[i].slice(0, 4) === st) { hit++; break; } });
     return hit / at.length >= 0.6;
   }
   function wikitextFetchEn(title){
@@ -3276,12 +3295,8 @@ document.addEventListener('DOMContentLoaded', function() {
       return runEn(0);
     });
     function runEn(i){
-      var lat = translitLat(base).replace(/serial|teleserial|film|movie|multfilm/g, ' ').replace(/\s+/g, ' ').trim();
-      if (!lat) lat = translitLat(base);
-      var latC = lat.replace(/ch/g, 'c');
-      var enTries = [lat, latC, lat + ' tv series', latC + ' tv series', lat + ' film'];
-      if (i >= enTries.length) return Promise.resolve('');
-      var url = 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(enTries[i]) + '&format=json&origin=*&srlimit=5';
+      if (i >= tries.length) return Promise.resolve('');
+      var url = 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(tries[i]) + '&format=json&origin=*&srlimit=5';
       return fetchTO(url, {}, 8000).then(function(t){
         var j = JSON.parse(t);
         var hits = j && j.query && j.query.search ? j.query.search : [];
@@ -3317,7 +3332,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   function aiChain(sys, user){
     function attempt(round){
-      return viaPost(sys, user).catch(function(e1){
+      return viaPost(sys, user, 'openai-large').catch(function(){ return viaPost(sys, user, 'mistral'); }).catch(function(){ return viaPost(sys, user, 'openai'); }).catch(function(e1){
         var c1 = e1 && e1.message ? String(e1.message) : '';
         return viaGet(sys, user).catch(function(e2){
           var c2 = e2 && e2.message ? String(e2.message) : '';
@@ -3343,13 +3358,32 @@ document.addEventListener('DOMContentLoaded', function() {
   function aiH(s){
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
-  function aiWhereBtns(title){
+  function aiWhereBtns(title, year){
     var q = encodeURIComponent(String(title || ''));
     var out = '<div class="ai-where"><span>Где посмотреть:</span>';
     for (var i = 0; i < AI_SERVICES.length; i++) {
       out += '<a class="ai-where-btn" href="' + AI_SERVICES[i].u + q + '" target="_blank" rel="noopener">' + aiH(AI_SERVICES[i].n) + '</a>';
     }
-    return out + '</div>';
+    out += '</div>';
+    if (TMDB_KEY) {
+      var id = 'ai-where-' + (++aiWhereSeq);
+      out += '<div id="' + id + '"></div>';
+      setTimeout(function(){
+        tmdbWhere(title).then(function(provs){
+          var el = document.getElementById(id);
+          if (!el) return;
+          if (provs && provs.length) {
+            var lbl = { free: 'бесплатно', sub: 'по подписке', rent: 'аренда', buy: 'покупка' };
+            var h = '';
+            provs.slice(0, 8).forEach(function(p){
+              h += '<a class="ai-where-btn" href="' + AI_SERVICES[0].u + encodeURIComponent(p.n + ' ' + title) + '" target="_blank" rel="noopener">' + aiH(p.n) + (lbl[p.c] ? ' · ' + lbl[p.c] : '') + '</a>';
+            });
+            el.innerHTML = '<div class="ai-where" style="margin-top:4px;"><span>Реально доступно (RU):</span>' + h + '</div>';
+          }
+        });
+      }, 60);
+    }
+    return out;
   }
   function aiChipBtn(m){
     var age = m.age ? ', ' + aiH(m.age) : '';
@@ -3462,7 +3496,7 @@ document.addEventListener('DOMContentLoaded', function() {
     out += '<div class="ai-note">Жанры: ' + aiH(Array.isArray(m.genres) ? m.genres.join(', ') : m.genres) + ' · Рейтинг: ' + aiH(m.rating) + '/10 · Возраст: <b>' + aiH(m.age || 'не указан') + '</b></div>';
     if (dir) out += '<div class="ai-note">Режиссёр: ' + aiH(dir) + (dur ? ' · Длительность: ' + aiH(dur) + ' мин' : '') + '</div>';
     if (desc) out += '<div class="ai-note">' + aiH(desc) + '</div>';
-    out += aiWhereBtns(m.title);
+    out += aiWhereBtns(m.title, m.year);
     return out;
   }
   function aiLocalReply(q){
@@ -3529,7 +3563,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var t = String(r || '');
     t = t.replace(/\*\*/g, '').replace(/^#{1,6}\s*/gm, '').replace(/\(\?\?\)/g, '');
     t = t.replace(/^-{3,}\s*$/gm, '');
-    var BAD = /(каталог|нет данных|не присутствует|недоступн|внешн|поищите|поищи|проверьте актуальн|не указана|не указано|в открытых источниках|отсутствуют|кинодоров|делиться не буду|кинопоиск|нашей базе|нет сведений|сведений о|уточните|уточнить|постараюсь найти|не найдено)/i;
+    var BAD = /(каталог|нет данных|не присутствует|недоступн|внешн|поищите|поищи|проверьте актуальн|не указана|не указано|в открытых источниках|отсутствуют|кинодоров|делиться не буду|кинопоиск|в нашей базе|нет сведений|к сожалению|уточнит|не могу найти|нет информации|не удалось найти)/i;
     t = t.split('\n').filter(function(line){
       var s2 = line.trim();
       if (s2.split('|').length > 2) return false;
@@ -3567,9 +3601,9 @@ document.addEventListener('DOMContentLoaded', function() {
     return diff <= 1;
   }
   function aiExtractSubject(q){
-    var s = String(q || '').replace(/[«»"']/g, ' ').replace(/\(\d{4}\)/g, ' ').replace(/\b\d{4}\b/g, ' ');
-    s = s.replace(/\b(расскажи|покажи|посоветуй|хочу|посмотреть|смотреть|сериалы?|фильмы?|мультики?|мультфильмы?|мне|про|об|о|у|и|в|на|кто|что|какой|какая|какие|как|о чем|о чём|сюжет|актеры|актёры|бюджет|отзывы|оценка|рейтинг|серий|серии|сезонов|весь|всё|все|его|её|там|это)\b/gi, ' ');
-    s = s.replace(/\s+/g, ' ').trim();
+    var s = String(q || '').replace(/[«»"']/g, ' ').replace(/\(\d{4}\)/g, ' ').replace(/(^|\s)\d{4}(?=\s|$)/g, ' ');
+    var STOP_RE = /^(расскажи|покажи|посоветуй|хочу|посмотреть|смотреть|сериала?|фильма?|мультика?|мультики|мультфильма?|мне|про|об|о|у|и|в|на|кто|что|какой|какая|какие|как|о чем|о чём|сюжет|актеры|актёры|бюджет|отзывы|оценка|рейтинг|серий|серии|сезонов|весь|всё|все|его|её|там|это)$/i;
+    s = s.split(/\s+/).filter(function(w){ return w && !STOP_RE.test(w); }).join(' ');
     return s;
   }
   function aiMatchLoose(text){
@@ -3583,11 +3617,12 @@ document.addEventListener('DOMContentLoaded', function() {
     movies.forEach(function(m){
       var mt = compactNorm(m.title);
       if (!mt) return;
+      var mb = mt.replace(/[0-9]+$/, ''), cb = cs.replace(/[0-9]+$/, '');
       if (mt === cs) { out.push(m); return; }
-      var r1 = mt.slice(cs.length), r2 = cs.slice(mt.length);
-      if (mt.indexOf(cs) === 0 && /^[^0-9]/.test(r1)) { out.push(m); return; }
-      if (cs.indexOf(mt) === 0 && /^[^0-9]/.test(r2)) { out.push(m); return; }
-      if (Math.abs(mt.length - cs.length) <= 2 && !/[0-9]$/.test(mt) && !/[0-9]$/.test(cs) && lev1(mt, cs)) out.push(m);
+      if (mt.indexOf(cs) === 0 && !/^[0-9]/.test(mt.slice(cs.length))) { out.push(m); return; }
+      if (cs.indexOf(mt) === 0 && !/^[0-9]/.test(cs.slice(mt.length))) { out.push(m); return; }
+      if (mb === cb && (/[0-9]/.test(mt) || /[0-9]/.test(cs))) return;
+      if (Math.abs(mt.length - cs.length) <= 2 && lev1(mt, cs)) out.push(m);
     });
     return out;
   }
@@ -3595,7 +3630,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return '<div class="ai-note" style="margin:10px 0;"><b>' + aiH(title) + '</b> — смотрите здесь:</div>' + aiWhereBtns(title);
   }
   /* семейство частей убрано: одна карточка строго по запросу пользователя */
-  function aiEnrich(userText, reply){
+  function aiEnrich(userText, reply, hasWiki){
     var clean = aiCleanReply(reply);
     var html = '', i;
     var paras = clean.split(/\n{2,}/).filter(function(p){ return p.trim(); });
@@ -3613,6 +3648,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var titleish = subj && subj.length >= 3 && subj.split(' ').length <= 3 && !/груст|весел|весёл|страшн|посмеять|роман|вечер|вдохнов|поразмыш|напрячь|расслаб|милое|трогатель|плакать|настроени|двоих/i.test(subj);
       if (titleish) html += aiMissingBlock(subj.charAt(0).toUpperCase() + subj.slice(1));
     }
+    if (hasWiki) html += '<div class="ai-note" style="margin-top:8px;opacity:.65;font-size:12px;">По данным Википедии</div>';
     return html;
   }
 
@@ -3643,12 +3679,12 @@ window.aiSend = function(){
     var inCat = findMovieInText(txt);
     if (inCat) aiCurFilm = inCat.title;
     var wikiQ = inCat ? txt : (aiCurFilm ? aiCurFilm : txt);
-    var wikiGot = '';
     var typing = aiAdd('ai-typing', 'ИИ думает…');
     var t0 = Date.now();
     var hist = aiHist.slice(-6).map(function(m){ return (m.who === 'user' ? 'Пользователь: ' : 'ИИ: ') + m.text; }).join('\n');
+    var lastWiki = '';
     getWikiContext(wikiQ).then(function(wiki){
-      wikiGot = wiki || '';
+      lastWiki = wiki || '';
       var sys = buildSystem();
       if (wiki) sys = sys + '\n\n' + wiki;
       var userMsg = txt;
@@ -3659,15 +3695,18 @@ window.aiSend = function(){
       lastReq = Date.now();
       aiHistPush('user', txt);
       aiHistPush('ai', reply || '');
-      aiAddHTML(aiEnrich(txt, reply || ''));
+      aiAddHTML(aiEnrich(txt, reply || '', !!lastWiki));
     }).catch(function(e){
       if(typing) typing.remove();
-      var s = localAdvice(txt);
-      if(s) { aiAddHTML(s); return; }
-      if (wikiGot) {
-        aiAdd('bot', 'ИИ сейчас не отвечает — повторите вопрос через минуту 🎬\n\n' + wikiGot + (aiCurFilm ? '\n\n«' + aiCurFilm + '» можно посмотреть здесь:' : ''));
+      var subj = aiExtractSubject(txt);
+      var titleish = subj && subj.length >= 3 && subj.split(' ').length <= 3 && !/груст|весел|весёл|страшн|посмеять|роман|вечер|вдохнов|поразмыш|напрячь|расслаб|милое|трогатель|плакать|настроени|двоих/i.test(subj);
+      if (titleish) {
+        var wl = lastWiki ? '<div style="margin-top:6px;">Что удалось найти в Википедии:</div><div>' + aiH(lastWiki) + '</div>' : '';
+        aiAddHTML('<div>ИИ сейчас не отвечает — повторите вопрос через минуту 🎬</div>' + wl + aiMissingBlock(subj.charAt(0).toUpperCase() + subj.slice(1)));
         return;
       }
+      var s = localAdvice(txt);
+      if(s) { aiAddHTML(s); return; }
       aiAdd('bot', fallbackText(e));
     });
   };
