@@ -3355,70 +3355,88 @@ document.addEventListener('DOMContentLoaded', function() {
     return out + '</div>';
   }
   var TMDB_KEY = '65d74b18432def614e220862fb83f816';
-  var TMDB_NAMES = { 'Kinopoisk': 'Кинопоиск HD', 'Kinopoisk HD': 'Кинопоиск HD', 'Netflix': 'Netflix', 'Netflix Standard with Ads': 'Netflix (с рекламой)', 'ivi': 'Иви', 'Okko': 'Окко', 'Wink': 'Wink', 'Premier': 'Premier', 'KION': 'KION', 'Start': 'Start', 'Apple TV+': 'Apple TV+', 'Apple TV': 'Apple TV', 'Amazon Prime Video': 'Prime Video', 'YouTube': 'YouTube', 'Google Play Movies': 'Google Play', 'Disney Plus': 'Disney+', 'HBO Max': 'HBO Max', 'Rutube': 'Rutube', 'LIME': 'LIME', 'Now': 'Now', 'Amediateka': 'Амедиатека', 'TurboSistem': 'Турбосистема' };
   var TMDB_HOSTS = ['https://apitmdb.cub.red/3', 'https://api.lampa.mx/3', 'https://tmdb.cub.red/3', 'https://api.themoviedb.org/3'];
-  var TMDB_OK_HOST = '';
-  function tmdbGet(path){
-    var list = TMDB_OK_HOST ? [TMDB_OK_HOST].concat(TMDB_HOSTS.filter(function(h){ return h !== TMDB_OK_HOST; })) : TMDB_HOSTS.slice();
+  var TMDB_HOST_OK = '';
+  function tmdbGet(path, qs, ms){
+    var hosts = TMDB_HOST_OK ? [TMDB_HOST_OK] : TMDB_HOSTS;
     var i = 0;
-    function attempt(){
-      if (i >= list.length) return Promise.reject(new Error('tmdb-unreachable'));
-      var host = list[i++];
-      return fetchTO(host.replace(/\/$/, '') + path, {}, 5000).then(function(t){
-        TMDB_OK_HOST = host;
-        return JSON.parse(t);
-      }).catch(function(){ return attempt(); });
+    function tryOne(){
+      if (i >= hosts.length) return Promise.reject(new Error('нет связи'));
+      var host = hosts[i++];
+      var url = host + path + (path.indexOf('?') >= 0 ? '&' : '?') + 'api_key=' + TMDB_KEY + (qs || '');
+      return fetchTO(url, {}, ms || 5000).then(function(txt){
+        var j = JSON.parse(txt);
+        TMDB_HOST_OK = host;
+        return j;
+      }).catch(function(){ return tryOne(); });
     }
-    return attempt();
+    return tryOne();
   }
-  function tmdbImg(posterPath, size){
-    if (!posterPath) return '';
-    return 'https://images.weserv.nl/?url=' + encodeURIComponent('image.tmdb.org/t/p/' + (size || 'w300') + posterPath);
+  function tmdbPoster(pth){
+    if (!pth) return '';
+    return 'https://images.weserv.nl/?url=' + encodeURIComponent('image.tmdb.org/t/p/w300' + pth);
   }
-  function tmdbFastCard(query){
+  function tmdbWhereTiers(ru){
+    if (!ru) return '';
+    var order = ['free', 'ads', 'flatrate', 'rent', 'buy'];
+    var html = '<div class="ai-where"><span>Реально доступно в РФ (по данным TMDB):</span>';
+    var any = false;
+    for (var k = 0; k < order.length; k++){
+      var h = tmdbTierHtml(order[k], ru[order[k]]);
+      if (h) { html += h; any = true; }
+    }
+    if (!any) return '';
+    return html + '</div>';
+  }
+  function tmdbCard(st){
     if (!TMDB_KEY) return Promise.resolve(null);
-    var st = String(query || '').trim();
-    if (!st) return Promise.resolve(null);
-    return tmdbGet('/search/multi?api_key=' + TMDB_KEY + '&query=' + encodeURIComponent(st) + '&language=ru-RU&page=1').then(function(j){
+    var s = String(st || '').trim();
+    if (!s) return Promise.resolve(null);
+    return tmdbGet('/search/multi?query=' + encodeURIComponent(s), '&language=ru-RU&page=1', 5000).then(function(j){
       var res = (j && j.results) || [];
-      var low = st.toLowerCase().replace(/[\u00ab\u00bb"']/g, '');
-      var pick = null;
+      if (!res.length) return null;
+      var low = s.toLowerCase();
+      var pick = res[0];
       for (var i = 0; i < res.length; i++){
-        var nm = String(res[i].title || res[i].name || '').toLowerCase().replace(/[\u00ab\u00bb"']/g, '');
-        if (!nm) continue;
-        if (nm.indexOf(low) === 0 || low.indexOf(nm) === 0) { pick = res[i]; break; }
+        var nm = String(res[i].title || res[i].name || '').toLowerCase();
+        if (nm && (nm.indexOf(low) === 0 || low.indexOf(nm) === 0)) { pick = res[i]; break; }
       }
-      if (!pick) pick = res[0];
-      if (!pick) return null;
       var mt = pick.media_type || 'movie';
       if (mt !== 'movie' && mt !== 'tv') return null;
-      var nm2 = pick.title || pick.name || st;
-      return tmdbGet('/' + mt + '/' + pick.id + '/watch/providers?api_key=' + TMDB_KEY).catch(function(){ return null; }).then(function(j2){
+      var title = pick.title || pick.name || s;
+      var year = String(pick.release_date || pick.first_air_date || '').slice(0, 4);
+      var rate = pick.vote_average ? Number(pick.vote_average).toFixed(1) : '';
+      var desc = pick.overview || '';
+      var poster = tmdbPoster(pick.poster_path);
+      var page = 'https://www.themoviedb.org/' + (mt === 'tv' ? 'tv' : 'movie') + '/' + pick.id + '?language=ru-RU';
+      var html = '<div style="display:flex;gap:14px;background:rgba(38,30,46,0.9);border:1px solid rgba(242,193,78,0.35);border-radius:14px;padding:14px;margin-top:6px;">'
+        + (poster ? '<img src="' + poster + '" alt="" style="width:92px;height:138px;object-fit:cover;border-radius:10px;flex-shrink:0;" onerror="this.style.display=\'none\'">' : '')
+        + '<div style="min-width:0;">'
+        + '<div style="font-weight:800;font-size:16px;">' + aiH(title) + (year ? ' <span style="opacity:.6;font-weight:600;">(' + aiH(year) + ')</span>' : '') + '</div>'
+        + (rate ? '<div style="color:#f2c14e;font-weight:700;font-size:13px;margin-top:2px;">★ ' + aiH(rate) + '</div>' : '')
+        + (desc ? '<div style="font-size:13px;line-height:1.5;opacity:.8;margin-top:6px;">' + aiH(desc).slice(0, 320) + (desc.length > 320 ? '…' : '') + '</div>' : '')
+        + '<div style="margin-top:10px;"><a class="ai-where-btn" href="' + aiH(page) + '" target="_blank" rel="noopener" style="background:#f2c14e;color:#1a1722;">Смотреть онлайн</a></div>'
+        + '</div></div>';
+      return tmdbGet('/' + mt + '/' + pick.id + '/watch/providers', '', 5000).then(function(j2){
         var ru = j2 && j2.results && j2.results.RU ? j2.results.RU : null;
-        var inner = '<div class="ai-note"><b>' + aiH(nm2) + '</b>';
-        var yr = String(pick.release_date || pick.first_air_date || '').slice(0, 4);
-        if (yr) inner += ' (' + yr + ')';
-        if (pick.vote_average) inner += ' — рейтинг ' + Number(pick.vote_average).toFixed(1) + '/10';
-        inner += '</div>';
-        if (pick.overview) inner += '<div style="font-size:14px;line-height:1.5;opacity:.85;margin-top:6px;">' + aiH(pick.overview) + '</div>';
-        if (pick.genre_ids && pick.genre_ids.length) {
-          var GN = {28:'боевик',12:'приключения',16:'мультфильм',35:'комедия',80:'криминал',99:'документальный',18:'драма',10751:'семейный',14:'фэнтези',36:'история',27:'ужасы',10402:'музыка',9648:'детектив',10749:'романтика',878:'фантастика',10770:'телефильм',53:'триллер',10752:'военный',37:'вестерн'};
-          var gl = [];
-          for (var g = 0; g < pick.genre_ids.length && g < 4; g++){ if (GN[pick.genre_ids[g]]) gl.push(GN[pick.genre_ids[g]]); }
-          if (gl.length) inner += '<div class="ai-note">• Жанр: ' + gl.join(', ') + '</div>';
-        }
-        var html = pick.poster_path
-          ? '<div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;"><img src="' + tmdbImg(pick.poster_path, 'w300') + '" alt="" style="width:110px;height:165px;object-fit:cover;border-radius:10px;flex-shrink:0;" onerror="this.style.display=\'none\'"><div style="min-width:200px;flex:1;">' + inner + '</div></div>'
-          : inner;
-        if (ru) {
-          var order = ['free', 'ads', 'flatrate', 'rent', 'buy'];
-          for (var k = 0; k < order.length; k++){ var h = tmdbTierHtml(order[k], ru[order[k]]); if (h) html += h; }
-        }
-        html += '<div class="ai-where"><span>Где посмотреть:</span><a class="ai-where-btn" href="https://www.themoviedb.org/' + mt + '/' + pick.id + '/watch?locale=RU" target="_blank" rel="noopener" style="background:#f2c14e;color:#1a1722;font-weight:700;">Смотреть онлайн</a>' + (ru && ru.link ? '<a class="ai-where-btn" href="' + aiH(ru.link) + '" target="_blank" rel="noopener">Все сервисы</a>' : '') + '</div>' + aiWhereBtns(st);
-        return { found: true, html: html, title: nm2 };
-      });
-    });
+        var link = (ru && ru.link) ? ru.link : page;
+        var extra = tmdbWhereTiers(ru);
+        return html.replace('href="' + aiH(page) + '"', 'href="' + aiH(link) + '"') + extra;
+      }).catch(function(){ return html; });
+    }).catch(function(){ return null; });
   }
+  function aiTitleQuery(q){
+    if (/\?/.test(String(q))) return false;
+    var s = String(q || '').toLowerCase().replace(/ё/g, 'е');
+    var w = s.replace(/[^0-9a-zа-я ]+/gi, ' ').split(/\s+/).filter(Boolean);
+    var tw = ['сериал','сериалы','фильм','фильмы','кино','мультфильм','мульт','тв','online','онлайн'];
+    w = w.filter(function(x){ return tw.indexOf(x) < 0; });
+    if (!w.length || w.length > 6) return false;
+    var qw = ['что','как','почему','кто','где','какой','какая','какие','зачем','когда','сколько','посоветуй','посоветуйте','порекомендуй','рекоменд','расскажи','напиши','лучше','стоит','смотреть','посмотреть','вечером','грустно','весело','нравится','люблю','похожие','похожее','похож','про'];
+    for (var i = 0; i < w.length; i++){ if (qw.indexOf(w[i]) >= 0) return false; }
+    return true;
+  }
+  var TMDB_NAMES = { 'Kinopoisk': 'Кинопоиск HD', 'Kinopoisk HD': 'Кинопоиск HD', 'Netflix': 'Netflix', 'Netflix Standard with Ads': 'Netflix (с рекламой)', 'ivi': 'Иви', 'Okko': 'Окко', 'Wink': 'Wink', 'Premier': 'Premier', 'KION': 'KION', 'Start': 'Start', 'Apple TV+': 'Apple TV+', 'Apple TV': 'Apple TV', 'Amazon Prime Video': 'Prime Video', 'YouTube': 'YouTube', 'Google Play Movies': 'Google Play', 'Disney Plus': 'Disney+', 'HBO Max': 'HBO Max', 'Rutube': 'Rutube', 'LIME': 'LIME', 'Now': 'Now', 'Amediateka': 'Амедиатека', 'TurboSistem': 'Турбосистема' };
   function tmdbTierHtml(tier, list){
     if (!list || !list.length) return '';
     var label = tier === 'free' ? 'Бесплатно' : tier === 'ads' ? 'Бесплатно с рекламой' : tier === 'flatrate' ? 'По подписке' : tier === 'rent' ? 'Аренда' : 'Покупка';
@@ -3429,7 +3447,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!TMDB_KEY) return Promise.resolve('');
     var st = String(title || '').trim();
     if (!st) return Promise.resolve('');
-    return tmdbGet('/search/multi?api_key=' + TMDB_KEY + '&query=' + encodeURIComponent(st) + '&language=ru-RU&page=1').then(function(j){
+    return tmdbGet('/search/multi?query=' + encodeURIComponent(st), '&language=ru-RU&page=1', 5000).then(function(j){
       var res = j && j.results && j.results.length ? j.results : [];
       if (!res.length) return '';
       var low = st.toLowerCase();
@@ -3441,7 +3459,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!pick) pick = res[0];
       var mt = pick.media_type || 'movie';
       if (mt !== 'movie' && mt !== 'tv') return '';
-      return tmdbGet('/' + mt + '/' + pick.id + '/watch/providers?api_key=' + TMDB_KEY).then(function(j2){
+      return tmdbGet('/' + mt + '/' + pick.id + '/watch/providers', '', 5000).then(function(j2){
         var ru = j2 && j2.results && j2.results.RU ? j2.results.RU : null;
         if (!ru) return '';
         var order = ['free', 'ads', 'flatrate', 'rent', 'buy'];
@@ -3735,14 +3753,6 @@ document.addEventListener('DOMContentLoaded', function() {
   function aiIsMood(t){
     return /груст|посмеять|плак|вдохнов|расслаб|поразмыш|напряг|приключ|мило|вечер|настроен|двое|случайн/i.test(t);
   }
-  function aiIsTitleQuery(txt){
-    if (aiIsMood(txt)) return false;
-    if (/почему|стоит ли|какой|какие|кто такой|лучший|топ-?\d|похож|порекоменд|совету|год выпуска|в каком году|актеры|актёры|бюджет|оценк/i.test(txt)) return false;
-    var subj = aiExtractSubject(txt);
-    if (!subj) return false;
-    var words = subj.split(' ').filter(function(w){ return w.length >= 1; });
-    return words.length >= 1 && words.length <= 5;
-  }
   function aiTrackSubject(txt){
     if (aiIsMood(txt)) return;
     var subj = aiExtractSubject(txt);
@@ -3758,40 +3768,44 @@ window.aiSend = function(){
     inp.value = '';
     aiAdd('user', txt);
     aiTrackSubject(txt);
+    var inCat0 = findMovieInText(txt);
+    if (inCat0) aiCurFilm = inCat0.title;
+    var subj0 = (inCat0 && inCat0.title) || aiCurFilm || aiExtractSubject(txt) || '';
+    if (!inCat0 && aiTitleQuery(txt)) {
+      var tp0 = aiAdd('ai-typing', 'Ищу фильм…');
+      tmdbCard(subj0 || txt).then(function(card){
+        if (tp0) tp0.remove();
+        if (card){ aiHistPush('user', txt); aiHistPush('ai', 'Карточка фильма'); aiAddHTML(card); return; }
+        aiSendBody(txt, subj0);
+      }).catch(function(){ if (tp0) tp0.remove(); aiSendBody(txt, subj0); });
+      return;
+    }
+    aiSendBody(txt, subj0);
+  };
+  window.aiSendBody = function(txt, subj){
     var inCat = findMovieInText(txt);
     if (inCat) aiCurFilm = inCat.title;
     var wikiQ = inCat ? txt : (aiCurFilm ? aiCurFilm : txt);
-    var typing = aiAdd('ai-typing', 'ИИ думает…');
+    var typing = aiAdd('ai-typing', 'Ищу справку…');
+    var answered = false;
+    var wd = setTimeout(function(){
+      if (answered) return;
+      answered = true;
+      if (typing) typing.remove();
+      var w2 = String(wikiGot || '').replace(/^КРАТКАЯ СПРАВКА ИЗ [^:]*:/, '').trim();
+      if (w2 && subj) {
+        aiAddHTML('<div class="ai-note"><b>' + aiH(subj) + '</b> — справка из Википедии (ответ не пришёл вовремя):</div><div>' + aiH(w2).replace(/\n/g, '<br>') + '</div>' + aiWhereBtns(subj));
+        return;
+      }
+      aiAdd('bot', 'Ответ не пришёл вовремя — сеть или ИИ-сервис не отвечают. Попробуйте ещё раз или уточните название.');
+    }, 45000);
     var t0 = Date.now();
     var hist = aiHist.slice(-6).map(function(m){ return (m.who === 'user' ? 'Пользователь: ' : 'ИИ: ') + m.text; }).join('\n');
     var wikiGot = '';
     var subj = (inCat && inCat.title) || aiCurFilm || aiExtractSubject(txt) || '';
-    if (aiIsTitleQuery(txt) && subj) {
-      typing.textContent = 'Ищу «' + subj + '»…';
-      return tmdbFastCard(subj).then(function(card){
-        if(typing) typing.remove();
-        if (card && card.found) {
-          aiHistPush('user', txt);
-          aiHistPush('ai', (card.title || subj));
-          aiAddHTML(card.html);
-          return;
-        }
-        return getWikiContext(subj).then(function(wiki){
-          var w = String(wiki || '').replace(/^КРАТКАЯ СПРАВКА ИЗ [^:]*:/, '').trim();
-          if (w) {
-            aiHistPush('user', txt);
-            aiHistPush('ai', w.slice(0, 300));
-            aiAddHTML('<div class="ai-note"><b>' + aiH(subj) + '</b> — справка из Википедии:</div><div>' + aiH(w).replace(/\n/g, '<br>') + '</div>' + aiWhereBtns(subj) + '<div style="margin-top:8px;font-size:12px;opacity:.65;">По данным Википедии</div>');
-            return;
-          }
-          aiAddHTML('<div class="ai-note">Не нашёл «' + aiH(subj) + '» — проверьте название или уточните год.</div>' + aiWhereBtns(subj));
-        }).catch(function(){
-          aiAddHTML('<div class="ai-note">Не нашёл «' + aiH(subj) + '» — проверьте название или уточните год.</div>' + aiWhereBtns(subj));
-        });
-      });
-    }
     getWikiContext(wikiQ).then(function(wiki){
       wikiGot = wiki || '';
+      if (typing && !answered) typing.textContent = 'Формулирую ответ…';
       var sys = buildSystem();
       if (wikiGot) sys = sys + '\n\n' + wikiGot;
       var userMsg = txt;
@@ -3800,6 +3814,8 @@ window.aiSend = function(){
         return { reply: reply || '', wiki: wikiGot };
       });
     }).then(function(pack){
+      if (answered) return;
+      answered = true; clearTimeout(wd);
       if(typing) typing.remove();
       lastReq = Date.now();
       var reply = pack.reply || '';
@@ -3811,6 +3827,8 @@ window.aiSend = function(){
         if (block && el) el.insertAdjacentHTML('beforeend', '<div style="margin-top:10px;">' + block + '</div>');
       });
     }).catch(function(e){
+      if (answered) return;
+      answered = true; clearTimeout(wd);
       if(typing) typing.remove();
       var w = String(wikiGot || '').replace(/^КРАТКАЯ СПРАВКА ИЗ [^:]*:/, '').trim();
       if (w && subj) {
