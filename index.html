@@ -3557,7 +3557,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ['семейн', 'семейный'], ['детск', 'семейный'],
     ['поплакать', 'драма'], ['плакат', 'драма'], ['слёз', 'драма'], ['слез', 'драма'], ['потрог', 'драма'], ['трогательн', 'драма'],
     ['напряж', 'триллер'], ['интриг', 'триллер'], ['весел', 'комедия'], ['весёл', 'комедия'],
-    ['настроение под', 'комедия'], ['поржа', 'комедия']
+    ['настроение под', 'комедия'], ['поржа', 'комедия'], ['экшен', 'боевик'], ['экшн', 'боевик'], ['драйв', 'боевик']
   ];
   var AI_MOOD_SYN = [
     ['успоко', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
@@ -3786,7 +3786,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function fallbackText(err){
     var code = err && err.message ? String(err.message) : 'ошибка';
     var r = movies[Math.floor(Math.random() * movies.length)];
-    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + ' ' + aiWhereBtns(r.title);
+    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + '. ' + aiWhereBtns(r.title);
   }
 
   function throttle(){
