@@ -3411,7 +3411,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return run(0);
   }
   function justwatchUrl(title){
-    return 'https://www.justwatch.com/ru/\u043f\u043e\u0438\u0441\u043a?q=' + encodeURIComponent(String(title || ''));
+    return 'https://yandex.ru/search/?text=' + encodeURIComponent(String(title || ''));
   }
   function tmdbWhereBlock(title){
     if (!TMDB_KEY) return Promise.resolve('');
@@ -3440,7 +3440,7 @@ document.addEventListener('DOMContentLoaded', function() {
           var h = tmdbTierHtml(order[k], ru ? ru[order[k]] : null);
           if (h) html += h;
         }
-        html += '<a class="ai-where-btn" href="' + justwatchUrl(st) + '" target="_blank" rel="noopener">▶ Смотреть онлайн (JustWatch)</a>';
+        html += '<a class="ai-where-btn" href="' + justwatchUrl(st) + '" target="_blank" rel="noopener">🔍 Найти онлайн (Яндекс)</a>';
         return html + '</div>';
       });
     }).catch(function(){ return ''; });
@@ -3488,7 +3488,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (aiPartMismatch(nq, inCat)) return { type: 'outside', title: txt, partHint: inCat.title };
       return { type: 'catalog', movie: inCat };
     }
-    var advice = /что посмотреть|что глянуть|что глянь|посоветуй|подскажи|рекоменд|подборк|похож|похоже|настроени|вечером|вечер\b|ночью|на ночь|груст|весел|страшн|посмеять|посмеят|поржать|юмор|смешн|плакать|поплакать|слез|вдохнов|напрячь|расслаб|успоко|чил|скучн|скучаю|трогатель|поразмыш|люблю|нравится|романтик|свидани|вдво|с девушк|с парнем|детям|детей|ребен|малыш|семейн|выходн|драйв|адреналин|ностальг|детств|душевн|философ|смысл|красив|стильн|эпичн|загадк|мистик|новеньк/i.test(nq);
+    var advice = /что посмотреть|что глянуть|что глянь|посоветуй|подскажи|рекоменд|подборк|похож|похоже|настроени|вечером|вечер\b|ночью|на ночь|груст|весел|страшн|посмеять|посмеят|поржать|юмор|смешн|плакать|поплакать|слез|вдохнов|напрячь|расслаб|успоко|чил|скучн|скучаю|трогатель|поразмыш|люблю|нравится|романтик|свидани|вдво|с девушк|с парнем|детям|детей|ребен|малыш|семейн|выходн|драйв|адреналин|экшен|взбодр|уснуть|заснуть|спать|сном|ностальг|детств|душевн|философ|смысл|красив|стильн|эпичн|загадк|мистик|новеньк/i.test(nq);
     var words = nq.split(/[^a-zа-я0-9]+/).filter(function(w){ return w.length > 2; });
     var genreish = false;
     if (words.length <= 2) {
@@ -3542,15 +3542,15 @@ document.addEventListener('DOMContentLoaded', function() {
     ['настроение под', 'комедия'], ['поржа', 'комедия']
   ];
   var AI_MOOD_SYN = [
-    ['успоко', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
-    ['чилить', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
-    ['расслаб', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
-    ['спокой', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
-    ['отдохн', 'расслаблен|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
-    ['снять стресс', 'расслаблен|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
-    ['стресс', 'расслаблен|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
-    ['уют', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
-    ['на ночь', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
+    ['успоко', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['чилить', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['расслаб', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['спокой', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['отдохн', 'расслаблен|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['снять стресс', 'расслаблен|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['стресс', 'расслаблен|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['уют', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['на ночь', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
     ['поднять настроение', 'весел|смешн|игрив|жизнеутверждающ', 'хоррор|военный|катастрофа'],
     ['повеселиться', 'весел|смешн|игрив', 'хоррор|военный|катастрофа'],
     ['весел', 'весел|смешн|игрив', 'хоррор|военный|катастрофа'],
@@ -3578,7 +3578,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ['с парнем', 'романтичн|мил', 'хоррор|катастрофа'],
     ['мелодрам', 'романтичн|трогател', 'хоррор'],
     ['с детьми', 'добр|приключенч|игрив', 'хоррор|криминал|военный|катастрофа'],
-    ['для детей', 'добр|приключенч|igрив|добр', 'хоррор|криминал|военный|катастрофа'],
+    ['для детей', 'добр|приключенч|игрив|добр', 'хоррор|криминал|военный|катастрофа'],
     ['ребен', 'добр|приключенч|игрив', 'хоррор|криминал|военный|катастрофа'],
     ['ребён', 'добр|приключенч|игрив', 'хоррор|криминал|военный|катастрофа'],
     ['малыш', 'добр|приключенч|игрив', 'хоррор|криминал|военный|катастрофа'],
@@ -3611,7 +3611,11 @@ document.addEventListener('DOMContentLoaded', function() {
     ['выходн', 'расслаблен|весел|приключенч', ''],
     ['вечером', 'расслаблен|весел|трогател', ''],
     ['напрячь', 'напряжен|загадочн', ''],
-    ['умн', 'умн|загадочн', '']
+    ['умн', 'умн|загадочн', ''],
+    ['уснуть', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['заснуть', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['спать', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн'],
+    ['сном', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа', 'страшн|напряжен|энергичн']
   ];
   function aiMatchVocab(nq, vocab, words){
     var found = [];
@@ -3636,11 +3640,12 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     var wantedM = aiMatchVocab(nq, moodV, words);
-    var bannedG = [];
+    var bannedG = [], bannedM = [];
     AI_MOOD_SYN.forEach(function(p){
       if (nq.indexOf(p[0]) >= 0) {
         p[1].split('|').forEach(function(e){ if (e && wantedM.indexOf(e) < 0) wantedM.push(e); });
         if (p[2]) p[2].split('|').forEach(function(b){ if (b && bannedG.indexOf(b) < 0) bannedG.push(b); });
+        if (p[3]) p[3].split('|').forEach(function(b){ if (b && bannedM.indexOf(b) < 0) bannedM.push(b); });
       }
     });
     var era = null;
@@ -3651,8 +3656,7 @@ document.addEventListener('DOMContentLoaded', function() {
       d0 = d0 - d0 % 10;
       era = [d0, d0 + 9];
     }
-    var fresh = /нов(ое|ых|инк)|свеж|недавн/.test(nq);
-    if (fresh) era = [2020, 2100];
+    if (/нов(ое|ых|инк|еньк)|свеж|недавн/.test(nq)) era = [2020, 2100];
     if (/классик|стар(ое|ых|инк)/.test(nq)) era = [0, 1999];
     var isTop = /лучш|топ|шедевр|величайш/.test(nq);
     var kids = /ребен|ребён|малыш|детям|детей|детск/.test(nq);
@@ -3675,6 +3679,8 @@ document.addEventListener('DOMContentLoaded', function() {
       wantedG.forEach(function(g){ if (gStr.indexOf(g) >= 0) sc += 3; });
       var mStr = String(m.emotions || '').toLowerCase().replace(/ё/g, 'е');
       wantedM.forEach(function(g){ if (mStr.indexOf(g) >= 0) sc += 3; });
+      if (bannedM.length && bannedM.some(function(b){ return mStr.indexOf(b) >= 0; })) return;
+      if (era && !wantedG.length && !wantedM.length) sc += 1;
       if (era) {
         var yy = parseInt(m.year, 10);
         if (yy >= era[0] && yy <= era[1]) sc += 2; else return;
@@ -3698,8 +3704,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var pool = [];
     movies.forEach(function(m){
       if (seen5[String(m.id)] || watchedSet[String(m.id)]) return;
-      var gF = String(m.genres || '').toLowerCase();
-      if (bannedG.length && bannedG.some(function(b){ return gF.indexOf(b) >= 0; })) return;
+      var pg = String(m.genres || '').toLowerCase();
+      if (bannedG.length && bannedG.some(function(b){ return pg.indexOf(b) >= 0; })) return;
+      var pm = String(m.emotions || '').toLowerCase().replace(/ё/g, 'е');
+      if (bannedM.length && bannedM.some(function(b){ return pm.indexOf(b) >= 0; })) return;
       if ((parseFloat(m.rating) || 0) >= 7) pool.push(m);
     });
     aiShuffle(pool);
@@ -3708,8 +3716,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var pool2 = [];
     movies.forEach(function(m){
       if (seen5[String(m.id)] || watchedSet[String(m.id)] || out5.indexOf(m) >= 0) return;
-      var gF = String(m.genres || '').toLowerCase();
-      if (bannedG.length && bannedG.some(function(b){ return gF.indexOf(b) >= 0; })) return;
+      var pg = String(m.genres || '').toLowerCase();
+      if (bannedG.length && bannedG.some(function(b){ return pg.indexOf(b) >= 0; })) return;
+      var pm = String(m.emotions || '').toLowerCase().replace(/ё/g, 'е');
+      if (bannedM.length && bannedM.some(function(b){ return pm.indexOf(b) >= 0; })) return;
       pool2.push(m);
     });
     aiShuffle(pool2);
@@ -3740,26 +3750,26 @@ document.addEventListener('DOMContentLoaded', function() {
     var nq = aiNorm(q).trim();
     if (!nq) return 'Напишите настроение, жанр или эпоху — подберу фильм из каталога.';
     if (/^(привет|здравств|хай|ку)\b/.test(nq)) return 'Привет! Скажите настроение, жанр или эпоху — подберу фильм. Например: «что-то трогательное про семью» или «криминал 90-х».';
-    var MOOD_RE = /настроени|груст|весел|страшн|посмеять|посмеят|поржать|юмор|смешн|угар|скучн|скучаю|отвлеч|роман|вечером|вечер|утром|вдохнов|поразмыш|напрячь|расслаб|успоко|чил|спокой|отдохн|стресс|уют|на ночь|ночью|мило|трогатель|плакать|ужас|загадк|мистик|интрига|философ|смысл|душевн|по душам|ностальг|детств|советск|классик|красив|стильн|визуальн|эпичн|масштабн|зрелищ|драйв|адреналин|экшен|динамичн|выходн|новеньк|с девушк|с парнем|вдво|свидани|любов|детям|детей|ребен|малыш|семейн|жизнеутвержд|комеди|драм|боевик|триллер|фантасти|детектив|мелодрам|криминал|истори|военн|фэнтез|сказк|анимац|мульт|приключ/i;
-    var wantsTitle = /расскажи|о фильме|про фильм|что за|подробност|описани|узнать|бюджет|сбор|режисс|актёр|актер|сериал|кто такой/i.test(nq);
-    if (!wantsTitle && MOOD_RE.test(nq)) {
-      var picks = aiPick(q);
-      var top = movies.slice();
-      top.sort(function(a, b){ return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0); });
-      var picks2 = (picks && picks.length) ? picks : top.slice(0, 5);
-      var intro = 'Подобрал под запрос «' + aiH(q) + '» — откройте карточку: там описание, возраст и кнопки «где смотреть».';
-      return intro + '<div>' + picks2.map(aiChipBtn).join('') + '</div>';
-    }
     var m = aiFindMovie(q);
     if (m) {
       if (aiPartMismatch(nq, m)) return '<div class="ai-note">«' + aiH(q) + '» — такой части в каталоге нет, но есть другая часть: <b>' + aiH(m.title) + '</b>. Её можно поискать здесь:</div>' + aiWhereBtns(m.title);
       return aiInfoBlock(m);
     }
-    var guess = q.replace(/расскажи (мне )?(о |про |об )?/gi, '').replace(/о фильме|про фильм|что за фильм|хочу узнать (о |про )?/gi, '').replace(/[«»"']/g, '').trim();
-    var t = guess || q;
+    var MOOD_RE = /настроени|груст|весел|страшн|посмеять|посмеят|поржать|юмор|смешн|угар|скучн|скучаю|отвлеч|роман|вечером|вечер|утром|вдохнов|поразмыш|напрячь|расслаб|успоко|чил|спокой|отдохн|стресс|уют|на ночь|ночью|мило|трогатель|плакать|ужас|загадк|мистик|интрига|философ|смысл|душевн|по душам|ностальг|детств|советск|классик|красив|стильн|визуальн|эпичн|масштабн|зрелищ|драйв|адреналин|экшен|динамичн|взбодр|уснуть|заснуть|спать|сном|выходн|новеньк|с девушк|с парнем|вдво|свидани|любов|детям|детей|ребен|малыш|семейн|жизнеутвержд|комеди|драм|боевик|триллер|фантасти|детектив|мелодрам|криминал|истори|военн|фэнтез|сказк|анимац|мульт|приключ/i;
+    var wantsTitle = /расскажи|о фильме|про фильм|что за|подробност|описани|узнать|бюджет|сбор|режисс|актёр|актер|сериал|кто такой/i.test(nq);
+    if (wantsTitle || !MOOD_RE.test(nq)) {
+      var guess = q.replace(/расскажи (мне )?(о |про |об )?/gi, '').replace(/о фильме|про фильм|что за фильм|хочу узнать (о |про )?/gi, '').replace(/[«»"']/g, '').trim();
+      var t = guess || q;
+      var picks = aiPick(q);
+      var intro = 'ИИ сейчас отвечает с перебоями — вот проверенные варианты из каталога 🎬\nА «' + aiH(t) + '» можно поискать здесь:' + aiWhereBtns(t);
+      return intro + '<div>' + (picks && picks.length ? picks.map(aiChipBtn).join('') : '') + '</div>';
+    }
     var picks = aiPick(q);
-    var intro = 'В каталоге «' + aiH(t) + '» пока нет, но его можно поискать здесь, а ниже — похожее из каталога:' + aiWhereBtns(t);
-    return intro + '<div>' + (picks && picks.length ? picks.map(aiChipBtn).join('') : '') + '</div>';
+    var top = movies.slice();
+    top.sort(function(a, b){ return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0); });
+    var picks2 = (picks && picks.length) ? picks : top.slice(0, 5);
+    var intro = 'Вот что подошло под запрос «' + aiH(q) + '» — откройте карточку: там описание, возраст и кнопки «где смотреть».';
+    return intro + '<div>' + picks2.map(aiChipBtn).join('') + '</div>';
   }
   function localAdvice(userText){
     return aiLocalReply(userText);
@@ -3768,7 +3778,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function fallbackText(err){
     var code = err && err.message ? String(err.message) : 'ошибка';
     var r = movies[Math.floor(Math.random() * movies.length)];
-    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + ' ' + aiWhereBtns(r.title);
+    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + ' + aiWhereBtns(r.title);
   }
 
   function throttle(){
