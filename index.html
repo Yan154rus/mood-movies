@@ -2927,7 +2927,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <button class="ai-qchip" onclick="aiQuickAsk('романтика, чтобы посмотреть с девушкой')">❤️ романтика</button>
       <button class="ai-qchip" onclick="aiQuickAsk('фильм для семейного вечера с детьми')">👨‍👩‍👧 с детьми</button>
       <button class="ai-qchip" onclick="aiQuickAsk('страшное, чтобы напрячься')">😱 страшное</button>
-      <button class="ai-qchip" onclick="aiQuickAsk('драйв, чтобы взбодриться')">⚡ драйв</button>
+      <button class="ai-qchip" onclick="aiQuickAsk('экшен, чтобы взбодриться')">⚡ экшен</button>
       <button class="ai-qchip" onclick="aiQuickAsk('что посмотреть на выходных')">🛋 на выходных</button>
       <button class="ai-qchip" onclick="aiQuickAsk('посоветуй что-нибудь новенькое')">✨ новенькое</button>
     </div>
@@ -3370,7 +3370,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== УМНЫЙ ОФЛАЙН-СОВЕТНИК =====
   var AI_SERVICES = [
-    { n: '▶ JustWatch', u: 'https://www.justwatch.com/ru/\u043f\u043e\u0438\u0441\u043a?q=' },
+    { n: '🔍 Яндекс', u: 'https://yandex.ru/search/?text=' },
     { n: 'Кинопоиск', u: 'https://www.kinopoisk.ru/index.php?kp_query=' },
     { n: 'Иви', u: 'https://www.ivi.ru/search/?q=' },
     { n: 'Okko', u: 'https://okko.tv/search?query=' },
@@ -3651,7 +3651,8 @@ document.addEventListener('DOMContentLoaded', function() {
       d0 = d0 - d0 % 10;
       era = [d0, d0 + 9];
     }
-    if (/нов(ое|ых|инк)|свеж|недавн/.test(nq)) era = [2015, 2100];
+    var fresh = /нов(ое|ых|инк)|свеж|недавн/.test(nq);
+    if (fresh) era = [2020, 2100];
     if (/классик|стар(ое|ых|инк)/.test(nq)) era = [0, 1999];
     var isTop = /лучш|топ|шедевр|величайш/.test(nq);
     var kids = /ребен|ребён|малыш|детям|детей|детск/.test(nq);
@@ -3697,6 +3698,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var pool = [];
     movies.forEach(function(m){
       if (seen5[String(m.id)] || watchedSet[String(m.id)]) return;
+      var gF = String(m.genres || '').toLowerCase();
+      if (bannedG.length && bannedG.some(function(b){ return gF.indexOf(b) >= 0; })) return;
       if ((parseFloat(m.rating) || 0) >= 7) pool.push(m);
     });
     aiShuffle(pool);
@@ -3705,6 +3708,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var pool2 = [];
     movies.forEach(function(m){
       if (seen5[String(m.id)] || watchedSet[String(m.id)] || out5.indexOf(m) >= 0) return;
+      var gF = String(m.genres || '').toLowerCase();
+      if (bannedG.length && bannedG.some(function(b){ return gF.indexOf(b) >= 0; })) return;
       pool2.push(m);
     });
     aiShuffle(pool2);
@@ -3735,26 +3740,26 @@ document.addEventListener('DOMContentLoaded', function() {
     var nq = aiNorm(q).trim();
     if (!nq) return 'Напишите настроение, жанр или эпоху — подберу фильм из каталога.';
     if (/^(привет|здравств|хай|ку)\b/.test(nq)) return 'Привет! Скажите настроение, жанр или эпоху — подберу фильм. Например: «что-то трогательное про семью» или «криминал 90-х».';
+    var MOOD_RE = /настроени|груст|весел|страшн|посмеять|посмеят|поржать|юмор|смешн|угар|скучн|скучаю|отвлеч|роман|вечером|вечер|утром|вдохнов|поразмыш|напрячь|расслаб|успоко|чил|спокой|отдохн|стресс|уют|на ночь|ночью|мило|трогатель|плакать|ужас|загадк|мистик|интрига|философ|смысл|душевн|по душам|ностальг|детств|советск|классик|красив|стильн|визуальн|эпичн|масштабн|зрелищ|драйв|адреналин|экшен|динамичн|выходн|новеньк|с девушк|с парнем|вдво|свидани|любов|детям|детей|ребен|малыш|семейн|жизнеутвержд|комеди|драм|боевик|триллер|фантасти|детектив|мелодрам|криминал|истори|военн|фэнтез|сказк|анимац|мульт|приключ/i;
+    var wantsTitle = /расскажи|о фильме|про фильм|что за|подробност|описани|узнать|бюджет|сбор|режисс|актёр|актер|сериал|кто такой/i.test(nq);
+    if (!wantsTitle && MOOD_RE.test(nq)) {
+      var picks = aiPick(q);
+      var top = movies.slice();
+      top.sort(function(a, b){ return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0); });
+      var picks2 = (picks && picks.length) ? picks : top.slice(0, 5);
+      var intro = 'Подобрал под запрос «' + aiH(q) + '» — откройте карточку: там описание, возраст и кнопки «где смотреть».';
+      return intro + '<div>' + picks2.map(aiChipBtn).join('') + '</div>';
+    }
     var m = aiFindMovie(q);
     if (m) {
       if (aiPartMismatch(nq, m)) return '<div class="ai-note">«' + aiH(q) + '» — такой части в каталоге нет, но есть другая часть: <b>' + aiH(m.title) + '</b>. Её можно поискать здесь:</div>' + aiWhereBtns(m.title);
       return aiInfoBlock(m);
     }
-    var MOOD_RE = /настроени|груст|весел|страшн|посмеять|посмеят|поржать|юмор|смешн|угар|скучн|скучаю|отвлеч|роман|вечером|вечер|утром|вдохнов|поразмыш|напрячь|расслаб|успоко|чил|спокой|отдохн|стресс|уют|на ночь|ночью|мило|трогатель|плакать|ужас|загадк|мистик|интрига|философ|смысл|душевн|по душам|ностальг|детств|советск|классик|красив|стильн|визуальн|эпичн|масштабн|зрелищ|драйв|адреналин|экшен|динамичн|выходн|новеньк|с девушк|с парнем|вдво|свидани|любов|детям|детей|ребен|малыш|семейн|жизнеутвержд|комеди|драм|боевик|триллер|фантасти|детектив|мелодрам|криминал|истори|военн|фэнтез|сказк|анимац|мульт|приключ/i;
-    var wantsTitle = /расскажи|о фильме|про фильм|что за|подробност|описани|узнать|бюджет|сбор|режисс|актёр|актер|сериал|кто такой/i.test(nq);
-    if (wantsTitle || !MOOD_RE.test(nq)) {
-      var guess = q.replace(/расскажи (мне )?(о |про |об )?/gi, '').replace(/о фильме|про фильм|что за фильм|хочу узнать (о |про )?/gi, '').replace(/[«»"']/g, '').trim();
-      var t = guess || q;
-      var picks = aiPick(q);
-      var intro = 'ИИ сейчас отвечает с перебоями — вот проверенные варианты из каталога 🎬\nА «' + aiH(t) + '» можно поискать здесь:' + aiWhereBtns(t);
-      return intro + '<div>' + (picks && picks.length ? picks.map(aiChipBtn).join('') : '') + '</div>';
-    }
+    var guess = q.replace(/расскажи (мне )?(о |про |об )?/gi, '').replace(/о фильме|про фильм|что за фильм|хочу узнать (о |про )?/gi, '').replace(/[«»"']/g, '').trim();
+    var t = guess || q;
     var picks = aiPick(q);
-    var top = movies.slice();
-    top.sort(function(a, b){ return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0); });
-    var picks2 = (picks && picks.length) ? picks : top.slice(0, 5);
-    var intro = 'Вот что подошло под запрос «' + aiH(q) + '» — откройте карточку: там описание, возраст и кнопки «где смотреть».';
-    return intro + '<div>' + picks2.map(aiChipBtn).join('') + '</div>';
+    var intro = 'В каталоге «' + aiH(t) + '» пока нет, но его можно поискать здесь, а ниже — похожее из каталога:' + aiWhereBtns(t);
+    return intro + '<div>' + (picks && picks.length ? picks.map(aiChipBtn).join('') : '') + '</div>';
   }
   function localAdvice(userText){
     return aiLocalReply(userText);
@@ -3763,7 +3768,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function fallbackText(err){
     var code = err && err.message ? String(err.message) : 'ошибка';
     var r = movies[Math.floor(Math.random() * movies.length)];
-    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + '. ' + aiWhereBtns(r.title);
+    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + ' ' + aiWhereBtns(r.title);
   }
 
   function throttle(){
