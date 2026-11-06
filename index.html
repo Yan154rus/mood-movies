@@ -2926,7 +2926,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <button class="ai-qchip" onclick="aiQuickAsk('спокойное, чтобы успокоиться')">🧘 успокоиться</button>
       <button class="ai-qchip" onclick="aiQuickAsk('романтика, чтобы посмотреть с девушкой')">❤️ романтика</button>
       <button class="ai-qchip" onclick="aiQuickAsk('фильм для семейного вечера с детьми')">👨‍👩‍👧 с детьми</button>
-      <button class="ai-qchip" onclick="aiQuickAsk('страшное, чтобы напрячься')">😱 страстное</button>
+      <button class="ai-qchip" onclick="aiQuickAsk('страшное, чтобы напрячься')">😱 страшное</button>
       <button class="ai-qchip" onclick="aiQuickAsk('драйв, чтобы взбодриться')">⚡ драйв</button>
       <button class="ai-qchip" onclick="aiQuickAsk('что посмотреть на выходных')">🛋 на выходных</button>
       <button class="ai-qchip" onclick="aiQuickAsk('посоветуй что-нибудь новенькое')">✨ новенькое</button>
@@ -3763,7 +3763,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function fallbackText(err){
     var code = err && err.message ? String(err.message) : 'ошибка';
     var r = movies[Math.floor(Math.random() * movies.length)];
-    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + ' + aiWhereBtns(r.title);
+    return 'ИИ не ответил (' + code + '). Пока — проверенный вариант из каталога: 🎬 «' + r.title + '» (' + r.year + '), ' + r.genres.join(', ') + ', рейтинг ' + r.rating + '. ' + aiWhereBtns(r.title);
   }
 
   function throttle(){
