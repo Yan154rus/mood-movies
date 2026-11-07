@@ -750,8 +750,6 @@ body.light .ai-note { color: rgba(26,23,34,0.65); }
 <div class="screen" id="screen-stats">
   <button class="back-btn" id="back-home-from-stats">← Назад</button>
   <h1>Статистика</h1>
-  <button class="more-btn" id="diary-btn" onclick="aiDiary()">📊 Итог месяца</button>
-  <div id="diary-box" style="display:none;"></div>
   <div id="stats-content"></div>
   <div id="no-stats" style="display: none;">
     Статистика появится, когда отметишь первый просмотренный фильм и поставишь пару оценок 🎬
@@ -2455,20 +2453,19 @@ window.rateMovie = function(id, stars) {
 
 window.toggleWatched = function(id) {
   const index = watched.indexOf(id);
+  let dates = {};
+  try { dates = JSON.parse(localStorage.getItem('mood_movies_watched_dates')) || {}; } catch (e) { dates = {}; }
   if (index === -1) {
     watched.push(id);
+    dates[String(id)] = new Date().toISOString().slice(0, 10);
     const m = movies.find(function(x) { return x.id === id; });
     showToast('🎬 «' + (m ? m.title : 'Фильм') + '» — отмечен как просмотренный', true);
   } else {
     watched.splice(index, 1);
+    delete dates[String(id)];
   }
   localStorage.setItem('mood_movies_watched', JSON.stringify(watched));
-  try {
-    var wlog = {};
-    try { wlog = JSON.parse(localStorage.getItem('mood_movies_watched_log')) || {}; } catch(eW) { wlog = {}; }
-    if (index === -1) wlog[String(id)] = Date.now(); else delete wlog[String(id)];
-    localStorage.setItem('mood_movies_watched_log', JSON.stringify(wlog));
-  } catch(eW2) {}
+  localStorage.setItem('mood_movies_watched_dates', JSON.stringify(dates));
   refreshCurrentScreen();
 };
 
@@ -2700,6 +2697,8 @@ function renderStats() {
   } else if (data.ratedCount === 0) {
     html += '<div class="stats-box"><div class="stats-hint">Поставь несколько оценок звёздами — и здесь появятся фильмы под твой вкус 💡</div></div>';
   }
+
+  html += (window.aiDiaryHTML && typeof window.aiDiaryHTML === 'function') ? window.aiDiaryHTML() : '';
 
   content.innerHTML = html;
 
@@ -2937,10 +2936,10 @@ document.addEventListener('DOMContentLoaded', function() {
       <button class="ai-qchip" onclick="aiQuickAsk('страшное, чтобы напрячься')">😱 страшное</button>
       <button class="ai-qchip" onclick="aiQuickAsk('экшен, чтобы взбодриться')">⚡ экшен</button>
       <button class="ai-qchip" onclick="aiQuickAsk('что посмотреть на выходных')">🛋 на выходных</button>
-      <button class="ai-qchip" onclick="aiQuickStart()">⚡ просто подбери</button>
-      <button class="ai-qchip" onclick="aiStartInterview()">🎯 подберём точнее</button>
-      <button class="ai-qchip" onclick="aiSleepPick()">🌙 уснуть</button>
       <button class="ai-qchip" onclick="aiQuickAsk('посоветуй что-нибудь новенькое')">✨ новенькое</button>
+      <button class="ai-qchip" onclick="aiQuickAsk('⚡ просто подбери')">⚡ просто подбери</button>
+      <button class="ai-qchip" onclick="aiQuickAsk('🎯 подберём точнее')">🎯 подберём точнее</button>
+      <button class="ai-qchip" onclick="aiSleepPick()">🌙 уснуть</button>
     </div>
     <div class="ai-input-row">
       <input id="ai-input" placeholder="Например: что посмотреть вечером, когда грустно?" onkeydown="if(event.key==='Enter')aiSend()">
@@ -3529,9 +3528,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (genreish) break;
       }
     }
-    if (/уснуть|заснуть|не могу спать|хочу уснуть|на сон|перед сном/.test(nq)) return { type: 'sleep' };
-    if (/просто подбер|что-?нибудь посмотреть|что нибудь посмотреть|лень думать/.test(nq)) return { type: 'quick' };
-    if (/подбер[её]м точнее/.test(nq) || (nq.length < 22 && /точнее/.test(nq))) return { type: 'interview' };
     if (advice || genreish) return { type: 'picks' };
     var loose = aiMatchLoose(txt);
     if (loose.length) return { type: 'catalog', movie: loose[0] };
@@ -3945,366 +3941,413 @@ document.addEventListener('DOMContentLoaded', function() {
     if (words.length >= 1 && words.length <= 3) aiCurFilm = words.join(' ');
   }
 
-  // ===== ОЧЕРЕДЬ 1+2: умный подбор, интервью, почему, не хочу, сон, дневник =====
-  function aiPainLoad(){
-    try { return JSON.parse(localStorage.getItem('mood_movies_pain')) || {}; } catch(e){ return {}; }
-  }
-  function aiPainSave(p){
-    try { localStorage.setItem('mood_movies_pain', JSON.stringify(p)); } catch(e){}
-  }
-  function aiPainActive(pain){
-    var out = {}, now = Date.now();
-    Object.keys(pain || {}).forEach(function(g){
-      if (now - pain[g] < 14 * 24 * 3600 * 1000) out[g] = 1;
-    });
+  /* ===== Очередь 1: умный подбор, интервью, объяснения, отказы ===== */
+  function aiLs(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
+  function aiLsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  function aiPenalty(){
+    var p = aiLs('ai_gpenalty_v1') || {};
+    var now = Date.now(), out = {};
+    for (var g in p) { if (now - p[g] < 14 * 24 * 3600 * 1000) out[g] = 1; }
     return out;
   }
-  function aiProfLoad(){
-    try { return JSON.parse(localStorage.getItem('mood_movies_profile')) || null; } catch(e){ return null; }
+  function aiPenAdd(g){ if (!g) return; var p = aiLs('ai_gpenalty_v1') || {}; p[g] = Date.now(); aiLsSet('ai_gpenalty_v1', p); }
+  function aiSaveProfile(p){ aiLsSet('ai_profile_v1', p || {}); }
+  function aiLoadProfile(){ return aiLs('ai_profile_v1') || null; }
+  function aiArr(v){
+    return (Array.isArray(v) ? v : String(v || '').split(','))
+      .map(function(x){ return String(x).trim().toLowerCase(); }).filter(Boolean);
   }
-  function aiProfSave(p){
-    try { localStorage.setItem('mood_movies_profile', JSON.stringify(p)); } catch(e){}
-  }
-  function aiGenresOf(m){
-    return (Array.isArray(m.genres) ? m.genres.join(',') : String(m.genres || '')).toLowerCase();
-  }
-  function aiEmotionsOf(m){
-    return (Array.isArray(m.emotions) ? m.emotions.join(',') : String(m.emotions || '')).toLowerCase().replace(/ё/g, 'е');
-  }
-  function aiSmartPick(profile, opts){
-    opts = opts || {};
-    var mood = profile.mood || null;
-    var tone = profile.tone || null;
-    var time = profile.time || null;
-    var comp = profile.company || null;
-    var sleep = !!opts.sleep;
-    var pain = aiPainActive(aiPainLoad());
-    var favGenres = {}, famGenres = {};
-    var watchedSet = {};
-    (watched || []).forEach(function(x){ watchedSet[String(x)] = 1; });
-    function addFav(genStr, w){
-      String(genStr || '').split(',').forEach(function(g){
-        g = g.trim().toLowerCase(); if (g) favGenres[g] = (favGenres[g] || 0) + w;
-      });
+  function aiFavGenres(){
+    var out = {};
+    function add(m, w){
+      aiArr(m.genres).forEach(function(g){ out[g] = (out[g] || 0) + w; });
     }
     (favorites || []).forEach(function(id){
-      movies.forEach(function(x){ if (String(x.id) === String(id)) addFav(x.genres, 1); });
+      movies.forEach(function(m){ if (String(m.id) === String(id)) add(m, 1); });
     });
-    Object.keys(ratings || {}).forEach(function(id){
-      var st = parseInt(ratings[id], 10);
-      if (st >= 4) movies.forEach(function(x){
-        if (String(x.id) === String(id)){
-          addFav(x.genres, 1);
-          String(x.genres || '').split(',').forEach(function(g){
-            g = g.trim().toLowerCase(); if (g) famGenres[g] = (famGenres[g] || 0) + 1;
-          });
+    if (ratings && typeof ratings === 'object') {
+      Object.keys(ratings).forEach(function(id){
+        if ((ratings[id] || 0) >= 7) {
+          movies.forEach(function(m){ if (String(m.id) === String(id)) add(m, 1.5); });
         }
       });
-    });
-    var moodGenre = {
-      'бодрое': ['боевик', 'приключения', 'фантастика'],
-      'спокойное': ['мелодрама', 'драма', 'музыкальный'],
-      'смешное': ['комедия'],
-      'грустное': ['драма'],
-      'эмоции': ['триллер', 'драма', 'хоррор']
-    }[mood] || [];
-    var moodEmo = {
-      'бодрое': ['энергичное', 'зрелищное', 'весёлое', 'безумное'],
-      'спокойное': ['расслабленное', 'милое', 'доброе'],
-      'смешное': ['смешное', 'весёлое'],
-      'грустное': ['трогательное', 'грустное', 'драматичное'],
-      'эмоции': ['напряжённое', 'страшное', 'загадочное']
-    }[mood] || [];
-    var sleepEmo = ['расслабленное', 'милое', 'доброе', 'красивое'];
-    var scored = [];
-    movies.forEach(function(m){
-      if (watchedSet[String(m.id)]) return;
-      var g = aiGenresOf(m);
-      var dur = parseInt(m.duration, 10) || 0;
-      var yy = parseInt(m.year, 10) || 0;
-      var age = String(m.age || '');
-      if (comp === 'one' && (g.indexOf('семейный') >= 0 || g.indexOf('мультфильм') >= 0)) return;
-      if (comp === 'kids' && !/^(0|6|12)\+/.test(age)) return;
-      if (comp === 'couple' && g.indexOf('хоррор') >= 0) return;
-      if (sleep && ['хоррор', 'триллер', 'криминал', 'военный', 'катастрофа', 'детектив', 'спорт'].some(function(b){ return g.indexOf(b) >= 0; })) return;
-      var sc = (parseFloat(m.rating) || 0) / 4;
-      moodGenre.forEach(function(gg){ if (g.indexOf(gg) >= 0) sc += 3; });
-      var em = aiEmotionsOf(m);
-      moodEmo.forEach(function(ee){ if (em.indexOf(ee) >= 0) sc += 2; });
-      if (sleep) sleepEmo.forEach(function(ee){ if (em.indexOf(ee) >= 0) sc += 3; });
-      if (tone === 'light'){
-        ['хоррор', 'триллер', 'криминал', 'военный', 'катастрофа'].forEach(function(b){ if (g.indexOf(b) >= 0) sc -= 4; });
-        ['комедия', 'приключения', 'фэнтези', 'мелодрама'].forEach(function(lg){ if (g.indexOf(lg) >= 0) sc += 2; });
-      }
-      if (tone === 'dark'){
-        ['триллер', 'криминал', 'драма', 'детектив', 'хоррор'].forEach(function(dg){ if (g.indexOf(dg) >= 0) sc += 2; });
-        ['мультфильм', 'семейный', 'мюзикл'].forEach(function(dg){ if (g.indexOf(dg) >= 0) sc -= 2; });
-      }
-      if (comp === 'kids'){
-        ['семейный', 'мультфильм', 'приключения', 'фэнтези'].forEach(function(kg){ if (g.indexOf(kg) >= 0) sc += 2; });
-      }
-      if (comp === 'couple'){
-        if (em.indexOf('романтичное') >= 0) sc += 3;
-        if (g.indexOf('мелодрама') >= 0) sc += 1;
-      }
-      if (time === 'short'){ if (dur && dur <= 105) sc += 2; if (dur >= 140) sc -= 1; }
-      if (time === 'mid'){ if (dur >= 85 && dur <= 140) sc += 2; if (dur && dur < 70) sc -= 1; }
-      if (time === 'long'){ if (dur >= 120) sc += 2; if (dur && dur <= 85) sc -= 1; }
-      if (sleep){ if (!dur || dur <= 130) sc += 1; }
-      if (yy >= 2010) sc += 1;
-      if (yy && yy < 1980) sc -= 1;
-      if (opts.minYear && yy < opts.minYear) return;
-      Object.keys(pain).forEach(function(pg){ if (g.indexOf(pg) >= 0) sc -= 2; });
-      if (sleep){
-        Object.keys(famGenres).forEach(function(fg){ if (g.indexOf(fg) >= 0) sc += 1.5 * Math.min(famGenres[fg], 3); });
-      }
-      Object.keys(favGenres).forEach(function(fg){ if (g.indexOf(fg) >= 0) sc += 0.8; });
-      if (sc <= 0.5) return;
-      scored.push({ m: m, sc: sc });
-    });
-    scored.sort(function(a, b){ return b.sc - a.sc; });
-    var out = [], firstGCount = {};
-    var last = (opts.excludeIds || []).map(String);
-    for (var i = 0; i < scored.length && out.length < 5; i++){
-      var mm = scored[i].m;
-      if (last.indexOf(String(mm.id)) >= 0) continue;
-      var fg = (aiGenresOf(mm).split(',')[0] || '').trim();
-      if (fg && (firstGCount[fg] || 0) >= 2) continue;
-      firstGCount[fg] = (firstGCount[fg] || 0) + 1;
-      out.push(mm);
     }
     return out;
   }
-  function aiExplainLine(m, profile, opts){
-    opts = opts || {};
-    profile = profile || {};
-    var g = aiGenresOf(m), em = aiEmotionsOf(m);
-    var parts = [];
-    if (opts.sleep) parts.push('спокойный темп');
-    else if (profile.mood === 'бодрое') parts.push('бодрый темп');
-    else if (profile.mood === 'спокойное') parts.push('спокойный ритм');
-    else if (profile.mood === 'смешное') parts.push('весёлое кино');
-    else if (profile.mood === 'грустное') parts.push('трогательная история');
-    else if (profile.mood === 'эмоции') parts.push('держит в напряжении');
-    if (profile.tone === 'light') parts.push('светлая картинка');
-    if (profile.tone === 'dark') parts.push('мрачная картинка');
-    if (profile.time === 'short') parts.push('короткий хронометраж');
-    if (profile.time === 'long') parts.push('большая форма');
-    var favHit = null;
-    var favIds = (favorites || []).slice();
-    Object.keys(ratings || {}).forEach(function(id){ if (parseInt(ratings[id], 10) >= 4) favIds.push(String(id)); });
-    favIds.forEach(function(id){
-      if (favHit) return;
-      movies.forEach(function(x){
-        if (favHit || String(x.id) !== String(id)) return;
-        var xg = aiGenresOf(x).split(',').map(function(v){ return v.trim(); });
-        var mg = g.split(',').map(function(v){ return v.trim(); });
-        for (var i = 0; i < xg.length; i++){
-          if (xg[i] && mg.indexOf(xg[i]) >= 0){
-            favHit = { title: x.title, stars: parseInt(ratings[id], 10) || 0 };
-            break;
-          }
-        }
-      });
-    });
-    if (favHit) parts.push('похоже на «' + favHit.title + '»' + (favHit.stars ? ' (оценил на ' + favHit.stars + '/5)' : ''));
-    parts.push('оценка ' + m.rating + '/10');
-    return parts.slice(0, 3).join('; ');
-  }
-  window.AI_LAST_PICKS = [];
-  window.AI_LAST_PROFILE = {};
-  window.AI_LAST_OPTS = {};
-  function aiWhyNopeRow(picks){
-    if (picks) window.AI_LAST_PICKS = picks;
-    return '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">' +
-      '<button class="ai-chip" onclick="aiWhyToggle()">💬 почему эти фильмы</button>' +
-      '<button class="ai-chip" onclick="aiNopeStart()">👎 не хочу, другое</button></div>';
-  }
-  window.aiWhyToggle = function(){
-    var picks = window.AI_LAST_PICKS || [];
-    if (!picks.length) return;
-    var html = picks.map(function(m){
-      return '<div class="ai-note">💬 <b>' + aiH(m.title) + '</b> — ' + aiExplainLine(m, window.AI_LAST_PROFILE, window.AI_LAST_OPTS) + '</div>';
-    }).join('');
-    aiAddHTML(html);
-  };
-  window.aiNopeStart = function(){
-    aiAddHTML('<div class="ai-note">Что не так с подборкой?</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">' +
-      '<button class="ai-chip" onclick="aiNopePick(\'long\')">слишком длинное</button>' +
-      '<button class="ai-chip" onclick="aiNopePick(\'old\')">слишком старое</button>' +
-      '<button class="ai-chip" onclick="aiNopePick(\'mood\')">не то настроение</button>' +
-      '<button class="ai-chip" onclick="aiNopePick(\'genre\')">не этот жанр</button>' +
-      '<button class="ai-chip" onclick="aiNopePick(\'nope\')">просто не зашло</button></div>');
-  };
-  window.aiNopePick = function(cause){
-    var prof = JSON.parse(JSON.stringify(window.AI_LAST_PROFILE || {}));
-    var opts = JSON.parse(JSON.stringify(window.AI_LAST_OPTS || {}));
-    var lastIds = (window.AI_LAST_PICKS || []).map(function(m){ return String(m.id); });
-    var msg = '';
-    if (cause === 'long'){ prof.time = 'short'; msg = 'Понял — покороче. Пересобрал:'; }
-    if (cause === 'old'){ opts.minYear = 2015; msg = 'Понял — посвежее. Пересобрал:'; }
-    if (cause === 'mood'){
-      var order = ['бодрое', 'спокойное', 'смешное', 'грустное', 'эмоции'];
-      prof.mood = order[(order.indexOf(prof.mood) + 1) % order.length] || 'спокойное';
-      msg = 'Меняю курс: теперь под «' + prof.mood + '». Пересобрал:';
-    }
-    if (cause === 'genre'){
-      var gs = {};
-      (window.AI_LAST_PICKS || []).forEach(function(m){
-        aiGenresOf(m).split(',').forEach(function(g){ g = g.trim(); if (g) gs[g] = (gs[g] || 0) + 1; });
-      });
-      var topG = null, topN = 0;
-      Object.keys(gs).forEach(function(g){ if (gs[g] > topN){ topN = gs[g]; topG = g; } });
-      if (topG){
-        var pain = aiPainLoad();
-        pain[topG] = Date.now();
-        aiPainSave(pain);
-        opts.excludeGenre = topG;
-        msg = 'Запомнил: «' + topG + '» пока не предлагаю. Пересобрал:';
-      } else { msg = 'Пересобрал:'; }
-    }
-    if (cause === 'nope'){ msg = 'Понял, пробую иначе:'; }
-    opts.excludeIds = lastIds;
-    var picks = aiSmartPick(prof, opts);
-    if (opts.excludeGenre) picks = picks.filter(function(m){ return aiGenresOf(m).indexOf(opts.excludeGenre) < 0; });
-    if (picks.length < 3){
-      var fallback = aiSmartPick(prof, opts);
-      if (fallback.length > picks.length) picks = fallback;
-    }
-    if (!picks.length) picks = aiPick('что-нибудь посмотреть');
-    aiAddHTML('<div class="ai-note">' + msg + '</div>' + aiRenderPicks(picks, prof, opts));
-  };
-  function aiRenderPicks(picks, profile, opts){
-    window.AI_LAST_PICKS = picks;
-    window.AI_LAST_PROFILE = profile;
-    window.AI_LAST_OPTS = opts || {};
-    return '<div>' + picks.map(aiChipBtn).join('') + '</div>' + aiWhyNopeRow();
-  }
-  var AI_INT_STEPS = [
-    { key: 'mood', q: 'Какое настроение?', opts: [['⚡ бодрое', 'бодрое'], ['😴 спокойное', 'спокойное'], ['😂 смешное', 'смешное'], ['😭 грустное', 'грустное'], ['🔥 хочу эмоций', 'эмоции']] },
-    { key: 'tone', q: 'Какая картинка по духу?', opts: [['☀ светлая и яркая', 'light'], ['🌑 тёмная', 'dark'], ['🤷 не важно', '']] },
-    { key: 'time', q: 'Сколько есть времени?', opts: [['⏱ до полутора часов', 'short'], ['⏰ около двух часов', 'mid'], ['🕰 два и больше', 'long'], ['🤷 не важно', '']] },
-    { key: 'company', q: 'С кем смотришь?', opts: [['🙂 один', 'one'], ['👨‍👩‍👧 с детьми', 'kids'], ['💕 вдвоём', 'couple'], ['🤷 не важно', '']] }
-  ];
-  window.AI_INT = null;
-  function aiIntSavedText(p){
-    p = p || {};
-    var parts = [];
-    if (p.mood) parts.push('настроение — ' + p.mood);
-    if (p.tone === 'light') parts.push('светлая картинка');
-    if (p.tone === 'dark') parts.push('тёмная картинка');
-    if (p.time === 'short') parts.push('короткое');
-    if (p.time === 'mid') parts.push('около двух часов');
-    if (p.time === 'long') parts.push('длинное');
-    if (p.company === 'one') parts.push('смотреть одному');
-    if (p.company === 'kids') parts.push('с детьми');
-    if (p.company === 'couple') parts.push('вдвоём');
-    return parts.join(', ') || 'ничего не запомнил';
-  }
-  window.aiStartInterview = function(){
-    var saved = aiProfLoad();
-    if (saved && saved.mood){
-      aiAddHTML('<div class="ai-note">В прошлый раз ты выбрал: ' + aiH(aiIntSavedText(saved)) + '. Оставляем?</div>' +
-        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">' +
-        '<button class="ai-chip" onclick="aiInterviewRun(true)">оставляем</button>' +
-        '<button class="ai-chip" onclick="aiInterviewRun(false)">сначала заново</button></div>');
-      return;
-    }
-    window.aiInterviewRun(false);
-  };
-  window.aiInterviewRun = function(useSaved){
-    if (useSaved){
-      aiFinishInterview(aiProfLoad());
-      return;
-    }
-    window.AI_INT = { prof: {}, step: 0 };
-    aiAskStep();
-  };
-  function aiAskStep(){
-    var st = window.AI_INT;
-    if (!st) return;
-    if (st.step >= AI_INT_STEPS.length){ aiFinishInterview(st.prof); window.AI_INT = null; return; }
-    var def = AI_INT_STEPS[st.step];
-    var btns = def.opts.map(function(o){
-      return '<button class="ai-chip" onclick="aiInterviewAns(\'' + aiAttr(o[1]) + '\')">' + aiH(o[0]) + '</button>';
-    }).join('');
-    aiAddHTML('<div class="ai-note">' + aiH(def.q) + '</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">' + btns + '</div>');
-  }
-  window.aiInterviewAns = function(v){
-    var st = window.AI_INT;
-    if (!st) return;
-    var def = AI_INT_STEPS[st.step];
-    st.prof[def.key] = v || null;
-    var label = v;
-    def.opts.forEach(function(o){ if (String(o[1]) === String(v)) label = o[0]; });
-    aiAdd('user', label || 'не важно');
-    st.step++;
-    aiAskStep();
-  };
-  function aiFinishInterview(prof){
-    if (!prof) prof = {};
-    aiProfSave(prof);
-    var picks = aiSmartPick(prof, {});
-    aiHistPush('ai', 'подборка по профилю: ' + aiIntSavedText(prof));
-    aiAddHTML('<div class="ai-note">Собрал под твой выбор: ' + aiH(aiIntSavedText(prof)) + '. Открывай карточки:</div>' + aiRenderPicks(picks, prof, {}));
-  }
-  window.aiQuickStart = function(){
+  function aiSmartPick(prof, adj){
+    prof = prof || {}; adj = adj || {};
+    var favG = aiFavGenres();
+    var pen = aiPenalty();
+    var watchedSet = {};
+    (watched || []).forEach(function(x){ watchedSet[String(x)] = 1; });
+    var exclude = {};
+    (adj.excludeIds || []).forEach(function(x){ exclude[String(x)] = 1; });
     var h = new Date().getHours();
     var evening = (h >= 19 || h < 6);
-    var prof = { mood: evening ? 'спокойное' : 'бодрое', tone: null, time: null, company: null };
-    var picks = aiSmartPick(prof, {});
-    var intro = '<div class="ai-note">' + (evening ? 'Вечер — держи что-то поспокойнее' : 'День — держи что-то поживее') + ', с учётом твоих фаворитов:</div>';
-    aiHistPush('ai', 'быстрая подборка');
-    aiAddHTML(intro + aiRenderPicks(picks, prof, {}));
-  };
-  window.aiSleepPick = function(){
-    var prof = { mood: 'спокойное', tone: null, time: 'short', company: null };
-    var picks = aiSmartPick(prof, { sleep: true });
-    aiHistPush('ai', 'подборка «уснуть»');
-    aiAddHTML('<div class="ai-note">Тихий, лёгкий набор — без экшена, хорроров и головоломок. Спокойной ночи 🌙</div>' + aiRenderPicks(picks, prof, { sleep: true }));
-  };
-  window.aiDiary = function(){
-    var box = document.getElementById('diary-box');
-    if (!box) return;
-    if (box.style.display !== 'none'){ box.style.display = 'none'; return; }
-    var wlog = {};
-    try { wlog = JSON.parse(localStorage.getItem('mood_movies_watched_log')) || {}; } catch(e){ wlog = {}; }
-    var now = Date.now();
-    var monthIds = [], allIds = [];
-    (watched || []).forEach(function(id){
-      allIds.push(String(id));
-      if (wlog[String(id)] && now - wlog[String(id)] < 30 * 24 * 3600 * 1000) monthIds.push(String(id));
+    var mood = adj.clearMood ? '' : (prof.mood || '');
+    var light = prof.picture || '';
+    var dur = prof.time || '';
+    var comp = prof.comp || '';
+    var scored = [];
+    movies.forEach(function(m){
+      var id = String(m.id);
+      var known = false;
+      if (adj.sleep && ratings && (parseInt(ratings[id], 10) || 0) >= 4) known = true;
+      if (exclude[id]) return;
+      if (watchedSet[id] && !known) return;
+      var gs = aiArr(m.genres);
+      var em = aiArr(m.emotions).map(function(x){ return x.replace(/ё/g, 'е'); });
+      var sc = (parseFloat(m.rating) || 6.5) * 0.8;
+      var why = [];
+      var kidsAge = /^(0|6|12)\+/.test(String(m.age || ''));
+      if (mood === 'energetic') {
+        if (gs.some(function(g){ return /боевик|приключения|спорт|криминал|вестерн/.test(g); })) { sc += 2.5; why.push('бодрый темп'); }
+        if (em.some(function(e){ return /энергичн|зрелищн|динамичн/.test(e); })) sc += 1.5;
+      }
+      if (mood === 'fun') {
+        if (gs.some(function(g){ return g.indexOf('комеди') === 0; })) { sc += 2.5; why.push('смешное'); }
+      }
+      if (mood === 'sad') {
+        if (em.some(function(e){ return /трогател|грустн|драматичн/.test(e); })) { sc += 2; why.push('трогательная история'); }
+      }
+      if (mood === 'tired') {
+        if (gs.some(function(g){ return g.indexOf('комеди') === 0; })) sc += 1.5;
+        if (gs.some(function(g){ return /хоррор|триллер/.test(g); })) sc -= 3;
+        if (em.some(function(e){ return /расслаблен|мил|добр/.test(e); })) sc += 1.2;
+      }
+      if (mood === 'calm') {
+        if (em.some(function(e){ return /расслаблен|мил|добр/.test(e); })) { sc += 2; why.push('спокойное настроение'); }
+        if (gs.some(function(g){ return /хоррор|триллер|криминал|военный/.test(g); })) sc -= 4;
+      }
+      if (mood === 'emotional') {
+        if (em.some(function(e){ return /трогател|вдохновляющ|драматичн/.test(e); })) { sc += 2; why.push('берёт за чувства'); }
+        if (gs.some(function(g){ return /приключения|боевик|фантастика/.test(g); })) sc += 1;
+      }
+      if (!mood && evening) {
+        if (em.some(function(e){ return /расслаблен|мил|добр/.test(e); })) sc += 1.2;
+        if (gs.some(function(g){ return /хоррор|триллер/.test(g); })) sc -= 1;
+      }
+      if (light === 'light') {
+        if (gs.some(function(g){ return /комеди|приключения|фэнтези|мюзикл|мелодрама/.test(g); })) { sc += 1.8; if (why.indexOf('светлая картинка') < 0) why.push('светлая картинка'); }
+        if (gs.some(function(g){ return /хоррор|триллер|криминал|военный/.test(g); })) sc -= 1.4;
+        if (gs.indexOf('драма') >= 0) sc -= 0.6;
+        if (em.some(function(e){ return /зрелищн/.test(e); })) sc += 1;
+      }
+      if (light === 'dark') {
+        if (gs.some(function(g){ return /хоррор|триллер|криминал|детектив/.test(g); })) { sc += 1.8; if (why.indexOf('атмосферно и мрачно') < 0) why.push('атмосферно и мрачно'); }
+        if (gs.indexOf('драма') >= 0) sc += 0.8;
+        if (gs.some(function(g){ return /комеди|мюзикл/.test(g); })) sc -= 1.2;
+      }
+      var d = parseInt(m.duration, 10) || 0;
+      if (dur === 'short') { if (d && d <= 105) sc += 1.5; else if (d > 125) sc -= 1.5; }
+      if (dur === 'mid') { if (d >= 85 && d <= 145) { sc += 1.2; if (why.indexOf('как раз на вечер') < 0) why.push('как раз на вечер'); } else if (d && d < 75) sc -= 1; }
+      if (dur === 'long') { if (d >= 115) { sc += 1.2; why.push('полноценный вечер'); } else if (d && d < 90) sc -= 1; }
+      if (comp === 'one') {
+        if (gs.indexOf('семейный') >= 0 || gs.some(function(g){ return g.indexOf('мульт') === 0; })) return;
+        sc += 0.5;
+      }
+      if (comp === 'kids') {
+        if (!kidsAge) return;
+        sc += 2;
+      }
+      if (comp === 'group') { if (gs.some(function(g){ return /комеди|боевик|приключения/.test(g); })) sc += 1.2; }
+      if (comp === 'date') {
+        if (em.some(function(e){ return /романтичн|мил/.test(e); })) sc += 1.5;
+        if (gs.indexOf('хоррор') >= 0) sc -= 1.5;
+      }
+      if (adj.sleep) {
+        if (gs.some(function(g){ return /боевик|триллер|хоррор|ужас|криминал|военный|детектив/.test(g); })) return;
+        if (em.some(function(e){ return /расслаблен|мил|добр|спокойн|уютн|нежн/.test(e); })) { sc += 1.8; if (why.indexOf('спокойный темп') < 0) why.push('спокойный темп'); }
+        if (d && d <= 110) sc += 0.8;
+        if (known) { sc += 1.5; why.push('знакомое — оценил на ' + (parseInt(ratings[id], 10) || 0) + '/5'); }
+      }
+      var g0 = gs[0] || '';
+      if (g0 && favG[g0]) { sc += 1.2 + Math.min(favG[g0], 3) * 0.4; if (why.indexOf('твой жанр — ' + g0) < 0) why.push('твой жанр — ' + g0); }
+      gs.forEach(function(g){ if (pen[g]) sc -= 2.5; });
+      var yy = parseInt(m.year, 10) || 0;
+      if (yy >= 2010) sc += 0.8; else if (yy < 1980) sc -= 0.7;
+      if (adj.minYear && yy < adj.minYear) return;
+      if (adj.maxDur && d > adj.maxDur) return;
+      if (adj.banGenre && gs.some(function(g){ return g.indexOf(adj.banGenre) === 0; })) return;
+      if (sc <= 3) return;
+      scored.push({ m: m, sc: sc, why: why });
     });
-    if (!allIds.length){
-      box.style.display = 'block';
-      box.innerHTML = '<div class="couple-box">Отметь пару фильмов как просмотренные — и я соберу итоги месяца 🎬</div>';
-      return;
+    scored.sort(function(a, b){ return b.sc - a.sc; });
+    var cnt = {}, out = [];
+    for (var i2 = 0; i2 < scored.length && out.length < 5; i2++) {
+      var gg = (Array.isArray(scored[i2].m.genres) && scored[i2].m.genres[0] ? String(scored[i2].m.genres[0]).trim().toLowerCase() : '');
+      cnt[gg] = (cnt[gg] || 0) + 1;
+      if (cnt[gg] > 2) continue;
+      out.push(scored[i2]);
     }
-    var list = (monthIds.length ? monthIds : allIds);
-    var per = monthIds.length ? 'за месяц' : 'за всё время';
-    var gcount = {}, rated = [], sum = 0, n = 0;
-    list.forEach(function(id){
-      movies.forEach(function(x){
-        if (String(x.id) !== String(id)) return;
-        aiGenresOf(x).split(',').forEach(function(g){ g = g.trim(); if (g) gcount[g] = (gcount[g] || 0) + 1; });
-        if (ratings && ratings[id]){ rated.push({ m: x, stars: parseInt(ratings[id], 10) }); sum += parseInt(ratings[id], 10); n++; }
-      });
+    return out;
+  }
+  function aiProfText(p){
+    p = p || {};
+    var MOODS = { energetic: 'бодрое', fun: 'весёлое', sad: 'трогательное', tired: 'устал, лёгкое', calm: 'спокойное', emotional: 'хочу эмоций' };
+    var PIC = { light: 'светлая картинка', dark: 'тёмная картинка', any: 'картинка любая' };
+    var TIME = { short: 'до полутора часов', mid: 'около двух часов', long: 'длинное', any: 'время любое' };
+    var COMP = { one: 'один', kids: 'с детьми', group: 'компания', date: 'вдвоём', any: 'компания любая' };
+    var parts = [];
+    if (p.mood && MOODS[p.mood]) parts.push(MOODS[p.mood]);
+    if (p.picture && PIC[p.picture]) parts.push(PIC[p.picture]);
+    if (p.time && TIME[p.time]) parts.push(TIME[p.time]);
+    if (p.comp && COMP[p.comp]) parts.push(COMP[p.comp]);
+    return parts.join(', ') || 'ничего не уточнено';
+  }
+  function aiWhyForQuery(m, nq){
+    var why = [];
+    var gs = aiArr(m.genres);
+    var em = aiArr(m.emotions).map(function(x){ return x.replace(/ё/g, 'е'); });
+    var favG = aiFavGenres();
+    var g0 = gs[0] || '';
+    if (g0 && favG[g0]) why.push('совпадает с твоими фаворитами');
+    var moodV = aiVocab('emotions');
+    Object.keys(moodV).forEach(function(e0){
+      if (nq.indexOf(e0.slice(0, 6)) >= 0) {
+        em.forEach(function(e){
+          if (e.indexOf(e0.slice(0, 6)) === 0 && why.indexOf('под настроение «' + e0 + '»') < 0) why.push('под настроение «' + e0 + '»');
+        });
+      }
     });
-    var topG = null, topN = 0;
-    Object.keys(gcount).forEach(function(g){ if (gcount[g] > topN){ topN = gcount[g]; topG = g; } });
-    var best = rated.slice().sort(function(a, b){ return b.stars - a.stars; })[0] || null;
-    var html = '<div class="couple-box"><div style="font-weight:700;margin-bottom:10px;">📊 Итоги ' + per + '</div>';
-    html += '<div class="ai-note">Посмотрел: <b>' + list.length + '</b> ' + (list.length % 10 === 1 && list.length % 100 !== 11 ? 'фильм' : 'фильмов');
-    if (n) html += ' · средняя оценка: <b>' + (sum / n).toFixed(1) + '/5</b>';
-    if (topG) html += '<br>Чаще всего выбирал: <b>' + aiH(topG) + '</b>';
-    if (best) html += '<br>Лучший выбор: «<b>' + aiH(best.m.title) + '</b>» — оценка ' + best.stars + '/5' + (best.stars >= 4 ? ', отличный вкус 🙂' : ', честно отмечено');
-    html += '</div></div>';
-    box.innerHTML = html;
-    box.style.display = 'block';
+    var r = parseFloat(m.rating) || 0;
+    if (r >= 8) why.push('высокая оценка ' + r);
+    var yy = parseInt(m.year, 10) || 0;
+    if (yy >= 2020) why.push('свежее');
+    return why.slice(0, 2);
+  }
+  window.AI_LAST = null;
+  function aiRenderPicks(prof, adj, intro){
+    var picks = aiSmartPick(prof || {}, adj || {});
+    window.AI_LAST = { prof: prof || {}, ids: picks.map(function(x){ return String(x.m.id); }), adj: adj || {} };
+    if (!picks.length) { aiAddHTML('По этим фильтрам ничего не нашлось — ослабь условия, скажи «не важно» по времени или настроению.'); return; }
+    var html = intro + '<div style="margin-top:6px;">';
+    var usedRefs = [];
+    picks.forEach(function(x){
+      var parts = (x.why || []).slice(0, 2);
+      var sim = aiSimilarNote(x.m, usedRefs);
+      if (sim) parts.push(sim);
+      var why = parts.length ? '💬 ' + esc(parts.join('; ')) : '';
+      html += aiChipBtn(x.m) + (why ? '<div style="font-size:12.5px;opacity:.75;margin:-2px 0 8px 8px;">' + why + '</div>' : '<div style="height:6px;"></div>');
+    });
+    html += '</div>';
+    html += '<div style="margin-top:6px;"><button class="ai-qchip" onclick="aiRejectAsk()">👎 не хочу, другое</button></div>';
+    aiHistPush('ai', intro);
+    aiAddHTML(html);
+  }
+  function aiRenderNormalPicks(query, picks){
+    var nq = aiNorm(query);
+    window.AI_LAST = { prof: {}, ids: picks.map(function(x){ return String(x.id); }), adj: {} };
+    var html = 'Вот что подобрал из каталога под запрос «' + aiH(query) + '»:<div style="margin-top:6px;">';
+    var usedRefs = [];
+    picks.forEach(function(m){
+      var parts = aiWhyForQuery(m, nq).slice(0, 2);
+      var sim = aiSimilarNote(m, usedRefs);
+      if (sim) parts.push(sim);
+      var whyTxt = parts.length ? '💬 ' + esc(parts.join('; ')) : '';
+      html += aiChipBtn(m) + (whyTxt ? '<div style="font-size:12.5px;opacity:.75;margin:-2px 0 8px 8px;">' + whyTxt + '</div>' : '<div style="height:6px;"></div>');
+    });
+    html += '</div><div style="margin-top:6px;"><button class="ai-qchip" onclick="aiRejectAsk()">👎 не хочу, другое</button></div>';
+    aiAddHTML(html);
+  }
+  function aiQuickPick(){
+    var h = new Date().getHours();
+    var evening = (h >= 19 || h < 6);
+    var favG = aiFavGenres();
+    var top = Object.keys(favG).sort(function(a, b){ return favG[b] - favG[a]; }).slice(0, 2);
+    var intro = '⚡ Быстрая подборка: ' + (evening ? 'вечер — подобрал спокойнее' : 'день — можно поживее') + (top.length ? '; твои жанры: ' + top.join(', ') : '') + '; просмотренное исключил.';
+    aiRenderPicks({}, {}, intro);
+  }
+  window.aiQuickPick = aiQuickPick;
+  var AI_QS = [
+    { key: 'mood', q: 'Какое настроение?', opts: [['бодрое', 'energetic', 'бодр|энергич|драйв|взбодр|экшен'], ['весёлое', 'fun', 'весел|посмея|смешн|поржа|юмор'], ['трогательное', 'sad', 'трогат|плак|слез|попла'], ['устал, лёгкое', 'tired', 'устал|легкое|лёгкое'], ['спокойное', 'calm', 'спокой|расслаб|уснуть|чил'], ['хочу эмоций', 'emotional', 'эмоци|вдохнов']] },
+    { key: 'picture', q: 'Какая картинка по духу?', opts: [['светлая и яркая', 'light', 'светл|ярк'], ['тёмная и мрачная', 'dark', 'темн|мрачн'], ['не важно', 'any', 'не важ']] },
+    { key: 'time', q: 'Сколько есть времени?', opts: [['до полутора часов', 'short', 'полутор|коротк'], ['около двух часов', 'mid', 'двух час|два час|часа два'], ['длинное, 2+ часа', 'long', 'длинн|больше двух'], ['не важно', 'any', 'не важ']] },
+    { key: 'comp', q: 'С кем смотришь?', opts: [['один', 'one', 'один|одна|сам'], ['с детьми', 'kids', 'дет'], ['компания', 'group', 'компан|друз|дружес'], ['вдвоём', 'date', 'вдво'], ['не важно', 'any', 'не важ']] }
+  ];
+  var AI_INT = null;
+  function aiIntAsk(){
+    var step = AI_QS[AI_INT.step];
+    var html = step.q + '<div class="ai-chips" style="margin-top:8px;">';
+    step.opts.forEach(function(o){
+      html += '<button class="ai-qchip" onclick="aiIntAns(\'' + o[1] + '\', \'' + aiAttr(o[0]) + '\')">' + esc(o[0]) + '</button>';
+    });
+    html += '</div>';
+    aiAddHTML(html);
+    aiHistPush('ai', step.q);
+  }
+  window.aiIntAns = function(key, label){
+    if (!AI_INT) return;
+    aiAdd('user', label);
+    AI_INT.answers[AI_QS[AI_INT.step].key] = key;
+    AI_INT.step++;
+    if (AI_INT.step < AI_QS.length) aiIntAsk();
+    else {
+      var prof = AI_INT.answers;
+      AI_INT = null;
+      aiSaveProfile(prof);
+      aiRenderPicks(prof, {}, 'Ты выбрал: ' + esc(aiProfText(prof)) + '. Собрал под это:');
+    }
   };
-  function aiNoop(){}
-
-  window.aiSend = function(){
+  window.aiIntRestart = function(){ AI_INT = { step: 0, answers: {} }; aiIntAsk(); };
+  window.aiProfileApply = function(){
+    var saved = aiLoadProfile();
+    AI_INT = null;
+    aiRenderPicks(saved || {}, {}, 'Прошлый профиль: ' + esc(aiProfText(saved || {})) + '. Собрал под него:');
+  };
+  function aiStartInterview(){
+    var saved = aiLoadProfile();
+    if (saved && saved.mood) {
+      aiAddHTML('В прошлый раз ты выбрал: <b>' + esc(aiProfText(saved)) + '</b>. Оставляем?'
+        + '<div class="ai-chips" style="margin-top:8px;">'
+        + '<button class="ai-qchip" onclick="aiProfileApply()">оставляем</button>'
+        + '<button class="ai-qchip" onclick="aiIntRestart()">ответить заново</button>'
+        + '</div>');
+    } else {
+      window.aiIntRestart();
+    }
+  }
+  window.aiRejectAsk = function(){
+    if (!window.AI_LAST || !window.AI_LAST.ids.length) return;
+    aiAdd('user', 'не хочу, другое');
+    aiAddHTML('Понял. Что не так?'
+      + '<div class="ai-chips" style="margin-top:8px;">'
+      + '<button class="ai-qchip" onclick="aiReject(\'длинное\')">слишком длинное</button>'
+      + '<button class="ai-qchip" onclick="aiReject(\'старое\')">слишком старое</button>'
+      + '<button class="ai-qchip" onclick="aiReject(\'настроение\')">не то настроение</button>'
+      + '<button class="ai-qchip" onclick="aiReject(\'жанр\')">не люблю такой жанр</button>'
+      + '<button class="ai-qchip" onclick="aiReject(\'зашло\')">просто не зашло</button>'
+      + '</div>');
+  };
+  window.aiReject = function(reason){
+    if (!window.AI_LAST) return;
+    var prof = {}, adj = {}, k;
+    for (k in window.AI_LAST.prof) prof[k] = window.AI_LAST.prof[k];
+    for (k in window.AI_LAST.adj) adj[k] = window.AI_LAST.adj[k];
+    adj.excludeIds = (adj.excludeIds || []).concat(window.AI_LAST.ids);
+    var intro = 'Понял, меняю курс — вот другое:';
+    if (reason === 'длинное') { adj.maxDur = adj.maxDur ? Math.min(adj.maxDur, 110) : 110; intro = 'Понял — короче. Вот:'; }
+    if (reason === 'старое') { adj.minYear = adj.minYear ? Math.max(adj.minYear, 2015) : 2015; intro = 'Понял — только свежее (2015+):'; }
+    if (reason === 'настроение') { prof.mood = ''; adj.clearMood = true; intro = 'Понял, настроение меняем — пересобрал:'; }
+    if (reason === 'жанр') {
+      var seen = {}, firstPen = '';
+      window.AI_LAST.ids.forEach(function(id){
+        movies.forEach(function(m){
+          if (String(m.id) === String(id)) {
+            var g0 = (Array.isArray(m.genres) && m.genres[0] ? String(m.genres[0]).trim().toLowerCase() : '');
+            if (g0 && !seen[g0]) { seen[g0] = 1; aiPenAdd(g0); if (!firstPen) firstPen = g0; }
+          }
+        });
+      });
+      adj.banGenre = firstPen;
+      intro = 'Запомнил — этот жанр подмешиваю реже. Вот другое:';
+    }
+    if (reason === 'зашло') intro = 'Понял, без обид — держи другое:';
+    aiRenderPicks(prof, adj, intro);
+  };
+  function aiHandleSpecial(txt){
+    var nq = aiNorm(txt);
+    if (AI_INT) {
+      var step = AI_QS[AI_INT.step];
+      if (step) {
+        var hit = null;
+        if (/не важно|все равно|всё равно|любое|пропуст/.test(nq)) {
+          step.opts.forEach(function(o){ if (o[1] === 'any') hit = o; });
+        } else {
+          step.opts.forEach(function(o){ if (!hit && o[2].split('|').some(function(st){ return nq.indexOf(st) >= 0; })) hit = o; });
+        }
+        if (hit) { aiIntAns(hit[1], hit[0]); return true; }
+      }
+    }
+    if (/просто подбер|просто подбор|быстр[оая] подбор/.test(nq)) { aiQuickPick(); return true; }
+     if (/не могу уснуть|не могу спать|хочу уснуть|не спится|как уснуть|перед сном|перед сном|бессонниц|уснуть бы/.test(nq)) { aiSleepPick(); return true; }
+    if (/подбер[её]м точнее|точнее подбер/.test(nq)) { aiStartInterview(); return true; }
+    if (/не знаю что посмотреть|не знаю что смотреть|незнаю что посмотреть/.test(nq)) {
+      aiAddHTML('Давай сделаю это точнее — 4 быстрых вопроса, или сразу соберу на лету.'
+        + '<div class="ai-chips" style="margin-top:8px;">'
+        + '<button class="ai-qchip" onclick="aiIntRestart()">🎯 подберём точнее</button>'
+        + '<button class="ai-qchip" onclick="aiQuickPick()">⚡ просто подбери</button>'
+        + '</div>');
+      return true;
+    }
+    return false;
+  }
+  // ===== Очередь 2: сходство, сон, дневник =====
+  var AI_MASSIVE_G = ['драма', 'комедия'];
+  function aiSimilarNote(m, used){
+    try {
+      var gs = (Array.isArray(m.genres) ? m.genres : []).map(function(g){ return String(g).trim().toLowerCase(); });
+      var refs = [];
+      Object.keys(ratings || {}).forEach(function(id){
+        var v = parseInt(ratings[id], 10) || 0;
+        if (v < 4) return;
+        var mm = movies.find(function(x){ return String(x.id) === String(id); });
+        if (!mm || String(mm.id) === String(m.id)) return;
+        var rg = (Array.isArray(mm.genres) ? mm.genres : []).map(function(g){ return String(g).trim().toLowerCase(); });
+        var shared = gs.filter(function(g){ return rg.indexOf(g) >= 0; });
+        if (shared.length < 2) return;
+        if (shared.every(function(g){ return AI_MASSIVE_G.indexOf(g) >= 0; })) return;
+        refs.push({ mm: mm, v: v, shared: shared.length });
+      });
+      if (!refs.length) return '';
+      refs.sort(function(a, b){ return b.shared - a.shared || b.v - a.v; });
+      for (var i = 0; i < refs.length; i++) {
+        var rid = String(refs[i].mm.id);
+        if (used && used.indexOf(rid) < 0) {
+          used.push(rid);
+          return 'похоже на «' + refs[i].mm.title + '» (оценил на ' + refs[i].v + '/5)';
+        }
+      }
+    } catch (e) {}
+    return '';
+  }
+  function aiSleepPick(){
+    aiRenderPicks({ mood: 'calm', time: 'any' }, { sleep: 1 }, '🌙 Подобрал под сон: убрал боевики, триллеры, криминал и детективы — оставил спокойное, а высоко оценённое знакомое поднял выше.');
+  }
+  window.aiSleepPick = aiSleepPick;
+  var AI_MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+  function aiDiaryHTML(){
+    var now = new Date();
+    var ym = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2);
+    var dates = {};
+    try { dates = JSON.parse(localStorage.getItem('mood_movies_watched_dates')) || {}; } catch (e) { dates = {}; }
+    var monthIds = [];
+    (watched || []).forEach(function(id){
+      var dd = dates[String(id)];
+      if (dd && String(dd).indexOf(ym) === 0) monthIds.push(id);
+    });
+    if (!monthIds.length && !(watched || []).length) {
+      return '<div class="stats-box"><div class="stats-title">📊 Кино-дневник ИИ</div><div class="stats-hint">Отметь пару фильмов кнопкой «уже смотрел» — и здесь появится дневник: сколько посмотрел, средняя оценка и лучший выбор месяца.</div></div>';
+    }
+    var scope, label;
+    if (monthIds.length) {
+      scope = monthIds;
+      label = 'за ' + AI_MONTHS[now.getMonth()].toLowerCase();
+    } else {
+      scope = (watched || []).slice();
+      label = 'за всё время (даты начали записываться только что)';
+    }
+    var items = scope.map(function(id){ return movies.find(function(x){ return String(x.id) === String(id); }); }).filter(function(x){ return x; });
+    var rated = items.filter(function(m){ return (parseInt(ratings[m.id], 10) || 0) > 0; });
+    var avg = rated.length ? rated.reduce(function(a, m){ return a + parseInt(ratings[m.id], 10); }, 0) / rated.length : 0;
+    var gc = {};
+    items.forEach(function(m){ (Array.isArray(m.genres) ? m.genres.slice(0, 3) : []).forEach(function(g){ var k = String(g).trim().toLowerCase(); if (k) gc[k] = (gc[k] || 0) + 1; }); });
+    var topG = Object.keys(gc).sort(function(a, b){ return gc[b] - gc[a]; })[0] || '';
+    var best = rated.sort(function(a, b){ return (parseInt(ratings[b.id], 10) || 0) - (parseInt(ratings[a.id], 10) || 0) || (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0); })[0];
+    var html = '<div class="stats-box">';
+    html += '<div class="stats-title">📊 Кино-дневник ИИ</div>';
+    html += '<div class="stat-row"><span>Посмотрел ' + label + '</span><span class="stat-value">' + items.length + '</span></div>';
+    if (rated.length) html += '<div class="stat-row"><span>Средняя твоя оценка ' + label + '</span><span class="stat-value">' + avg.toFixed(1) + '/5</span></div>';
+    if (topG) html += '<div class="stat-row"><span>Любимый жанр ' + label + '</span><span class="stat-value">' + esc(topG) + '</span></div>';
+    if (best) {
+      var bv = parseInt(ratings[best.id], 10) || 0;
+      html += '<div class="stat-row"><span>🏆 Лучший выбор</span><span class="stat-value">«' + esc(best.title) + '»' + (bv ? ' — ' + bv + '/5' : '') + '</span></div>';
+    }
+    html += '</div>';
+    return html;
+  }
+  window.aiDiaryHTML = aiDiaryHTML;
+window.aiSend = function(){
     var inp = document.getElementById('ai-input');
     if(!inp) return;
     var txt = (inp.value || '').trim();
@@ -4313,6 +4356,8 @@ document.addEventListener('DOMContentLoaded', function() {
     aiAdd('user', txt);
     aiTrackSubject(txt);
     aiHistPush('user', txt);
+
+    if (aiHandleSpecial(txt)) return;
 
     var cls = aiClassify(txt);
 
@@ -4337,14 +4382,8 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    if (cls.type === 'quick') { aiQuickStart(); return; }
-    if (cls.type === 'interview') { aiStartInterview(); return; }
-    if (cls.type === 'sleep') { aiSleepPick(); return; }
     if (cls.type === 'picks') {
-      var picks = aiPick(txt);
-      var intro = 'Вот что подобрал из каталога под запрос «' + aiH(txt) + '» — откройте карточку: там описание и кнопки «где смотреть».';
-      aiHistPush('ai', intro);
-      aiAddHTML(intro + '<div>' + picks.map(aiChipBtn).join('') + '</div>' + aiWhyNopeRow(picks));
+      aiRenderNormalPicks(txt, aiPick(txt));
       return;
     }
 
