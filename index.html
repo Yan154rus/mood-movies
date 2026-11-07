@@ -3533,6 +3533,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (/уснуть|заснуть|не могу спать|хочу уснуть|на сон|перед сном/.test(nq)) return { type: 'sleep' };
     var likeM = nq.match(/похож[ео] на\s+([^«»]{3,50})|в стиле\s+([^«»]{3,50})|что-?нибудь как\s+([^«»]{3,50})|как\s+«([^»]{3,50})»/);
     if (likeM) return { type: 'like', subject: (likeM[1] || likeM[2] || likeM[3] || likeM[4] || '').trim().replace(/[.!?]+$/, '') };
+    if (/европейск|европ|азиатск|японск|корейск|китайск|американск|голливуд|советск|российск|русск|наше|нов(ое|ых)|классик|стар(ое|ых)|\b\d0-?х\b|девяност|восьмидесят|семидесят|шестидесят/.test(nq)) return { type: 'picks' };
     if (/просто подбер|что-?нибудь посмотреть|что нибудь посмотреть|лень думать/.test(nq)) return { type: 'quick' };
     if (/подбер[её]м точнее/.test(nq) || (nq.length < 22 && /точнее/.test(nq))) return { type: 'interview' };
     if (advice || genreish) return { type: 'picks' };
@@ -4335,7 +4336,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.aiLikePick = function(name){
     name = (name || '').trim();
     if (!name){ aiLikePrompt(); return; }
-    var ref = aiFindMovie(name);
+    var ref = aiFindMovie(name) || (aiMatchLoose(name)[0] || null);
     if (!ref){ aiHistPush('ai', 'похоже на «' + name + '» — нет в каталоге'); aiAddHTML('<div class="ai-note"><b>' + aiH(name.charAt(0).toUpperCase() + name.slice(1)) + '</b> — этого фильма в каталоге нет. Напиши название точнее или попробуй другой.</div>'); return; }
     var rg = aiGenresOf(ref).split(',').map(function(v){ return v.trim(); }).filter(function(v){ return v; });
     var re_ = aiEmotionsOf(ref).split(',').map(function(v){ return v.trim(); }).filter(function(v){ return v; });
