@@ -2930,6 +2930,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <button class="ai-qchip" onclick="aiQuickAsk('экшен, чтобы взбодриться')">⚡ экшен</button>
       <button class="ai-qchip" onclick="aiQuickAsk('что посмотреть на выходных')">🛋 на выходных</button>
       <button class="ai-qchip" onclick="aiQuickAsk('посоветуй что-нибудь новенькое')">✨ новенькое</button>
+      <button class="ai-qchip" onclick="aiQuickPick()">⚡ просто подбери</button>
+      <button class="ai-qchip" onclick="aiInterview()">🎯 подберём точнее</button>
     </div>
     <div class="ai-input-row">
       <input id="ai-input" placeholder="Например: что посмотреть вечером, когда грустно?" onkeydown="if(event.key==='Enter')aiSend()">
@@ -3506,7 +3508,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (aiPartMismatch(nq, inCat)) return { type: 'outside', title: txt, partHint: inCat.title };
       return { type: 'catalog', movie: inCat };
     }
-    var advice = /что посмотреть|что глянуть|что глянь|посоветуй|подскажи|рекоменд|подборк|похож|похоже|настроени|вечером|вечер\b|ночью|на ночь|груст|весел|страшн|посмеять|посмеят|поржать|юмор|смешн|плакать|поплакать|слез|вдохнов|напрячь|расслаб|успоко|чил|скучн|скучаю|трогатель|поразмыш|люблю|нравится|романтик|свидани|вдво|с девушк|с парнем|детям|детей|ребен|малыш|семейн|выходн|драйв|адреналин|ностальг|детств|душевн|философ|смысл|красив|стильн|эпичн|загадк|мистик|новеньк|экшен|динамичн|взбодр|уснуть|заснуть|спать|сном/i.test(nq);
+    var advice = /что посмотреть|что глянуть|что глянь|посоветуй|подскажи|рекоменд|подборк|подбер|похож|похоже|настроени|вечером|вечер\b|ночью|на ночь|груст|весел|страшн|посмеять|посмеят|поржать|юмор|смешн|плакать|поплакать|слез|вдохнов|напрячь|расслаб|успоко|чил|скучн|скучаю|трогатель|поразмыш|люблю|нравится|романтик|свидани|вдво|с девушк|с парнем|детям|детей|ребен|малыш|семейн|выходн|драйв|адреналин|ностальг|детств|душевн|философ|смысл|красив|стильн|эпичн|загадк|мистик|новеньк|экшен|динамичн|взбодр|уснуть|заснуть|спать|сном/i.test(nq);
     var words = nq.split(/[^a-zа-я0-9]+/).filter(function(w){ return w.length > 2; });
     var genreish = false;
     if (words.length <= 2) {
@@ -3553,11 +3555,12 @@ document.addEventListener('DOMContentLoaded', function() {
     ['любов', 'мелодрама'], ['романт', 'мелодрама'],
     ['загадк', 'детектив'], ['расследов', 'детектив'], ['сыщик', 'детектив'],
     ['шпион', 'триллер'], ['саспенс', 'триллер'],
+    ['экшен', 'боевик'], ['экшн', 'боевик'], ['драйв', 'боевик'], ['адреналин', 'боевик'],
     ['войн', 'военный'], ['сказк', 'фэнтези'], ['магия', 'фэнтези'], ['дракон', 'фэнтези'],
     ['семейн', 'семейный'], ['детск', 'семейный'],
     ['поплакать', 'драма'], ['плакат', 'драма'], ['слёз', 'драма'], ['слез', 'драма'], ['потрог', 'драма'], ['трогательн', 'драма'],
     ['напряж', 'триллер'], ['интриг', 'триллер'], ['весел', 'комедия'], ['весёл', 'комедия'],
-    ['настроение под', 'комедия'], ['поржа', 'комедия'], ['экшен', 'боевик'], ['экшн', 'боевик'], ['драйв', 'боевик']
+    ['настроение под', 'комедия'], ['поржа', 'комедия']
   ];
   var AI_MOOD_SYN = [
     ['успоко', 'расслаблен|мил|добр', 'хоррор|триллер|криминал|военный|катастрофа'],
@@ -3596,7 +3599,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ['с парнем', 'романтичн|мил', 'хоррор|катастрофа'],
     ['мелодрам', 'романтичн|трогател', 'хоррор'],
     ['с детьми', 'добр|приключенч|игрив', 'хоррор|криминал|военный|катастрофа'],
-    ['для детей', 'добр|приключенч|igрив|добр', 'хоррор|криминал|военный|катастрофа'],
+    ['для детей', 'добр|приключенч|игрив|добр', 'хоррор|криминал|военный|катастрофа'],
     ['ребен', 'добр|приключенч|игрив', 'хоррор|криминал|военный|катастрофа'],
     ['ребён', 'добр|приключенч|игрив', 'хоррор|криминал|военный|катастрофа'],
     ['малыш', 'добр|приключенч|игрив', 'хоррор|криминал|военный|катастрофа'],
@@ -3646,7 +3649,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     return found;
   }
-  function aiPick(q){
+  function aiOptsOk(m, opts){
+    if (!opts) return true;
+    if (opts.maxDur && !((parseInt(m.duration, 10) || 0) <= opts.maxDur)) return false;
+    if (opts.minYear && parseInt(m.year, 10) < opts.minYear) return false;
+    if (opts.excludeGenre && String(m.genres || '').toLowerCase().indexOf(opts.excludeGenre) >= 0) return false;
+    if (opts.excludeIds && opts.excludeIds[String(m.id)]) return false;
+    return true;
+  }
+  function aiPick(q, opts){
+    opts = opts || {};
     var nq = aiNorm(q);
     var words = nq.split(/[^a-zа-я0-9]+/).filter(function(w){ return w.length > 2; });
     var genreV = aiVocab('genres');
@@ -3690,10 +3702,12 @@ document.addEventListener('DOMContentLoaded', function() {
     movies.forEach(function(m){
       if (kids && !/^(0|6|12)\+/.test(String(m.age || ''))) return;
       if (!allowWatched && watchedSet[String(m.id)]) return;
+      if (!aiOptsOk(m, opts)) return;
       var sc = 0;
       var gStr = String(m.genres || '').toLowerCase();
       if (bannedG.length && bannedG.some(function(b){ return gStr.indexOf(b) >= 0; })) return;
       wantedG.forEach(function(g){ if (gStr.indexOf(g) >= 0) sc += 3; });
+      aiPenalties().forEach(function(pg){ if (gStr.indexOf(pg) >= 0) sc -= 1.5; });
       var mStr = String(m.emotions || '').toLowerCase().replace(/ё/g, 'е');
       wantedM.forEach(function(g){ if (mStr.indexOf(g) >= 0) sc += 3; });
       if (era) {
@@ -3719,6 +3733,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var pool = [];
     movies.forEach(function(m){
       if (seen5[String(m.id)] || watchedSet[String(m.id)]) return;
+      if (!aiOptsOk(m, opts)) return;
       if ((parseFloat(m.rating) || 0) >= 7 && !(bannedG.length && bannedG.some(function(b){ return String(m.genres || '').toLowerCase().indexOf(b) >= 0; }))) pool.push(m);
     });
     aiShuffle(pool);
@@ -3727,6 +3742,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var pool2 = [];
     movies.forEach(function(m){
       if (seen5[String(m.id)] || watchedSet[String(m.id)] || out5.indexOf(m) >= 0) return;
+      if (!aiOptsOk(m, opts)) return;
       if (bannedG.length && bannedG.some(function(b){ return String(m.genres || '').toLowerCase().indexOf(b) >= 0; })) return;
       pool2.push(m);
     });
@@ -3930,6 +3946,211 @@ document.addEventListener('DOMContentLoaded', function() {
     var words = subj.split(' ').filter(function(w){ return w.length >= 2; });
     if (words.length >= 1 && words.length <= 3) aiCurFilm = words.join(' ');
   }
+  function aiWhyLine(m, txt){
+    try {
+      var nq = aiNorm(txt);
+      var words = nq.split(/[^a-zа-я0-9]+/).filter(function(w){ return w.length > 2; });
+      var parts = [];
+      var gStr = String(m.genres || '').toLowerCase();
+      var gHits = [];
+      aiMatchVocab(nq, aiVocab('genres'), words).forEach(function(g){ if (gStr.indexOf(g) >= 0 && gHits.indexOf(g) < 0) gHits.push(g); });
+      AI_GENRE_SYN.forEach(function(p){ if (nq.indexOf(p[0]) >= 0 && gStr.indexOf(p[1]) >= 0 && gHits.indexOf(p[1]) < 0) gHits.push(p[1]); });
+      if (gHits.length) parts.push('жанр — ' + gHits.join(', '));
+      var mStr = String(m.emotions || '').toLowerCase().replace(/ё/g, 'е');
+      var mHits = [];
+      aiMatchVocab(nq, aiVocab('emotions'), words).forEach(function(e){ if (mStr.indexOf(e) >= 0 && mHits.indexOf(e) < 0) mHits.push(e); });
+      if (mHits.length) parts.push('настроение — ' + mHits.join(', '));
+      var rg = parseFloat(m.rating) || 0;
+      if (rg >= 7.5) parts.push('высокая оценка ' + m.rating);
+      if (!parts.length) parts.push('подошёл под твой запрос');
+      return '<div class="ai-note" style="font-size:12px; opacity:0.85; margin-top:2px; margin-bottom:8px;">💬 Почему: ' + aiH(parts.join('; ')) + '</div>';
+    } catch(e){ return ''; }
+  }
+  function aiNotWantBar(){
+    return '<div style="margin-top:10px;"><button class="ai-qchip" onclick="aiNotWant()">👎 не хочу, другое</button></div>';
+  }
+  function aiPenalties(){
+    try {
+      var d = JSON.parse(localStorage.getItem('ai_pen_v1') || '{}');
+      var now = Date.now(), out = [];
+      Object.keys(d).forEach(function(k){ if (now - d[k] <= 1209600000) out.push(k); });
+      return out;
+    } catch(e){ return []; }
+  }
+  function aiFavTopGenre(){
+    var favG = {};
+    (favorites || []).forEach(function(id){ var fm = null; movies.forEach(function(x){ if (String(x.id) === String(id)) fm = x; }); if (fm) String(fm.genres || '').split(',').forEach(function(g){ g = g.trim().toLowerCase(); if (g) favG[g] = (favG[g] || 0) + 1; }); });
+    var t = Object.keys(favG).sort(function(a, b){ return favG[b] - favG[a]; });
+    return t.length ? t[0] : null;
+  }
+  function aiRenderPicks(picks, intro, q){
+    window.AI_LAST = { ids: picks.map(function(m){ return String(m.id); }), query: q };
+    aiHistPush('ai', intro);
+    aiAddHTML(intro + '<div>' + picks.map(function(m){ return aiChipBtn(m) + aiWhyLine(m, q); }).join('') + '</div>' + aiNotWantBar());
+  }
+  function aiRebuild(opts){
+    try {
+      var L = window.AI_LAST || {};
+      var excl = {};
+      (L.ids || []).forEach(function(id){ excl[String(id)] = 1; });
+      opts.excludeIds = excl;
+      var q = L.query || 'что посмотреть вечером';
+      if (opts.dropMood) {
+        var ft = aiFavTopGenre();
+        q = 'что посмотреть: ' + (ft ? ft + ', что-то хорошее' : 'что-то хорошее, зрелищное');
+      }
+      var picks = aiPick(q, opts);
+      if (!picks.length) picks = aiPick(q);
+      var intro = 'Понял, меняю курс. Вот другой вариант:';
+      if (opts.excludeGenre) intro = 'Понял — «' + aiH(opts.excludeGenre) + '» больше не навязываю, учту это и в будущих подборках. Вот другой вариант:';
+      if (opts.maxDur) intro = 'Понял — ищу покороче. Вот другой вариант:';
+      if (opts.minYear) intro = 'Понял — беру только свежее. Вот другой вариант:';
+      aiRenderPicks(picks, intro, q);
+    } catch(e){ aiAddHTML('Не получилось пересобрать — попробуй ещё раз 🙂'); }
+  }
+  window.aiNotWant = function(){
+    if (!window.AI_LAST || !window.AI_LAST.ids || !window.AI_LAST.ids.length) { aiAddHTML('Сначала собери подборку — жми «⚡ просто подбери» или напиши запрос 🙂'); return; }
+    var gSet = {};
+    window.AI_LAST.ids.forEach(function(id){ var fm = null; movies.forEach(function(x){ if (String(x.id) === String(id)) fm = x; }); if (fm) String(fm.genres || '').split(',').forEach(function(g){ g = g.trim().toLowerCase(); if (g) gSet[g] = 1; }); });
+    var gs = Object.keys(gSet).slice(0, 5);
+    var gChips = gs.map(function(g){
+      return '<button class="ai-qchip" onclick="aiNotWantGenre(\'' + aiAttr(g) + '\')">🚫 не люблю «' + aiH(g) + '»</button>';
+    }).join('');
+    var el = aiAddHTML('Понял, не то. А что не так? Выбери причину — пересоберу:');
+    el.insertAdjacentHTML('beforeend', '<div>' + gChips + '</div><div>' +
+      '<button class="ai-qchip" onclick="aiNotWantReason(\'long\')">⏱ слишком длинное</button>' +
+      '<button class="ai-qchip" onclick="aiNotWantReason(\'old\')">👴 слишком старое</button>' +
+      '<button class="ai-qchip" onclick="aiNotWantReason(\'mood\')">🎭 не то настроение</button>' +
+      '<button class="ai-qchip" onclick="aiNotWantReason(\'any\')">🤷 просто не зашло</button></div>');
+  };
+  window.aiNotWantGenre = function(g){
+    aiHistPush('user', 'не люблю жанр «' + g + '»');
+    try { var d = JSON.parse(localStorage.getItem('ai_pen_v1') || '{}'); d[g] = Date.now(); localStorage.setItem('ai_pen_v1', JSON.stringify(d)); } catch(e){}
+    aiRebuild({ excludeGenre: g });
+  };
+  window.aiNotWantReason = function(r){
+    var labels = { long: 'слишком длинное', old: 'слишком старое', mood: 'не то настроение', any: 'просто не зашло' };
+    aiHistPush('user', labels[r] || r);
+    if (r === 'long') aiRebuild({ maxDur: 110 });
+    else if (r === 'old') aiRebuild({ minYear: 2015 });
+    else if (r === 'mood') aiRebuild({ dropMood: true });
+    else aiRebuild({});
+  };
+  window.aiQuickPick = function(){
+    try {
+      var h = new Date().getHours();
+      var evening = (h >= 19 || h < 5);
+      var favG = {};
+      (favorites || []).forEach(function(id){ var fm = null; movies.forEach(function(x){ if (String(x.id) === String(id)) fm = x; }); if (fm) String(fm.genres || '').split(',').forEach(function(g){ g = g.trim().toLowerCase(); if (g) favG[g] = (favG[g] || 0) + 1; }); });
+      var rt = {};
+      try { rt = JSON.parse(localStorage.getItem('mood_movies_ratings') || '{}'); } catch(e){}
+      Object.keys(rt || {}).forEach(function(id){ if ((rt[id] || 0) >= 4) { var fm2 = null; movies.forEach(function(x){ if (String(x.id) === String(id)) fm2 = x; }); if (fm2) String(fm2.genres || '').split(',').forEach(function(g){ g = g.trim().toLowerCase(); if (g) favG[g] = (favG[g] || 0) + 1; }); } });
+      var topG = Object.keys(favG).sort(function(a, b){ return favG[b] - favG[a]; }).slice(0, 2);
+      var qp = ['что посмотреть'];
+      if (topG.length) qp.push(topG.join(', '));
+      qp.push(evening ? 'расслабленное' : 'энергичное');
+      var q = qp.join(', ');
+      var picks = aiPick(q);
+      aiHistPush('user', '⚡ просто подбери');
+      var intro = '⚡ Быстрая подборка — без вопросов. ' + (topG.length ? 'Ты часто отмечаешь «' + topG.join('» и «') + '» — на них и опираюсь' : (evening ? 'Вечер — значит спокойнее' : 'День — можно поживее')) + '. Просмотренное исключил.';
+      aiRenderPicks(picks, intro, q);
+    } catch(e){ aiAddHTML('Не получилось собрать подборку — попробуй ещё раз 🙂'); }
+  };
+  var aiIv = null;
+  var AI_IV_STEPS = [
+    { k: 'mood', q: 'Какое настроение? Жми кнопку:', opts: [
+      ['energy', '⚡ бодрое', 'энергичное'],
+      ['fun', '😄 весёлое', 'весёлое'],
+      ['cry', '😭 грустное', 'грустное'],
+      ['relax', '🌙 устал, хочу спокойное', 'расслабленное'],
+      ['thrill', '😱 хочу эмоций', 'напряжённое'],
+      ['touch', '🫂 трогательное', 'трогательное']
+    ]},
+    { k: 'tone', q: 'Какая картинка по духу?', opts: [
+      ['light', '☀️ светлая и яркая', 'комедия, семейный'],
+      ['dark', '🌑 тёмная и мрачная', 'триллер, криминал'],
+      ['any', '🤷 не важно', '']
+    ]},
+    { k: 'time', q: 'Сколько есть времени?', opts: [
+      ['short', '⏱ до полутора часов', 'short'],
+      ['mid', '⏰ около двух часов', 'mid'],
+      ['long', '🕯 не ограничен', 'long'],
+      ['any', '🤷 не важно', 'any']
+    ]},
+    { k: 'comp', q: 'С кем смотришь?', opts: [
+      ['alone', '1️⃣ один', ''],
+      ['kids', '👨‍👩‍👧 с детьми', 'с детьми'],
+      ['couple', '❤️ вдвоём', 'романтичное'],
+      ['any', '🤷 не важно', '']
+    ]}
+  ];
+  function aiIvRender(step){
+    var s = AI_IV_STEPS[step];
+    var chips = s.opts.map(function(o){
+      return '<button class="ai-qchip" onclick="aiInterviewAnswer(\'' + s.k + '\',\'' + o[0] + '\')">' + o[1] + '</button>';
+    }).join('');
+    aiIv.el = aiAddHTML('🎯 ' + aiH(s.q) + '<div>' + chips + '</div>');
+  }
+  function aiInterviewStart(){
+    aiIv = { step: 0, a: {}, labels: [] };
+    aiHistPush('user', '🎯 подберём точнее');
+    aiAddHTML('Ок! Задам 4 коротких вопроса — на каждый есть кнопки, печатать не надо 🙂');
+    aiIvRender(0);
+  }
+  window.aiInterview = function(){
+    var prof = null;
+    try { prof = JSON.parse(localStorage.getItem('ai_profile_v1') || 'null'); } catch(e){ prof = null; }
+    if (prof && prof.labels && prof.labels.length) {
+      aiHistPush('user', '🎯 подберём точнее');
+      var el = aiAddHTML('В прошлый раз ты выбрал: <b>' + aiH(prof.labels.join(', ')) + '</b>. Оставляем?');
+      el.insertAdjacentHTML('beforeend', '<div><button class="ai-qchip" onclick="aiInterviewFromProfile()">оставляем</button> <button class="ai-qchip" onclick="aiInterviewStart()">начать заново</button></div>');
+    } else aiInterviewStart();
+  };
+  window.aiInterviewFromProfile = function(){
+    var prof = null;
+    try { prof = JSON.parse(localStorage.getItem('ai_profile_v1') || 'null'); } catch(e){ prof = null; }
+    if (prof && prof.a) aiInterviewFinish(prof.a, prof.labels || []);
+    else aiInterviewStart();
+  };
+  window.aiInterviewAnswer = function(k, v){
+    if (!aiIv) { aiInterviewStart(); return; }
+    var s = AI_IV_STEPS[aiIv.step];
+    var o = null;
+    s.opts.forEach(function(x){ if (x[0] === v) o = x; });
+    if (!o) return;
+    aiIv.a[k] = v;
+    aiIv.labels.push(o[1]);
+    aiIv.step++;
+    if (aiIv.step < AI_IV_STEPS.length) aiIvRender(aiIv.step);
+    else aiInterviewFinish(aiIv.a, aiIv.labels);
+  };
+  function aiIvOpts(a){
+    var o = {};
+    if (a.time === 'short') o.maxDur = 100;
+    if (a.time === 'mid') o.maxDur = 125;
+    return o;
+  }
+  function aiIvQuery(a){
+    var parts = ['что посмотреть'];
+    var mood = { energy: 'энергичное', fun: 'весёлое', cry: 'грустное', relax: 'расслабленное', thrill: 'напряжённое', touch: 'трогательное' };
+    if (mood[a.mood]) parts.push(mood[a.mood]);
+    var tone = { light: 'комедия, семейный', dark: 'триллер, криминал' };
+    if (tone[a.tone]) parts.push(tone[a.tone]);
+    if (a.comp === 'kids') parts.push('с детьми');
+    if (a.comp === 'couple') parts.push('романтичное');
+    return parts.join(', ');
+  }
+  function aiInterviewFinish(a, labels){
+    try {
+      var q = aiIvQuery(a);
+      var picks = aiPick(q, aiIvOpts(a));
+      if (!picks.length) picks = aiPick(q);
+      try { localStorage.setItem('ai_profile_v1', JSON.stringify({ a: a, labels: labels })); } catch(e){}
+      aiIv = null;
+      aiRenderPicks(picks, 'Ты выбрал: <b>' + aiH(labels.join(', ')) + '</b>. Собрал под это — открывай карточки:', q);
+    } catch(e){ aiIv = null; aiAddHTML('Не получилось собрать — попробуй ещё раз 🙂'); }
+  }
+
 window.aiSend = function(){
     var inp = document.getElementById('ai-input');
     if(!inp) return;
@@ -3967,7 +4188,8 @@ window.aiSend = function(){
       var picks = aiPick(txt);
       var intro = 'Вот что подобрал из каталога под запрос «' + aiH(txt) + '» — откройте карточку: там описание и кнопки «где смотреть».';
       aiHistPush('ai', intro);
-      aiAddHTML(intro + '<div>' + picks.map(aiChipBtn).join('') + '</div>');
+      window.AI_LAST = { ids: picks.map(function(m){ return String(m.id); }), query: txt };
+      aiAddHTML(intro + '<div>' + picks.map(function(m){ return aiChipBtn(m) + aiWhyLine(m, txt); }).join('') + '</div>' + aiNotWantBar());
       return;
     }
 
