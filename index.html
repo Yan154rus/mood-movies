@@ -4548,6 +4548,7 @@ document.addEventListener('DOMContentLoaded', function() {
 window.aiAboutMovie = function(id){
     var m = movies.find(function(x){ return x.id === id; });
     if(!m) return;
+    closeModal();
     if (typeof showScreen === 'function') showScreen('screen-ai');
     var inp = document.getElementById('ai-input');
     if(!inp) return;
