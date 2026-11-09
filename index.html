@@ -517,7 +517,7 @@ body.light .fod-hero { background: #fff; }
   .fod-poster { width: 180px; }
   .fod-info .card-title { font-size: 20px; }
 }
-@media (min-width: 1100px) { .screen { max-width: 1080px; } }
+@media (min-width: 1100px) { .screen { max-width: 1080px; } #screen-home.active { max-width: none; } }
 /* Модалка: прокрутка без видимой полосы */
 .modal-box { scrollbar-width: none; -ms-overflow-style: none; }
 .modal-box::-webkit-scrollbar { display: none; width: 0; }
@@ -531,9 +531,9 @@ body { overflow-x: hidden; }
 body.light .top-bar-slogan { color: rgba(26,23,34,0.72); }
 @media (max-width: 1100px) { .top-bar-slogan { display: none; } }
 /* === Главный экран: колонка слева + Фильм дня, ровно и в один экран === */
-#screen-home.active { display: flex; align-items: center; justify-content: center; max-width: none; height: calc(100vh - var(--header-h, 118px)); max-height: calc(100vh - var(--header-h, 118px)); overflow: visible; padding: 10px 24px 12px; }
-.home-layout { display: flex; align-items: center; justify-content: center; gap: 40px; width: 100%; max-width: 1460px; }
-.side-col { display: flex; flex-direction: column; gap: 10px; width: 224px; flex-shrink: 0; }
+#screen-home.active { display: flex; align-items: center; justify-content: center; height: calc(100vh - var(--header-h, 118px)); max-height: calc(100vh - var(--header-h, 118px)); overflow: visible; padding: 10px 24px 12px; }
+.home-layout { display: flex; align-items: center; justify-content: center; gap: 26px; width: 100%; max-width: 1440px; }
+.side-col { display: flex; flex-direction: column; gap: 12px; width: 236px; flex-shrink: 0; margin-bottom: 40px; }
 .side-btn { width: 100%; font-family: inherit; font-size: 14px; font-weight: 700; padding: 12px 14px; text-align: left; display: flex; align-items: center; gap: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: rgba(38,30,46,0.72); color: #d9a5f2; border: 1px solid rgba(178,112,235,0.55); border-radius: 14px; cursor: pointer; transition: all 0.2s ease; }
 body.light .side-btn { background: rgba(255,255,255,0.78); color: #7a1f8f; border-color: rgba(122,31,143,0.4); }
 .side-btn:hover { background: #7a1f8f; color: #fff; box-shadow: 0 0 16px rgba(122,31,143,0.5); transform: translateY(-2px); }
@@ -551,26 +551,25 @@ body.light .dropdown-menu .mood-btn, body.light .dropdown-menu .cat-item { color
 .fod-hero { background: rgba(26,23,34,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 body.light .fod-hero { background: rgba(255,252,246,0.66); }
 /* Компактность: всё в один экран без прокрутки */
-.fod-hero { padding: 20px 22px; gap: 22px; }
-.fod-poster { width: 300px; }
-.fod-info .card-title { font-size: 28px; }
+.fod-hero { padding: 16px 18px; gap: 18px; }
+.fod-poster { width: 186px; }
+.fod-info .card-title { font-size: 23px; }
 .fod-hero .card-desc { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; font-size: 13.5px; }
-.fod-side { flex: 0 0 150px; }
-.fod-side img { width: 140px; }
+.fod-side { flex: 0 0 104px; }
+.fod-side img { width: 94px; }
 .fod-arrows { margin-top: 10px; }
 .fod-arrow { width: 38px; height: 38px; font-size: 19px; }
 .fod-counter { font-size: 12px; }
-.home-layout .fod-row { flex: 1 1 auto; min-width: 0; }
 @media (max-height: 840px) {
-  .fod-poster { width: 220px; }
-  .fod-info .card-title { font-size: 24px; }
+  .fod-poster { width: 158px; }
+  .fod-info .card-title { font-size: 20px; }
   .fod-hero .card-desc { -webkit-line-clamp: 5; }
   .side-btn { padding: 10px 12px; font-size: 13.5px; }
   .side-col { gap: 8px; }
 }
 @media (max-height: 720px) {
-  .fod-poster { width: 170px; }
-  .fod-info .card-title { font-size: 20px; }
+  .fod-poster { width: 130px; }
+  .fod-info .card-title { font-size: 18px; }
   .fod-hero .card-desc { -webkit-line-clamp: 4; }
   .fod-hero { padding: 12px 14px; }
 }
@@ -646,6 +645,17 @@ body.light select { color-scheme: light; }
 body.light #to-top { background: rgba(255,255,255,0.92); color: #a8791f; border-color: rgba(178,140,50,0.5); }
 body.light #to-top:hover { background: var(--gold); color: #1a1722; }
 @media (max-width: 560px) { #to-top { width: 40px; height: 40px; right: 12px; bottom: 66px; font-size: 17px; } }
+/* === Апгрейд «Фильма дня»: крупные постеры и золотая окантовка === */
+@media (min-width: 901px) {
+  .fod-poster { width: 330px; border: 2px solid rgba(242,193,78,0.55); box-shadow: 0 14px 40px rgba(0,0,0,0.55); }
+  .fod-side { flex: 0 0 150px; }
+  .fod-side img { width: 150px; border: 2px solid rgba(242,193,78,0.55); box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .fod-side:hover img { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(242,193,78,0.3); }
+  .fod-info .card-title { font-size: 28px; }
+  .fod-side-title { font-size: 13px; }
+  .fod-hero { padding: 26px; gap: 26px; }
+}
+@media (min-width: 901px) and (max-height: 840px) { .fod-poster { width: 280px; } }
 </style>
 </head>
 <body>
@@ -4549,7 +4559,6 @@ document.addEventListener('DOMContentLoaded', function() {
 window.aiAboutMovie = function(id){
     var m = movies.find(function(x){ return x.id === id; });
     if(!m) return;
-    if (typeof closeModal === 'function') closeModal();
     if (typeof showScreen === 'function') showScreen('screen-ai');
     var inp = document.getElementById('ai-input');
     if(!inp) return;
