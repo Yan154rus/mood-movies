@@ -3512,9 +3512,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   function aiClassify(txt){
     var nq = aiNorm(txt);
-    var likeM0 = nq.match(/похож[ео] на\s+([^«»]{3,50})|в стиле\s+([^«»]{3,50})|что-?нибудь как\s+([^«»]{3,50})|как\s+«([^»]{3,50})»/);
-    if (likeM0) return { type: 'like', subject: (likeM0[1] || likeM0[2] || likeM0[3] || likeM0[4] || '').trim().replace(/[.!?]+$/, '') };
     if (aiMoodOnly(nq)) return { type: 'picks' };
+var likeM = nq.match(/похож[ео] на\s+([^«»]{3,50})|в стиле\s+([^«»]{3,50})|что-?нибудь как\s+([^«»]{3,50})|как\s+«([^»]{3,50})»/);
+    if (likeM) return { type: 'like', subject: (likeM[1] || likeM[2] || likeM[3] || likeM[4] || '').trim().replace(/[.!?]+$/, '') };
     var inCat = findMovieInText(txt);
     if (inCat) {
       if (aiPartMismatch(nq, inCat)) return { type: 'outside', title: txt, partHint: inCat.title };
@@ -3533,6 +3533,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     if (/уснуть|заснуть|не могу спать|хочу уснуть|на сон|перед сном/.test(nq)) return { type: 'sleep' };
+    
     if (/просто подбер|что-?нибудь посмотреть|что нибудь посмотреть|лень думать/.test(nq)) return { type: 'quick' };
     if (/подбер[её]м точнее/.test(nq) || (nq.length < 22 && /точнее/.test(nq))) return { type: 'interview' };
     if (advice || genreish) return { type: 'picks' };
@@ -4335,12 +4336,8 @@ document.addEventListener('DOMContentLoaded', function() {
   window.aiLikePick = function(name){
     name = (name || '').trim();
     if (!name){ aiLikePrompt(); return; }
-    var ref = aiFindMovie(name);
-    if (!ref){
-      var loose0 = aiMatchLoose(name);
-      if (loose0.length){ loose0.sort(function(x, y){ return (parseFloat(y.rating) || 0) - (parseFloat(x.rating) || 0); }); ref = loose0[0]; }
-    }
-    if (!ref){ aiHistPush('ai', 'похоже на «' + name + '» — нет в каталоге'); aiAddHTML('<div class="ai-note"><b>' + aiH(name.charAt(0).toUpperCase() + name.slice(1)) + '</b> — этого фильма в каталоге нет. Напиши название точнее или попробуй другой.</div>' + aiWhereBtns(name)); return; }
+    var ref = aiFindMovie(name) || (aiMatchLoose(name) || [])[0];
+    if (!ref){ aiHistPush('ai', 'похоже на «' + name + '» — нет в каталоге'); aiAddHTML('<div class="ai-note"><b>' + aiH(name.charAt(0).toUpperCase() + name.slice(1)) + '</b> — этого фильма в каталоге нет. Напиши название точнее или попробуй другой.</div>'); return; }
     var rg = aiGenresOf(ref).split(',').map(function(v){ return v.trim(); }).filter(function(v){ return v; });
     var re_ = aiEmotionsOf(ref).split(',').map(function(v){ return v.trim(); }).filter(function(v){ return v; });
     var rated = parseInt(ratings[ref.id], 10) || 0;
@@ -4360,9 +4357,7 @@ document.addEventListener('DOMContentLoaded', function() {
       scored.push({ m: m, sc: sc, common: common });
     });
     scored.sort(function(a, b){ return b.sc - a.sc; });
-    var withCommon = scored.filter(function(s){ return s.common.length > 0; });
-    var poolC = withCommon.length >= 3 ? withCommon : scored;
-    var top = poolC.slice(0, 5);
+    var top = scored.slice(0, 5);
     var picks = top.map(function(s){ return s.m; });
     var comMap = {};
     top.forEach(function(s){ comMap[s.m.id] = s.common; });
