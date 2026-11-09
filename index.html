@@ -522,44 +522,6 @@ body.light .fod-hero { background: #fff; }
 .modal-box { scrollbar-width: none; -ms-overflow-style: none; }
 .modal-box::-webkit-scrollbar { display: none; width: 0; }
 
-/* === Единый стиль прокрутки (вся тема) === */
-* { scrollbar-width: thin; scrollbar-color: rgba(178,112,235,0.55) transparent; }
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: rgba(178,112,235,0.55); border-radius: 999px;
-  border: 1px solid rgba(242,193,78,0.35);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gold);
-  box-shadow: 0 0 8px rgba(242,193,78,0.5);
-}
-body.light { scrollbar-color: rgba(178,140,50,0.55) transparent; }
-body.light ::-webkit-scrollbar-thumb {
-  background: rgba(178,140,50,0.55); border-color: rgba(178,140,50,0.4);
-}
-body.light ::-webkit-scrollbar-thumb:hover { background: #b2802a; }
-
-/* === Кнопка «наверх» === */
-#btn-totop {
-  position: fixed; right: 20px; bottom: 84px; z-index: 260;
-  width: 48px; height: 48px; border-radius: 50%;
-  font-family: inherit; font-size: 20px; line-height: 1;
-  background: rgba(38,30,46,0.92); color: var(--gold);
-  border: 1px solid rgba(242,193,78,0.5); cursor: pointer;
-  box-shadow: var(--shadow);
-  opacity: 0; visibility: hidden; pointer-events: none;
-  transition: opacity 0.25s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-#btn-totop.show { opacity: 1; visibility: visible; pointer-events: auto; }
-#btn-totop:hover {
-  background: var(--gold); color: #1a1722;
-  box-shadow: 0 0 18px rgba(242,193,78,0.55); transform: translateY(-2px);
-}
-body.light #btn-totop { background: rgba(255,255,255,0.95); color: #b2802a; border-color: rgba(178,140,50,0.6); }
-body.light #btn-totop:hover { background: var(--gold); color: #1a1722; }
-@media (max-width: 560px) { #btn-totop { right: 12px; bottom: 78px; width: 42px; height: 42px; font-size: 18px; } }
-
 /* === Шапка: поиск и слоган === */
 body { overflow-x: hidden; }
 .top-bar-search { display: flex; gap: 8px; flex: 1 1 320px; max-width: 620px; margin: 0 auto; }
@@ -641,6 +603,48 @@ body.light .ai-where { color: rgba(26,23,34,0.75); }
 .ai-where-btn:hover { filter: brightness(1.1); box-shadow: 0 0 10px rgba(242,193,78,0.4); }
 .ai-note { margin-top: 8px; font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.65); }
 body.light .ai-note { color: rgba(26,23,34,0.65); }
+
+/* === Единый стиль прокрутки (везде) === */
+* { scrollbar-width: thin; scrollbar-color: rgba(178,112,235,0.7) transparent; }
+body.light * { scrollbar-color: rgba(178,140,50,0.6) transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(178,112,235,0.6); border-radius: 999px; border: 1px solid rgba(242,193,78,0.35); }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); box-shadow: 0 0 8px rgba(242,193,78,0.5); }
+body.light ::-webkit-scrollbar-thumb { background: rgba(178,140,50,0.55); }
+
+/* === Фильтры и селекты в теме === */
+.back-btn { color: var(--gold); font-weight: 700; }
+.back-btn:hover { text-shadow: 0 0 12px rgba(242,193,78,0.55); }
+body.light .back-btn { color: #a8791f; }
+.filters-row label { color: var(--gold); }
+body.light .filters-row label { color: #a8791f; }
+.filters-row select, .couple-row select {
+  appearance: none; -webkit-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%23f2c14e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+}
+body.light .filters-row select, body.light .couple-row select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%23a8791f" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+}
+select { color-scheme: dark; }
+body.light select { color-scheme: light; }
+
+/* === Кнопка «наверх» === */
+#to-top {
+  position: fixed; right: 20px; bottom: 74px; z-index: 280;
+  width: 46px; height: 46px; border-radius: 50%;
+  font-size: 20px; font-family: inherit; font-weight: 800; line-height: 1;
+  background: rgba(38,30,46,0.92); color: var(--gold);
+  border: 1px solid rgba(242,193,78,0.5); cursor: pointer;
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: all 0.25s ease; padding: 0;
+}
+#to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+#to-top:hover { background: var(--gold); color: #1a1722; box-shadow: 0 0 18px rgba(242,193,78,0.5); }
+body.light #to-top { background: rgba(255,255,255,0.92); color: #a8791f; border-color: rgba(178,140,50,0.5); }
+body.light #to-top:hover { background: var(--gold); color: #1a1722; }
+@media (max-width: 560px) { #to-top { width: 40px; height: 40px; right: 12px; bottom: 66px; font-size: 17px; } }
 </style>
 </head>
 <body>
@@ -664,8 +668,7 @@ body.light .ai-note { color: rgba(26,23,34,0.65); }
 
 <div class="screen active" id="screen-home">
     <div class="home-layout">
-    <div class="side-col">
-      <button class="side-btn" id="btn-ai" onclick="showScreen('screen-ai')">✨ Спросить ИИ</button>
+    <div class="side-col"><button class="side-btn" id="btn-ai" onclick="showScreen('screen-ai')">✨ Спросить ИИ</button>
       <button class="side-btn" id="btn-couple">👥 Фильм для двоих</button>
       <div class="side-menu-wrap">
         <button class="side-btn" id="mood-toggle">🎭 Настроение</button>
@@ -684,7 +687,7 @@ body.light .ai-note { color: rgba(26,23,34,0.65); }
         <button class="side-btn" id="cats-toggle">🗂️ Категории</button>
         <div class="dropdown-menu" id="cats-menu"></div>
       </div>
-      <button class="side-btn" id="btn-recommend">💡 Рекомендации</button>
+    <button class="side-btn" id="btn-recommend">💡 Рекомендации</button>
       <button class="side-btn" id="btn-random">🎲 Случайный фильм</button>
     </div>
     <div class="fod-col">
@@ -813,8 +816,6 @@ body.light .ai-note { color: rgba(26,23,34,0.65); }
     <div id="modal-content"></div>
   </div>
 </div>
-
-<button id="btn-totop" title="Наверх" aria-label="Наверх">↑</button>
 
 <div id="toast-container"></div>
 
@@ -4624,41 +4625,38 @@ window.aiAboutMovie = function(id){
 
 </script>
 
+
+<button id="to-top" title="Наверх">↑</button>
 <script>
-/* === Кнопка «наверх» + подгонка высоты выпадающих списков === */
 (function(){
   function fitMenus(){
     document.querySelectorAll('.dropdown-menu.open').forEach(function(m){
       var r = m.getBoundingClientRect();
-      var avail = window.innerHeight - r.top - 12;
-      if (avail > 120) m.style.maxHeight = Math.floor(avail) + 'px';
+      if (!r.height) return;
+      var avail = window.innerHeight - r.top - 14;
+      if (avail > 160) m.style.maxHeight = avail + 'px';
     });
   }
-  document.addEventListener('click', function(){ setTimeout(fitMenus, 0); }, true);
   window.addEventListener('resize', fitMenus);
-
-  var btn = document.getElementById('btn-totop');
-  if (btn) {
-    var SCROLL_SEL = '.ai-messages, #chat-panel, .dropdown-menu, .modal-box';
-    function updTop(){
-      var shown = (window.scrollY || document.documentElement.scrollTop || 0) > 400;
-      if (!shown) {
-        document.querySelectorAll(SCROLL_SEL).forEach(function(el){
-          if (el.scrollTop > 300) shown = true;
-        });
-      }
-      btn.classList.toggle('show', shown);
+  window.setInterval(fitMenus, 400);
+  var tt = document.getElementById('to-top');
+  function upd(){
+    var any = window.scrollY > 400;
+    if (!any) {
+      var els = document.querySelectorAll('.screen.active, .ai-messages, #chat-panel.open, .dropdown-menu.open, .modal-overlay.open .modal-box');
+      for (var i = 0; i < els.length; i++) { if (els[i].scrollTop > 400) { any = true; break; } }
     }
-    window.addEventListener('scroll', updTop, {passive:true});
-    document.addEventListener('scroll', updTop, true);
-    btn.addEventListener('click', function(){
-      window.scrollTo({top:0, behavior:'smooth'});
-      document.querySelectorAll(SCROLL_SEL).forEach(function(el){
-        el.scrollTo({top:0, behavior:'smooth'});
-      });
-    });
-    updTop();
+    tt.classList.toggle('show', any);
   }
+  window.addEventListener('scroll', upd, {passive:true});
+  window.setInterval(upd, 500);
+  upd();
+  tt.addEventListener('click', function(){
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    document.querySelectorAll('.screen.active, .ai-messages, #chat-panel.open, .dropdown-menu.open, .modal-overlay.open .modal-box').forEach(function(el){
+      el.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
 })();
 </script>
 </body>
