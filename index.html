@@ -531,15 +531,15 @@ body { overflow-x: hidden; }
 body.light .top-bar-slogan { color: rgba(26,23,34,0.72); }
 @media (max-width: 1100px) { .top-bar-slogan { display: none; } }
 /* === Главный экран: колонка слева + Фильм дня, ровно и в один экран === */
-#screen-home.active { display: flex; align-items: center; justify-content: center; height: calc(100vh - var(--header-h, 118px)); max-height: calc(100vh - var(--header-h, 118px)); overflow: hidden; padding: 10px 24px 12px; }
+#screen-home.active { display: flex; align-items: center; justify-content: center; height: calc(100vh - var(--header-h, 118px)); max-height: calc(100vh - var(--header-h, 118px)); overflow: visible; padding: 10px 24px 12px; }
 .home-layout { display: flex; align-items: center; justify-content: center; gap: 30px; width: 100%; max-width: 1180px; }
 .side-col { display: flex; flex-direction: column; gap: 10px; width: 224px; flex-shrink: 0; }
-.side-btn { font-family: inherit; font-size: 14px; font-weight: 700; padding: 12px 14px; text-align: left; display: flex; align-items: center; gap: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: rgba(38,30,46,0.72); color: #d9a5f2; border: 1px solid rgba(178,112,235,0.55); border-radius: 14px; cursor: pointer; transition: all 0.2s ease; }
+.side-btn { width: 100%; font-family: inherit; font-size: 14px; font-weight: 700; padding: 12px 14px; text-align: left; display: flex; align-items: center; gap: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: rgba(38,30,46,0.72); color: #d9a5f2; border: 1px solid rgba(178,112,235,0.55); border-radius: 14px; cursor: pointer; transition: all 0.2s ease; }
 body.light .side-btn { background: rgba(255,255,255,0.78); color: #7a1f8f; border-color: rgba(122,31,143,0.4); }
 .side-btn:hover { background: #7a1f8f; color: #fff; box-shadow: 0 0 16px rgba(122,31,143,0.5); transform: translateY(-2px); }
 body.light .side-btn:hover { background: #7a1f8f; color: #fff; }
 .side-menu-wrap { position: relative; }
-.dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; width: 100%; display: none; flex-direction: column; gap: 6px; padding: 10px; background: rgba(26,23,34,0.97); border: 1px solid rgba(178,112,235,0.5); border-radius: 14px; box-shadow: var(--shadow); z-index: 80; max-height: min(430px, 58vh); overflow-y: auto; }
+.dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; width: 100%; display: none; flex-direction: column; gap: 6px; padding: 10px; background: rgba(26,23,34,0.97); border: 1px solid rgba(178,112,235,0.5); border-radius: 14px; box-shadow: var(--shadow); z-index: 80; overflow-y: auto; }
 .dropdown-menu.open { display: flex; }
 body.light .dropdown-menu { background: #fff; }
 .dropdown-menu .mood-btn, .dropdown-menu .cat-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; font-family: inherit; font-size: 13.5px; font-weight: 600; text-align: left; color: #f5f0e6; background: transparent; border: 1px solid rgba(178,112,235,0.35); border-radius: 10px; cursor: pointer; transition: all 0.15s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -627,10 +627,8 @@ body.light .ai-note { color: rgba(26,23,34,0.65); }
 <div class="screen active" id="screen-home">
     <div class="home-layout">
     <div class="side-col">
-      <button class="side-btn" id="btn-random">🎲 Случайный фильм</button>
-      <button class="side-btn" id="btn-couple">👥 Фильм для двоих</button>
-      <button class="side-btn" id="btn-recommend">💡 Рекомендации</button>
       <button class="side-btn" id="btn-ai" onclick="showScreen('screen-ai')">✨ Спросить ИИ</button>
+      <button class="side-btn" id="btn-couple">👥 Фильм для двоих</button>
       <div class="side-menu-wrap">
         <button class="side-btn" id="mood-toggle">🎭 Настроение</button>
         <div class="dropdown-menu" id="mood-menu">
@@ -648,6 +646,8 @@ body.light .ai-note { color: rgba(26,23,34,0.65); }
         <button class="side-btn" id="cats-toggle">🗂️ Категории</button>
         <div class="dropdown-menu" id="cats-menu"></div>
       </div>
+      <button class="side-btn" id="btn-recommend">💡 Рекомендации</button>
+      <button class="side-btn" id="btn-random">🎲 Случайный фильм</button>
     </div>
     <div class="fod-col">
       <div class="fod-label">🎬 Фильм дня</div>
@@ -3513,8 +3513,6 @@ document.addEventListener('DOMContentLoaded', function() {
   function aiClassify(txt){
     var nq = aiNorm(txt);
     if (aiMoodOnly(nq)) return { type: 'picks' };
-var likeM = nq.match(/похож[ео] на\s+([^«»]{3,50})|в стиле\s+([^«»]{3,50})|что-?нибудь как\s+([^«»]{3,50})|как\s+«([^»]{3,50})»/);
-    if (likeM) return { type: 'like', subject: (likeM[1] || likeM[2] || likeM[3] || likeM[4] || '').trim().replace(/[.!?]+$/, '') };
     var inCat = findMovieInText(txt);
     if (inCat) {
       if (aiPartMismatch(nq, inCat)) return { type: 'outside', title: txt, partHint: inCat.title };
@@ -3533,7 +3531,8 @@ var likeM = nq.match(/похож[ео] на\s+([^«»]{3,50})|в стиле\s+([
       }
     }
     if (/уснуть|заснуть|не могу спать|хочу уснуть|на сон|перед сном/.test(nq)) return { type: 'sleep' };
-    
+    var likeM = nq.match(/похож[ео] на\s+([^«»]{3,50})|в стиле\s+([^«»]{3,50})|что-?нибудь как\s+([^«»]{3,50})|как\s+«([^»]{3,50})»/);
+    if (likeM) return { type: 'like', subject: (likeM[1] || likeM[2] || likeM[3] || likeM[4] || '').trim().replace(/[.!?]+$/, '') };
     if (/просто подбер|что-?нибудь посмотреть|что нибудь посмотреть|лень думать/.test(nq)) return { type: 'quick' };
     if (/подбер[её]м точнее/.test(nq) || (nq.length < 22 && /точнее/.test(nq))) return { type: 'interview' };
     if (advice || genreish) return { type: 'picks' };
@@ -4336,7 +4335,7 @@ var likeM = nq.match(/похож[ео] на\s+([^«»]{3,50})|в стиле\s+([
   window.aiLikePick = function(name){
     name = (name || '').trim();
     if (!name){ aiLikePrompt(); return; }
-    var ref = aiFindMovie(name) || (aiMatchLoose(name) || [])[0];
+    var ref = aiFindMovie(name);
     if (!ref){ aiHistPush('ai', 'похоже на «' + name + '» — нет в каталоге'); aiAddHTML('<div class="ai-note"><b>' + aiH(name.charAt(0).toUpperCase() + name.slice(1)) + '</b> — этого фильма в каталоге нет. Напиши название точнее или попробуй другой.</div>'); return; }
     var rg = aiGenresOf(ref).split(',').map(function(v){ return v.trim(); }).filter(function(v){ return v; });
     var re_ = aiEmotionsOf(ref).split(',').map(function(v){ return v.trim(); }).filter(function(v){ return v; });
@@ -4531,17 +4530,18 @@ window.aiAboutMovie = function(id){
 (function(){
   const topBar = document.querySelector('.top-bar');
   function syncHeaderH(){ if (topBar) document.documentElement.style.setProperty('--header-h', topBar.offsetHeight + 'px'); }
-  syncHeaderH(); window.addEventListener('resize', syncHeaderH);
+  syncHeaderH(); window.addEventListener('resize', syncHeaderH); window.addEventListener('resize', function(){ [moodMenu, catsMenu].forEach(function(m){ if (m && m.classList.contains('open')) fitMenu(m); }); });
   const moodToggle = document.getElementById('mood-toggle');
   const moodMenu = document.getElementById('mood-menu');
   const catsToggle = document.getElementById('cats-toggle');
   const catsMenu = document.getElementById('cats-menu');
+  function fitMenu(menu){ if (!menu) return; const top = menu.getBoundingClientRect().top; menu.style.maxHeight = Math.max(180, window.innerHeight - top - 12) + 'px'; }
   function closeAll(except){ [moodMenu, catsMenu].forEach(function(m){ if (m && m !== except) m.classList.remove('open'); }); }
   if (moodToggle && moodMenu) moodToggle.addEventListener('click', function(e){
     e.stopPropagation();
     const willOpen = !moodMenu.classList.contains('open');
     closeAll(null);
-    if (willOpen) moodMenu.classList.add('open');
+    if (willOpen) { moodMenu.classList.add('open'); fitMenu(moodMenu); }
   });
   if (moodMenu) moodMenu.addEventListener('click', function(e){
     if (e.target.closest('.mood-btn')) moodMenu.classList.remove('open');
@@ -4563,7 +4563,7 @@ window.aiAboutMovie = function(id){
     e.stopPropagation();
     const willOpen = !catsMenu.classList.contains('open');
     closeAll(null);
-    if (willOpen) { buildCats(); catsMenu.classList.add('open'); }
+    if (willOpen) { buildCats(); catsMenu.classList.add('open'); fitMenu(catsMenu); }
   });
   document.addEventListener('click', function(e){
     if (moodMenu && moodMenu.classList.contains('open') && !moodMenu.contains(e.target)) moodMenu.classList.remove('open');
