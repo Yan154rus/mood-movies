@@ -409,9 +409,6 @@ body.light #no-stats, body.light #no-favorites, body.light #no-watched { backgro
 @media (max-width: 560px) {
   h1 { font-size: 26px; }
   .mood-buttons { grid-template-columns: 1fr 1fr; }
-  .quick-btn { white-space: normal; font-size: 14px; padding: 12px 10px; }
-  .side-btn { white-space: normal; font-size: 13px; padding: 11px 10px; }
-  .dropdown-menu .mood-btn, .dropdown-menu .cat-item { white-space: normal; }
   .card { flex-direction: column; }
   .card-poster { width: 100%; height: 300px; margin: 0; border-radius: 0; }
   .card-body { padding: 16px; }
@@ -422,8 +419,6 @@ body.light #no-stats, body.light #no-favorites, body.light #no-watched { backgro
   .couple-row select { max-width: none; }
   #toast-container { right: 10px; bottom: 10px; left: 10px; }
   #chat-panel { width: calc(100vw - 40px); }
-  .screen { padding-bottom: 90px; }
-  #screen-home.active { height: auto; max-height: none; }
 }
 
 /* === Адаптация и ИИ-чат (блок Алисы) === */
@@ -465,8 +460,6 @@ body.light .ai-qchip { background: #f4f1ea; color: #7a1f8f; }
   .card-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain; margin: 14px 14px 0; background: rgba(0,0,0,0.35); }
   .card-body { padding: 16px; }
   .ai-messages { max-height: 48vh; }
-  #chat-btn { width: 44px; height: 44px; font-size: 19px; left: 14px; bottom: 14px; }
-  #chat-panel { left: 14px; bottom: 66px; }
 }
 @media (max-width: 380px) {
   .top-bar-title { font-size: 15px; }
@@ -675,6 +668,30 @@ body.light #to-top:hover { background: var(--gold); color: #1a1722; }
 @media (max-height: 840px) and (min-width: 1100px) {
   .fod-poster { width: 280px; }
   .fod-hero { padding: 22px; gap: 22px; }
+}
+
+/* === AI-MOBILE-FIX: точечные правки только для телефонов (<=560px) === */
+@media (max-width: 560px) {
+  /* 1. Кнопки быстрых действий и настроения: текст не режется */
+  .quick-btn, .mood-btn, .side-btn {
+    white-space: normal !important;
+    font-size: 13.5px;
+    padding: 12px 10px;
+    line-height: 1.35;
+    overflow: visible;
+    text-overflow: unset;
+  }
+  /* 2. Аватарка чата: меньше и не накрывает контент */
+  #chat-btn {
+    width: 44px !important;
+    height: 44px !important;
+    left: 14px;
+    bottom: 14px;
+  }
+  #chat-panel { left: 14px; bottom: 66px; }
+  /* 3. Нижний запас прокрутки: карточка "Фильма дня" доскроллится */
+  body { padding-bottom: 26px; }
+  .screen { padding-bottom: 70px; }
 }
 </style>
 </head>
