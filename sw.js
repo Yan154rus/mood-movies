@@ -1,69 +1,80 @@
-/* Mood Movies — service worker, версия кэша v7 */
-const CACHE_NAME = 'mood-movies-v7';
-const CORE_ASSETS = [
-  './',
-  './index.html',
-  './style.css',
-  './mobile.css',
-  './app.js',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
-  './marvel.jpg',
-  './background-day.jpg'
+// Mood Movies — Service Worker v8
+// Предзагрузка ядра; постеры кэшируются по мере показа (runtime cache)
+
+const CACHE_NAME = 'mood-movies-v8';
+const CORE = [
+  'index.html',
+  'style.css',
+  'mobile.css',
+  'app.js',
+  'data.js',
+  'posters.js',
+  'manifest.json',
+  'icon-192.png',
+  'icon-512.png',
+  'marvel.jpg',
+  'background-day.jpg'
 ];
 
-self.addEventListener('install', (event) => {
+// ставим ядро: отсутствующие файлы не роняют установку
+self.addEventListener('install', function(event) {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => Promise.allSettled(
-        CORE_ASSETS.map((url) => cache.add(new Request(url, { cache: 'reload' })))
-      ))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(function(cache) {
+      return Promise.all(CORE.map(function(f) {
+        return cache.add(new Request(f, { cache: 'reload' })).catch(function() {});
+      }));
+    }).then(function() { return self.skipWaiting(); })
   );
 });
 
-self.addEventListener('activate', (event) => {
+// активация: удаляем ВСЕ старые версии кэша
+self.addEventListener('activate', function(event) {
   event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(
-        keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
-      ))
-      .then(() => self.clients.claim())
+    caches.keys().then(function(keys) {
+      return Promise.all(keys.map(function(k) {
+        if (k !== CACHE_NAME) return caches.delete(k);
+      }));
+    }).then(function() { return self.clients.claim(); })
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  if (request.method !== 'GET') return;
+// стратегия: ядро — cache-first с фоновым обновлением,
+// картинки (posters/, wikimedia) — cache-first + докачка при промахе
+self.addEventListener('fetch', function(event) {
+  const url = new URL(event.request.url);
+  if (event.request.method !== 'GET') return;
 
-  const url = new URL(request.url);
+  const isImage = url.pathname.includes('/posters/') ||
+    /upload\.wikimedia\.org|thumb\.wikimedia\.org/.test(url.hostname);
 
-  // API (TMDB, Pollinations, Wikipedia): сеть-сначала, кэш как офлайн-резерв
-  const isApi = /themoviedb|tmdb|pollinations|wikipedia/i.test(url.hostname);
-  if (isApi) {
+  if (isImage) {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-          return response;
-        })
-        .catch(() => caches.match(request))
+      caches.match(event.request).then(function(hit) {
+        if (hit) return hit;
+        return fetch(event.request).then(function(resp) {
+          if (resp && resp.ok) {
+            const copy = resp.clone();
+            caches.open(CACHE_NAME).then(function(c) { c.put(event.request, copy); });
+          }
+          return resp;
+        }).catch(function() { return hit; });
+      })
     );
     return;
   }
 
-  // Статика своего сайта: кэш-сначала, иначе сеть и запись в кэш
-  if (url.origin === self.location.origin) {
+  // прочие запросы своего origin: из кэша, обновляем в фоне
+  if (url.origin === location.origin) {
     event.respondWith(
-      caches.match(request).then((hit) => {
-        if (hit) return hit;
-        return fetch(request).then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-          return response;
-        });
+      caches.match(event.request).then(function(hit) {
+        const network = fetch(event.request).then(function(resp) {
+          if (resp && resp.ok) {
+            const copy = resp.clone();
+            caches.open(CACHE_NAME).then(function(c) { c.put(event.request, copy); });
+          }
+          return resp;
+        }).catch(function() { return hit; });
+        return hit || network;
       })
     );
   }
