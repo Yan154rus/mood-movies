@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mood-movies-v5';
+const CACHE_NAME = 'mood-movies-v6';
 const CORE = [
   './',
   './index.html',
