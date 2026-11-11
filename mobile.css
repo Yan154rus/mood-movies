@@ -167,4 +167,29 @@
     padding-left: 58px;
     box-sizing: border-box;
   }
+/* ===== Правки по скринам 15:41: пустота и поле ИИ ===== */
+@media (max-width: 768px) {
+
+  /* Шапка sticky и сама занимает место — убираем её вторую компенсацию */
+  .screen { padding: 16px 16px 28px; }
+
+  /* Поле ввода ИИ: ровно по ширине чата, никакие внешние правила не мешают */
+  .ai-input-row {
+    margin: 12px 0 0 !important;
+    padding: 0 !important;
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  #ai-input {
+    flex: 1 1 auto;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    margin: 0 !important;
+  }
+  .ai-send-btn { flex-shrink: 0; }
+}
 
