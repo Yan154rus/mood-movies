@@ -139,3 +139,32 @@
   #chat-panel { left: 12px; width: calc(100vw - 24px); max-height: 55vh; bottom: 70px; }
   #to-top { right: 12px; bottom: 84px; }
 }
+/* ===== Правки по скринам от 11.11 ===== */
+@media (max-width: 768px) {
+
+  /* Фильтры: подпись слева, селект справа — ровные ряды */
+  .filters-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 8px 10px;
+  }
+  .filters-row label { margin: 0; }
+  .filters-row select { width: 100%; }
+
+  /* Кнопки меню: текст переносится, не обрезается */
+  .side-btn {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    gap: 8px;
+    padding: 12px 10px;
+  }
+
+  /* Поле ввода ИИ: внутри контейнера и не под аватаром */
+  .ai-input-row {
+    margin-left: 0;
+    padding-left: 58px;
+    box-sizing: border-box;
+  }
+
