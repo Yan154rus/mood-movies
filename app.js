@@ -3805,3 +3805,27 @@ window.aiAboutMovie = function(id){
     });
   });
 })();
+
+
+/* ===== Плавающая подсказка поля ИИ (мобильная вёрстка) =====
+   Текст плейсхолдера переносится из атрибута в подпись .ai-hint,
+   которая лежит поверх поля и скрывается при фокусе/вводе.
+   Работает только там, где mobile.css включает подсказку. */
+(function () {
+  function initAiHint() {
+    var input = document.getElementById('ai-input');
+    if (!input || document.querySelector('.ai-hint')) return;
+    var text = (input.getAttribute('placeholder') || '').trim();
+    if (!text) return;
+    input.setAttribute('placeholder', ' ');
+    var span = document.createElement('span');
+    span.className = 'ai-hint';
+    span.textContent = text;
+    input.parentNode.insertBefore(span, input.nextSibling);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAiHint);
+  } else {
+    initAiHint();
+  }
+})();
