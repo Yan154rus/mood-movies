@@ -1,0 +1,254 @@
+/* ============================================
+   MOOD MOVIES — мобильная версия (адаптив)
+   Подключается ПОСЛЕ style.css, перекрывает его
+   только на узких экранах. Основной стиль не трогает.
+   ============================================ */
+
+/* ---------- Планшеты и узкие ноутбуки: до 1024px ---------- */
+@media (max-width: 1024px) {
+  .home-layout {
+    flex-direction: column;
+  }
+
+  .side-col {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .side-col .side-btn {
+    flex: 1 1 40%;
+    min-width: 140px;
+  }
+
+  .side-menu-wrap {
+    flex: 1 1 100%;
+  }
+}
+
+/* ---------- Телефоны: до 768px ---------- */
+@media (max-width: 768px) {
+
+  /* Шапка: колонки вместо трёх полос */
+  .top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .top-bar-left {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .top-bar-slogan {
+    display: none; /* слоган на телефоне только мешает */
+  }
+
+  .top-bar-search {
+    width: 100%;
+  }
+
+  .top-bar-search input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .top-bar-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .top-bar-right button {
+    flex: 1 1 30%;
+    min-width: 100px;
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+
+  /* Основная сетка — одна колонка */
+  .home-layout {
+    flex-direction: column;
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .side-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .side-col .side-btn {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  .side-menu-wrap {
+    grid-column: 1 / -1;
+  }
+
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .dropdown-menu .mood-btn {
+    width: 100%;
+    text-align: left;
+  }
+
+  .fod-col {
+    width: 100%;
+  }
+
+  /* Экраны с отступами */
+  .screen {
+    padding: 12px;
+  }
+
+  .screen h1 {
+    font-size: 22px;
+  }
+
+  /* Фильтры: вертикально, элементы на всю ширину */
+  .filters-panel {
+    padding: 10px;
+  }
+
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .filters-row label,
+  .filters-row select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Карточки фильмов: одна или две колонки */
+  #results-list,
+  #favorites-list,
+  #watched-list,
+  #couple-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Чат-помощник: не перекрывает весь экран */
+  #chat-btn {
+    width: 52px;
+    height: 52px;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  #chat-panel {
+    right: 8px;
+    left: 8px;
+    bottom: 72px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .ai-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .ai-qchip {
+    flex: 0 1 auto;
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .ai-input-row {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .ai-input-row input {
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  /* Модалка: без вылезания за края */
+  .modal-box {
+    width: calc(100% - 24px);
+    max-width: none;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  /* Кнопки-действия на всю ширину */
+  .random-btn,
+  .more-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* ---------- Узкие телефоны: до 480px ---------- */
+@media (max-width: 480px) {
+
+  .top-bar-title {
+    font-size: 18px;
+  }
+
+  .top-bar-right button {
+    flex: 1 1 45%;
+  }
+
+  /* Карточки — строго одна колонка */
+  #results-list,
+  #favorites-list,
+  #watched-list,
+  #couple-list {
+    grid-template-columns: 1fr;
+  }
+
+  .side-col {
+    grid-template-columns: 1fr;
+  }
+
+  .side-col .side-btn {
+    flex: 1 1 100%;
+  }
+
+  .screen h1 {
+    font-size: 20px;
+  }
+
+  .couple-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .couple-row select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* ---------- Мелкая гарантия: всё в пределах экрана ---------- */
+@media (max-width: 768px) {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
