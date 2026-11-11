@@ -192,4 +192,9 @@
   }
   .ai-send-btn { flex-shrink: 0; }
 }
+/* ===== Финальная подгонка отступов ===== */
+@media (max-width: 768px) {
+  .screen { padding: 12px 14px 12px; }
+  body { padding-bottom: 64px; }
+}
 
