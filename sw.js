@@ -1,45 +1,70 @@
-const CACHE_NAME = 'mood-movies-v6';
-const CORE = [
+/* Mood Movies — service worker, версия кэша v7 */
+const CACHE_NAME = 'mood-movies-v7';
+const CORE_ASSETS = [
   './',
   './index.html',
-  './manifest.json',
   './style.css',
+  './mobile.css',
   './app.js',
+  './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  './helper.png'
+  './marvel.jpg',
+  './background-day.jpg'
 ];
 
-self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(CORE)));
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', event => {
-  event.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-  ));
-  self.clients.claim();
-});
-
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
-  const url = event.request.url;
-
-  // API — сеть сначала: данные всегда свежие, кэш только офлайн-запас
-  const isApi = url.includes('themoviedb') || url.includes('pollinations') || url.includes('wikipedia');
-
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      const fetchPromise = fetch(event.request).then(response => {
-        if (response && response.status === 200) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
-        }
-        return response;
-      }).catch(() => cached);
-
-      return isApi ? fetchPromise : (cached || fetchPromise);
-    })
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => Promise.allSettled(
+        CORE_ASSETS.map((url) => cache.add(new Request(url, { cache: 'reload' })))
+      ))
+      .then(() => self.skipWaiting())
   );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(
+        keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
+      ))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
+
+  const url = new URL(request.url);
+
+  // API (TMDB, Pollinations, Wikipedia): сеть-сначала, кэш как офлайн-резерв
+  const isApi = /themoviedb|tmdb|pollinations|wikipedia/i.test(url.hostname);
+  if (isApi) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Статика своего сайта: кэш-сначала, иначе сеть и запись в кэш
+  if (url.origin === self.location.origin) {
+    event.respondWith(
+      caches.match(request).then((hit) => {
+        if (hit) return hit;
+        return fetch(request).then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          return response;
+        });
+      })
+    );
+  }
 });
