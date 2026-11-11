@@ -1,254 +1,141 @@
-/* ============================================
-   MOOD MOVIES — мобильная версия (адаптив)
-   Подключается ПОСЛЕ style.css, перекрывает его
-   только на узких экранах. Основной стиль не трогает.
-   ============================================ */
+/* ==================================================
+   Mood Movies — мобильная адаптация (полная версия)
+   ================================================== */
 
-/* ---------- Планшеты и узкие ноутбуки: до 1024px ---------- */
 @media (max-width: 1024px) {
-  .home-layout {
-    flex-direction: column;
-  }
-
-  .side-col {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    width: 100%;
-  }
-
-  .side-col .side-btn {
-    flex: 1 1 40%;
-    min-width: 140px;
-  }
-
-  .side-menu-wrap {
-    flex: 1 1 100%;
-  }
+  .top-bar-slogan { display: none; }
 }
 
-/* ---------- Телефоны: до 768px ---------- */
 @media (max-width: 768px) {
 
-  /* Шапка: колонки вместо трёх полос */
-  .top-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    padding: 10px 12px;
+  /* ---------- Шапка ---------- */
+  .top-bar { flex-wrap: wrap; row-gap: 8px; padding: 10px 12px; }
+  .top-bar-left { width: 100%; justify-content: space-between; }
+  .top-bar-right { width: 100%; gap: 6px; }
+  .stats-counter, .watched-counter, .fav-counter {
+    flex: 1 1 0; justify-content: center;
+    padding: 8px 4px; font-size: 13px; gap: 6px;
   }
+  .stats-count, .watched-count, .fav-count { min-width: 20px; height: 20px; font-size: 11px; }
+  .top-bar-search { order: 3; flex-basis: 100%; max-width: none; }
+  #search-input { font-size: 16px; }
 
-  .top-bar-left {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .top-bar-slogan {
-    display: none; /* слоган на телефоне только мешает */
-  }
-
-  .top-bar-search {
-    width: 100%;
-  }
-
-  .top-bar-search input {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .top-bar-right {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .top-bar-right button {
-    flex: 1 1 30%;
-    min-width: 100px;
-    font-size: 13px;
-    padding: 8px 6px;
-  }
-
-  /* Основная сетка — одна колонка */
-  .home-layout {
-    flex-direction: column;
-    padding: 12px;
-    gap: 16px;
-  }
-
+  /* ---------- Главный экран: меню в 2 колонки, «Фильм дня» ниже ---------- */
+  #screen-home.active { height: auto; max-height: none; padding: 16px 16px 40px; }
+  .home-layout { flex-direction: column; gap: 16px; }
   .side-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .side-col .side-btn {
     width: 100%;
-    min-width: 0;
-    padding: 12px 8px;
-    font-size: 14px;
-  }
-
-  .side-menu-wrap {
-    grid-column: 1 / -1;
-  }
-
-  .dropdown-menu {
-    position: static;
-    width: 100%;
-    box-shadow: none;
-  }
-
-  .dropdown-menu .mood-btn {
-    width: 100%;
-    text-align: left;
-  }
-
-  .fod-col {
-    width: 100%;
-  }
-
-  /* Экраны с отступами */
-  .screen {
-    padding: 12px;
-  }
-
-  .screen h1 {
-    font-size: 22px;
-  }
-
-  /* Фильтры: вертикально, элементы на всю ширину */
-  .filters-panel {
-    padding: 10px;
-  }
-
-  .filters-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .filters-row label,
-  .filters-row select {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* Карточки фильмов: одна или две колонки */
-  #results-list,
-  #favorites-list,
-  #watched-list,
-  #couple-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
+  .side-col .side-menu-wrap { display: contents; }
+  .dropdown-menu { position: static; grid-column: 1 / -1; }
+  .dropdown-menu.open { display: grid; grid-template-columns: 1fr 1fr; }
 
-  /* Чат-помощник: не перекрывает весь экран */
-  #chat-btn {
-    width: 52px;
-    height: 52px;
-    right: 12px;
-    bottom: 12px;
-  }
+  /* ---------- Фильтры ---------- */
+  .filters-row select { flex: 1 1 45%; }
 
-  #chat-panel {
-    right: 8px;
-    left: 8px;
-    bottom: 72px;
-    max-height: 60vh;
-    overflow-y: auto;
-  }
-
-  .ai-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .ai-qchip {
-    flex: 0 1 auto;
-    font-size: 13px;
-    padding: 6px 10px;
-  }
-
-  .ai-input-row {
-    flex-direction: row;
-    gap: 6px;
-  }
-
-  .ai-input-row input {
-    width: 100%;
-    box-sizing: border-box;
-    min-width: 0;
-  }
-
-  /* Модалка: без вылезания за края */
-  .modal-box {
-    width: calc(100% - 24px);
-    max-width: none;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  /* Кнопки-действия на всю ширину */
-  .random-btn,
-  .more-btn {
-    width: 100%;
-    box-sizing: border-box;
-  }
-}
-
-/* ---------- Узкие телефоны: до 480px ---------- */
-@media (max-width: 480px) {
-
-  .top-bar-title {
-    font-size: 18px;
-  }
-
-  .top-bar-right button {
-    flex: 1 1 45%;
-  }
-
-  /* Карточки — строго одна колонка */
-  #results-list,
-  #favorites-list,
-  #watched-list,
-  #couple-list {
-    grid-template-columns: 1fr;
-  }
-
-  .side-col {
-    grid-template-columns: 1fr;
-  }
-
-  .side-col .side-btn {
-    flex: 1 1 100%;
-  }
-
-  .screen h1 {
-    font-size: 20px;
-  }
-
-  .couple-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 4px;
-  }
-
-  .couple-row select {
-    width: 100%;
-    box-sizing: border-box;
-  }
-}
-
-/* ---------- Мелкая гарантия: всё в пределах экрана ---------- */
-@media (max-width: 768px) {
-  img {
-    max-width: 100%;
+  /* ---------- Карточка фильма ---------- */
+  .card { flex-direction: column; }
+  .card-poster {
+    width: calc(100% - 28px);
     height: auto;
+    max-height: 46vh;
+    object-fit: contain;
+    margin: 14px 14px 0;
+    background: rgba(0,0,0,0.35);
   }
+  .card-body { padding: 16px; }
+
+  /* ===== Кнопки карточки: ровные ряды по 2 =====
+     Хочу посмотреть | Уже смотрел
+     Поделиться      | Отзывы
+     Спросить ИИ (на всю полосу)                  */
+  .card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .card-actions > button {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .card-actions > .ai-soft,
+  .card-actions > button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .card-actions .share-messengers,
+  .card-actions .review-panel { grid-column: 1 / -1; }
+
+  /* ===== «Где смотреть» и трейлер: ровные ряды по 2 ===== */
+  .services {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .service-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 10px 8px;
+  }
+  .service-chip:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+  /* ===== Чипы ИИ-кинокритика: ровные ряды по 2 ===== */
+  .ai-chips {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .ai-qchip {
+    width: 100%;
+    margin: 0;
+    padding: 9px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Поле ввода ИИ: не под аватаром помощника */
+  .ai-input-row { margin-left: 60px; }
+
+  /* ---------- Модалка: постер не во весь экран ---------- */
+  .modal-box {
+    width: calc(100vw - 24px);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 18px 14px;
+  }
+  .modal-box img,
+  #modal-content img {
+    max-height: 55vh;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* ---------- «Фильм дня»: постер не во весь экран ---------- */
+  #film-of-day img,
+  .fod-poster {
+    max-height: 52vh;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+
+  /* ---------- Плавающие кнопки ---------- */
+  body { padding-bottom: 76px; }
+  #chat-btn { width: 48px; height: 48px; left: 12px; bottom: 12px; }
+  #chat-panel { left: 12px; width: calc(100vw - 24px); max-height: 55vh; bottom: 70px; }
+  #to-top { right: 12px; bottom: 84px; }
 }
