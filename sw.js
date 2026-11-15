@@ -1,7 +1,7 @@
 // Mood Movies — Service Worker v8
 // Предзагрузка ядра; постеры кэшируются по мере показа (runtime cache)
 
-const CACHE_NAME = 'mood-movies-v10';
+const CACHE_NAME = 'mood-movies-v11';
 const CORE = [
   'index.html',
   'style.css',
