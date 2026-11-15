@@ -1,7 +1,16 @@
 // Mood Movies — карта постеров.
 // Локальные файлы — в папке posters/, внешние — ссылки на Wikimedia.
 const POSTER_EXT = {
-    "397": "https://ru.wikipedia.org/wiki/Special:FilePath/Catch_22_DVD_cover.jpg?width=400",
+  "487": "https://ru.wikipedia.org/wiki/Special:FilePath/Home_Alone_2_poster.jpg?width=400",
+  "488": "https://ru.wikipedia.org/wiki/Special:FilePath/Kate_and_Leopold_poster.jpg?width=400",
+  "24": "https://ru.wikipedia.org/wiki/Special:FilePath/Love_Actually_poster.jpg?width=400",
+  "148": "https://ru.wikipedia.org/wiki/Special:FilePath/Jumanji_poster.jpg?width=400",
+  "167": "https://ru.wikipedia.org/wiki/Special:FilePath/A_Silent_Voice_poster.jpg?width=400",
+  "201": "https://ru.wikipedia.org/wiki/Special:FilePath/L.A._Confidential_poster.jpg?width=400",
+  "214": "https://ru.wikipedia.org/wiki/Special:FilePath/What_We_Do_in_the_Shadows_poster.jpg?width=400",
+  "275": "https://ru.wikipedia.org/wiki/Special:FilePath/The_Bourne_Identity_poster.jpg?width=400",
+  "362": "https://ru.wikipedia.org/wiki/Special:FilePath/Ronin_poster.jpg?width=400",
+  "397": "https://ru.wikipedia.org/wiki/Special:FilePath/Catch_22_DVD_cover.jpg?width=400",
   "473": "https://ru.wikipedia.org/wiki/Special:FilePath/Heat.jpg?width=400",
   "476": "https://ru.wikipedia.org/wiki/Special:FilePath/Eternal_Sunshine_of_the_Spotless_Mind.jpg?width=400",
   "480": "https://ru.wikipedia.org/wiki/Special:FilePath/Benjamin_Button_poster.jpg?width=400",
