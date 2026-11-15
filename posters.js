@@ -1,6 +1,11 @@
 // Mood Movies — карта постеров.
 // Локальные файлы — в папке posters/, внешние — ссылки на Wikimedia.
 const POSTER_EXT = {
+    "397": "https://ru.wikipedia.org/wiki/Special:FilePath/Catch_22_DVD_cover.jpg?width=400",
+  "473": "https://ru.wikipedia.org/wiki/Special:FilePath/Heat.jpg?width=400",
+  "476": "https://ru.wikipedia.org/wiki/Special:FilePath/Eternal_Sunshine_of_the_Spotless_Mind.jpg?width=400",
+  "480": "https://ru.wikipedia.org/wiki/Special:FilePath/Benjamin_Button_poster.jpg?width=400",
+  "148": "https://ru.wikipedia.org/wiki/Special:FilePath/Джуманджи_(фильм)_плакат.jpg?width=400",
   "1": "https://upload.wikimedia.org/wikipedia/ru/1/1d/%D0%96%D0%B8%D0%B7%D0%BD%D1%8C_%D0%BF%D1%80%D0%B5%D0%BA%D1%80%D0%B0%D1%81%D0%BD%D0%B0_%28%D0%BF%D0%BE%D1%81%D1%82%D0%B5%D1%80%29.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
   "2": "https://thumb.wikimedia.org/wikipedia/ru/thumb/c/cd/The_Hangover.jpg/330px-The_Hangover.jpg?utm_source=ru.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "3": "https://ru.wikipedia.org/wiki/Special:FilePath/Форрест_Гамп.jpg?width=400",
