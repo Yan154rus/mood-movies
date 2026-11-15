@@ -1,6 +1,7 @@
 // Mood Movies — карта постеров.
 // Локальные файлы — в папке posters/, внешние — ссылки на Wikimedia.
 const POSTER_EXT = {
+   "45": "https://ru.wikipedia.org/wiki/Special:FilePath/Тайна_третьей_планеты.jpg?width=400",
   "487": "https://ru.wikipedia.org/wiki/Special:FilePath/Home_Alone_2_poster.jpg?width=400",
   "488": "https://ru.wikipedia.org/wiki/Special:FilePath/Kate_and_Leopold_poster.jpg?width=400",
   "24": "https://ru.wikipedia.org/wiki/Special:FilePath/Love_Actually_poster.jpg?width=400",
